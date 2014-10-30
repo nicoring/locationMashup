@@ -26,3 +26,9 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
+
+# compiled javascripts and stylesheets
+public/javascripts
+public/stylesheets
+
+public/bower_components

@@ -1,0 +1,1 @@
+sed -E -e 's/^[ ]*//; s/--//; s/<[\/]?binding( name="[spo]")?>[\n\r]?//; s/<result>//; s/<\/result>//; /^$/d; s/<uri>/</; s/<\/uri>/> /; s/<literal>/"/; s/<\/literal>/"/; s/<literal datatype="(\S)+">/"/g' $1

@@ -1,0 +1,285 @@
+<http://localhost/wikivoyage/Curry+36> a voyont:Activity ;
+	rdfs:label "Curry 36" ;
+	skos:prefLabel "Curry 36" ;
+	dbo:location <http://localhost/wikivoyage/Berlin-East+Central> ;
+	schema:address "Mehringdamm 36" ;
+	voyont:directions "U-Bahn Mehringdamm" ;
+	rdfs:seeAlso "http://www.curry36.de/curry36.html" ;
+	geo:lat "52.4935584"^^xsd:float ;
+	geo:long "13.3877282"^^xsd:float ;
+	dcterms:description "The best pork sausage ''(German: Wurst)'' with curry ketchup and curry powder." ;
+	a voyont:EatActivity .
+
+
+# location of Curry 36
+<http://localhost/wikivoyage/Berlin-East+Central> a voyont:Location ;
+	rdfs:label "Berlin/East Central" .
+    owl:sameAs dbpedia:Friedrichshain-Kreuzberg;
+    voyont:part dbpedia:Friedrichshain-Kreuzberg;
+    dcterms:description """Associated with the left wing youth culture, artists, and Turkish immigrants, this district is somewhat noisier than most, packed with lots of cafés, bars, clubs, and trendy shops, but also with some museums in Kreuzberg near the border to Mitte. These districts are undergoing gentrification as they are popular with students, artists and media professionals alike.""".
+
+# wikivoyage entries in voy:Berlin-East+Central
+# http://localhost/wikivoyage/&quot;tausche&quot;
+# http://localhost/wikivoyage/103+Bar
+# http://localhost/wikivoyage/A&O
+# http://localhost/wikivoyage/Al+Hamra
+# http://localhost/wikivoyage/Alcatraz+Backpacker+Hostel
+# http://localhost/wikivoyage/All+In+Hostel+Berlin
+# http://localhost/wikivoyage/Angus+Restaurant+Steak-Haus
+# http://localhost/wikivoyage/Asador+Steakhouse
+# http://localhost/wikivoyage/BackpackerBerlin
+# http://localhost/wikivoyage/Bangkok+Treffpunkt
+
+<http://localhost/wikivoyage/103+Bar> a voyont:Activity ;
+	rdfs:label "103 Bar" ;
+	skos:prefLabel "103 Bar" ;
+	dbo:location <http://localhost/wikivoyage/Berlin-East+Central> ;
+	schema:telephone "+49 30 48492651" ;
+	rdfs:seeAlso "http://www.agentur103.de/" ;
+	dcterms:description "49 Kastanienallee, - Nice place to have a drink, don't miss the White Russian." ;
+	a voyont:DrinkActivity .
+
+
+@prefix owl:	<http://www.w3.org/2002/07/owl#> .
+@prefix ns1:	<http://fr.dbpedia.org/resource/> .
+@prefix dbpedia:	<http://dbpedia.org/resource/> .
+ns1:Arrondissement_de_Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns3:	<http://de.dbpedia.org/resource/> .
+ns3:Bezirk_Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns4:	<http://wikidata.dbpedia.org/resource/> .
+ns4:Q158893	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns5:	<http://cs.dbpedia.org/resource/> .
+ns5:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns6:	<http://es.dbpedia.org/resource/> .
+ns6:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns7:	<http://eu.dbpedia.org/resource/> .
+ns7:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns8:	<http://id.dbpedia.org/resource/> .
+ns8:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns9:	<http://it.dbpedia.org/resource/> .
+ns9:Distretto_di_Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns10:	<http://ja.dbpedia.org/resource/> .
+ns10:フリードリヒスハイン＝クロイツベルク区	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns11:	<http://nl.dbpedia.org/resource/> .
+ns11:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns12:	<http://pl.dbpedia.org/resource/> .
+ns12:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns13:	<http://pt.dbpedia.org/resource/> .
+ns13:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix foaf:	<http://xmlns.com/foaf/0.1/> .
+@prefix ns15:	<http://en.wikipedia.org/wiki/> .
+ns15:Friedrichshain-Kreuzberg	foaf:primaryTopic	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns16:	<http://br.dbpedia.org/resource/> .
+ns16:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns17:	<http://da.dbpedia.org/resource/> .
+ns17:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns18:	<http://eo.dbpedia.org/resource/> .
+ns18:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns19:	<http://et.dbpedia.org/resource/> .
+ns19:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns20:	<http://fi.dbpedia.org/resource/> .
+ns20:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns21:	<http://he.dbpedia.org/resource/> .
+ns21:פרידריכסהיין-קרויצברג	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns22:	<http://ka.dbpedia.org/resource/> .
+ns22:ფრიდრიხსჰაინ-კროიცბერგი	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns23:	<http://la.dbpedia.org/resource/> .
+ns23:Lucus_Fridericianus-Mons_Crucis	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns24:	<http://mk.dbpedia.org/resource/> .
+ns24:Фридрихсхајн-Кројцберг	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns25:	<http://no.dbpedia.org/resource/> .
+ns25:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns26:	<http://ro.dbpedia.org/resource/> .
+ns26:Sector_Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns27:	<http://ru.dbpedia.org/resource/> .
+ns27:Фридрихсхайн-Кройцберг	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns28:	<http://sco.dbpedia.org/resource/> .
+ns28:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns29:	<http://simple.dbpedia.org/resource/> .
+ns29:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns30:	<http://sv.dbpedia.org/resource/> .
+ns30:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns31:	<http://tr.dbpedia.org/resource/> .
+ns31:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns32:	<http://xmf.dbpedia.org/resource/> .
+ns32:ფრიდრიხსჰაინ-კროიცბერგი	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns33:	<http://zh.dbpedia.org/resource/> .
+ns33:弗里德里希斯海因-克罗伊茨贝格	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix ns34:	<http://zh_min_nan.dbpedia.org/resource/> .
+ns34:Friedrichshain-Kreuzberg	owl:sameAs	dbpedia:Friedrichshain-Kreuzberg .
+@prefix dbpedia-owl:	<http://dbpedia.org/ontology/> .
+<http://dbpedia.org/resource/Kreuzberg_(disambiguation)>	dbpedia-owl:wikiPageDisambiguates	dbpedia:Friedrichshain-Kreuzberg .
+@prefix dbpprop:	<http://dbpedia.org/property/> .
+dbpedia:Berlin_Ostbahnhof	dbpprop:borough	dbpedia:Friedrichshain-Kreuzberg ;
+	dbpedia-owl:location	dbpedia:Friedrichshain-Kreuzberg .
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix yago:	<http://dbpedia.org/class/yago/> .
+dbpedia:Friedrichshain-Kreuzberg	rdf:type	yago:District108552138 ,
+		yago:Region108630985 ,
+		yago:Location100027167 ,
+		yago:YagoLegalActorGeo ,
+		dbpedia-owl:Settlement .
+@prefix ns39:	<http://dbpedia.org/ontology/Wikidata:> .
+dbpedia:Friedrichshain-Kreuzberg	rdf:type	ns39:Q532 ,
+		dbpedia-owl:Place ,
+		dbpedia-owl:PopulatedPlace .
+@prefix ns40:	<http://www.opengis.net/gml/> .
+dbpedia:Friedrichshain-Kreuzberg	rdf:type	ns40:_Feature ,
+		yago:DistrictsOfBerlin ,
+		yago:PhysicalEntity100001930 ,
+		owl:Thing ,
+		yago:YagoPermanentlyLocatedEntity ,
+		yago:YagoGeoEntity .
+@prefix ns41:	<http://schema.org/> .
+dbpedia:Friedrichshain-Kreuzberg	rdf:type	ns41:Place ,
+		yago:Object100002684 .
+@prefix d0:	<http://www.ontologydesignpatterns.org/ont/d0.owl#> .
+dbpedia:Friedrichshain-Kreuzberg	rdf:type	d0:Location ;
+	owl:sameAs	ns6:Friedrichshain-Kreuzberg ,
+		ns16:Friedrichshain-Kreuzberg ,
+		ns28:Friedrichshain-Kreuzberg ,
+		ns3:Bezirk_Friedrichshain-Kreuzberg ,
+		ns34:Friedrichshain-Kreuzberg .
+@prefix ns43:	<http://wikidata.org/entity/> .
+dbpedia:Friedrichshain-Kreuzberg	owl:sameAs	ns43:Q158893 .
+@prefix ns44:	<http://yago-knowledge.org/resource/> .
+dbpedia:Friedrichshain-Kreuzberg	owl:sameAs	ns44:Friedrichshain-Kreuzberg ,
+		ns27:Фридрихсхайн-Кройцберг ,
+		ns29:Friedrichshain-Kreuzberg ,
+		ns10:フリードリヒスハイン＝クロイツベルク区 ,
+		ns12:Friedrichshain-Kreuzberg ,
+		ns1:Arrondissement_de_Friedrichshain-Kreuzberg ,
+		ns33:弗里德里希斯海因-克罗伊茨贝格 ,
+		ns4:Q158893 ,
+		ns26:Sector_Friedrichshain-Kreuzberg ,
+		ns23:Lucus_Fridericianus-Mons_Crucis ,
+		ns7:Friedrichshain-Kreuzberg ,
+		ns11:Friedrichshain-Kreuzberg ,
+		ns32:ფრიდრიხსჰაინ-კროიცბერგი ,
+		ns5:Friedrichshain-Kreuzberg ,
+		ns17:Friedrichshain-Kreuzberg ,
+		ns18:Friedrichshain-Kreuzberg ,
+		<http://sws.geonames.org/3336295/> ,
+		<http://rdf.freebase.com/ns/m.022n8j> ,
+		ns8:Friedrichshain-Kreuzberg ,
+		ns21:פרידריכסהיין-קרויצברג ,
+		ns19:Friedrichshain-Kreuzberg ,
+		ns20:Friedrichshain-Kreuzberg ,
+		ns13:Friedrichshain-Kreuzberg ,
+		ns22:ფრიდრიხსჰაინ-კროიცბერგი ,
+		dbpedia:Friedrichshain-Kreuzberg ,
+		ns9:Distretto_di_Friedrichshain-Kreuzberg ,
+		ns25:Friedrichshain-Kreuzberg ,
+		ns24:Фридрихсхајн-Кројцберг ,
+		ns30:Friedrichshain-Kreuzberg ,
+		ns31:Friedrichshain-Kreuzberg .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+dbpedia:Friedrichshain-Kreuzberg	rdfs:label	"\u5F17\u91CC\u5FB7\u91CC\u5E0C\u65AF\u6D77\u56E0-\u514B\u7F57\u4F0A\u8328\u8D1D\u683C"@zh ,
+		"Friedrichshain-Kreuzberg"@pt ,
+		"Friedrichshain-Kreuzberg"@en ,
+		"Friedrichshain-Kreuzberg"@es ,
+		"Friedrichshain-Kreuzberg"@pl ,
+		"Bezirk Friedrichshain-Kreuzberg"@de ,
+		"\u30D5\u30EA\u30FC\u30C9\u30EA\u30D2\u30B9\u30CF\u30A4\u30F3\uFF1D\u30AF\u30ED\u30A4\u30C4\u30D9\u30EB\u30AF\u533A"@ja ,
+		"Distretto di Friedrichshain-Kreuzberg"@it ,
+		"\u0424\u0440\u0438\u0434\u0440\u0438\u0445\u0441\u0445\u0430\u0439\u043D-\u041A\u0440\u043E\u0439\u0446\u0431\u0435\u0440\u0433"@ru ,
+		"Arrondissement de Friedrichshain-Kreuzberg"@fr ,
+		"Friedrichshain-Kreuzberg"@nl .
+@prefix dcterms:	<http://purl.org/dc/terms/> .
+@prefix category:	<http://dbpedia.org/resource/Category:> .
+dbpedia:Friedrichshain-Kreuzberg	dcterms:subject	category:Friedrichshain-Kreuzberg ,
+		category:Districts_of_Berlin .
+@prefix grs:	<http://www.georss.org/georss/> .
+dbpedia:Friedrichshain-Kreuzberg	grs:point	"52.5 13.45" .
+@prefix xsd:	<http://www.w3.org/2001/XMLSchema#> .
+@prefix geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#> .
+dbpedia:Friedrichshain-Kreuzberg	geo:lat	"52.5"^^xsd:float ;
+	geo:long	"13.45"^^xsd:float ;
+	foaf:homepage	<http://www.friedrichshain-kreuzberg.de> ;
+	foaf:depiction	<http://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Berlin.svg> ;
+	foaf:name	"Friedrichshain-Kreuzberg"@en .
+@prefix prov:	<http://www.w3.org/ns/prov#> .
+dbpedia:Friedrichshain-Kreuzberg	prov:wasDerivedFrom	<http://en.wikipedia.org/wiki/Friedrichshain-Kreuzberg?oldid=566718740> ;
+	rdfs:comment	"Il distretto di Friedrichshain-Kreuzberg \u00E8 il secondo distretto (Bezirk) di Berlino.Con una superficie di soli 20,2 km\u00B2, \u00E8 il meno esteso fra i distretti cittadini.Con una popolazione (2006) di 265.592 abitanti, costituisce il distretto con la pi\u00F9 alta densit\u00E0 di popolazione."@it ,
+		"Friedrichshain-Kreuzberg is een van de 12 districten van Berlijn. Het district bestaat uit de stadsdelen Friedrichshain (voormalig Oost-Berlijn) en Kreuzberg (voormalig West-Berlijn). In het wapen van het district is de Oberbaumbr\u00FCcke afgebeeld, die de enige verbinding vormt tussen de twee samenstellende stadsdelen.Kreuzberg en Friedrichshain staan bekend als alternatieve wijken met veel kunstenaars en studenten."@nl ,
+		"Friedrichshain-Kreuzberg \u00E9 o segundo borough de Berlim, formado em 2001 pela aglutina\u00E7\u00E3o de Friedrichshain, antigo borough de Berlim Oriental e Kreuzberg, antigo borough de Berlim Ocidental. A Oberbaumbr\u00FCcke sobre o rio Spree liga Friedrichshain com Kreuzberg."@pt ,
+		"\u5F17\u91CC\u5FB7\u91CC\u5E0C\u65AF\u6D77\u56E0-\u514B\u7F57\u4F0A\u8328\u8D1D\u683C\uFF08Friedrichshain-Kreuzberg\uFF09\u662F\u67CF\u6797\u7684\u4E00\u4E2A\u884C\u653F\u533A\uFF0C2001\u5E74\u5408\u5E76\u8FC7\u53BB\u4E1C\u67CF\u6797\u7684\u5F17\u91CC\u5FB7\u91CC\u5E0C\u65AF\u6D77\u56E0\u533A\u548C\u524D\u897F\u67CF\u6797\u7684\u514B\u7F57\u4F0A\u8328\u8D1D\u683C\u533A\u6210\u7ACB\u3002\u8FDE\u63A5\u4E24\u4E2A\u65E7\u533A\uFF0C\u65BD\u666E\u96F7\u6CB3\u4E0A\u7684\u5965\u4F2F\u9C8D\u59C6\u6865\u6210\u4E3A\u8FD9\u4E2A\u65B0\u533A\u7684\u5730\u6807\u3002\u514B\u7F57\u4F0A\u8328\u8D1D\u683C\u5177\u6709\u7684\u53CD\u6587\u5316\u4F20\u7EDF\uFF0C\u4F7F\u5F97\u8BE5\u533A\u6210\u4E3A\u67CF\u6797\u552F\u4E00\u7EFF\u515A\u83B7\u591A\u6570\u9009\u7968\u7684\u533A\uFF0C\u5F53\u5730\u7684\u56FD\u4F1A\u8BAE\u5458Hans-Christian Str\u00F6bele\u662F\u552F\u4E00\u76F4\u63A5\u9009\u5165\u8054\u90A6\u8BAE\u4F1A\u7684\u7EFF\u515A\u653F\u6CBB\u5BB6\u3002"@zh ,
+		"Friedrichshain-Kreuzberg es el segundo distrito de Berl\u00EDn, Alemania. Este distrito se form\u00F3 en 2001 por la fusi\u00F3n de Friedrichshain y Kreuzberg."@es ,
+		"\u0424\u0440\u0438\u0434\u0440\u0438\u0445\u0441\u0445\u0430\u0439\u043D-\u041A\u0440\u043E\u0439\u0446\u0431\u0435\u0440\u0433 (\u043D\u0435\u043C. Friedrichshain-Kreuzberg) \u2014 \u0430\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u0438\u0432\u043D\u044B\u0439 \u043E\u043A\u0440\u0443\u0433 \u0411\u0435\u0440\u043B\u0438\u043D\u0430, \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u0431\u044B\u043B \u043E\u0431\u0440\u0430\u0437\u043E\u0432\u0430\u043D \u0438\u0437 \u043E\u043A\u0440\u0443\u0433\u043E\u0432 \u0424\u0440\u0438\u0434\u0440\u0438\u0445\u0441\u0445\u0430\u0439\u043D (\u0412\u043E\u0441\u0442\u043E\u0447\u043D\u044B\u0439 \u0411\u0435\u0440\u043B\u0438\u043D) \u0438 \u041A\u0440\u043E\u0439\u0446\u0431\u0435\u0440\u0433 (\u0417\u0430\u043F\u0430\u0434\u043D\u044B\u0439 \u0411\u0435\u0440\u043B\u0438\u043D)."@ru ,
+		"Friedrichshain-Kreuzberg est le 2e arrondissement administratif (Bezirk) de Berlin, form\u00E9 en 2001 par la fusion des anciens districts de Friedrichshain et Kreuzberg, constituant ainsi deux nouveaux quartiers.Cet arrondissement est le seul, avec celui de Mitte, \u00E0 m\u00EAler des anciens districts de Berlin-Ouest et de Berlin-Est.L'arrondissement couvre une superficie de 20,2 km\u00B2 pour une population totale de : 278 579 hab. (au 30/11/2012), une densit\u00E9 de 13 791 hab./km\u00B2."@fr ,
+		"Friedrichshain-Kreuzberg \u2013 drugi okr\u0119g administracyjny (Bezirk) Berlina. Liczy ponad 260 000 mieszka\u0144c\u00F3w. Powsta\u0142 w 2001 z po\u0142\u0105czenia dw\u00F3ch okr\u0119g\u00F3w administracyjnych: Friedrichshain z Berlina Wschodniego oraz Kreuzberg z Berlina Zachodniego. Pod wzgl\u0119dem powierzchni jest najmniejszym okr\u0119giem Berlina."@pl ,
+		"Friedrichshain-Kreuzberg is the second borough of Berlin, formed in 2001 by merging the former East Berlin borough of Friedrichshain and the former West Berlin borough of Kreuzberg. The historic Oberbaum Bridge, formerly a Berlin border crossing for pedestrians, links both districts across the river Spree as the new borough's landmark (as featured in the coat of arms)."@en ,
+		"Friedrichshain-Kreuzberg ist der zweite Verwaltungsbezirk von Berlin und z\u00E4hlt rund 265.000 Einwohner. Er entstand per 1. Januar 2001 durch Fusion des bis dato eigenst\u00E4ndigen Ost-Bezirks Friedrichshain und des West-Bezirks Kreuzberg.Der Bezirk gilt als alternativ, kreativ und ist eine Hochburg linker Parteien, insbesondere der Gr\u00FCnen."@de ,
+		"\u30D5\u30EA\u30FC\u30C9\u30EA\u30D2\u30B9\u30CF\u30A4\u30F3\uFF1D\u30AF\u30ED\u30A4\u30C4\u30D9\u30EB\u30AF\u533A (\u30C9\u30A4\u30C4\u8A9E: Bezirk Friedrichshain-Kreuzberg) \u306F\u30C9\u30A4\u30C4\u306E\u9996\u90FD\u30D9\u30EB\u30EA\u30F3\u306E\u533A\u3067\u3042\u308A\u3001\u533A\u30B3\u30FC\u30C9\u306F02\u3067\u3042\u308B\u30022001\u5E74\u306E\u533A\u57DF\u6539\u9769\u306B\u3088\u308A\u3001\u65E7\u6771\u30D9\u30EB\u30EA\u30F3\u306E\u65E7\u30D5\u30EA\u30FC\u30C9\u30EA\u30D2\u30B9\u30CF\u30A4\u30F3\u533A\u3068\u65E7\u897F\u30D9\u30EB\u30EA\u30F3\u306E\u65E7\u30AF\u30ED\u30A4\u30C4\u30D9\u30EB\u30AF\u533A\u304C\u5408\u4F75\u3057\u3066\u6210\u7ACB\u3057\u305F\u3002\u30AA\u30EB\u30BF\u30CA\u30C6\u30A3\u30D6\u3001\u30AF\u30EA\u30A8\u30A4\u30C6\u30A3\u30D6\u306A\u5730\u533A\u3068\u3057\u3066\u77E5\u3089\u308C\u3001\u69D8\u3005\u306A\u5DE6\u7FFC\u653F\u515A\u3001\u3068\u308A\u308F\u3051\u7DD1\u306E\u515A\u306E\u7259\u57CE\u3067\u3042\u308B\u3002\u672C\u533A\u306F\u30D9\u30EB\u30EA\u30F3\u3067\u5E73\u5747\u5E74\u9F62\u304C\u6700\u3082\u82E5\u3044\u533A\u3067\u3042\u308A\u3001\u307E\u305F\u4EBA\u53E3\u5BC6\u5EA6\u30821\u5E73\u65B9\u30AD\u30ED\u30E1\u30FC\u30C8\u30EB\u5F53\u305F\u308A1\u4E073,000\u4EBA\u3068\u3001\u30D9\u30EB\u30EA\u30F3\u516812\u533A\u4E2D\u3067\u4ED6\u306B\u5927\u304D\u304F\u5DEE\u3092\u3064\u3051\u6700\u9AD8\u3067\u3042\u308B\u3002\u6D41\u884C\u306E\u6700\u5148\u7AEF\u5730\u57DF\u306B\u6570\u3048\u3089\u308C\u3001\u305D\u306E\u305F\u3081\u306B\u30B8\u30A7\u30F3\u30C8\u30EA\u30D5\u30A3\u30B1\u30FC\u30B7\u30E7\u30F3\u306B\u898B\u821E\u308F\u308C\u3066\u3044\u308B\u3002"@ja ;
+	dbpedia-owl:federalState	dbpedia:Berlin ;
+	foaf:isPrimaryTopicOf	ns15:Friedrichshain-Kreuzberg ;
+	dbpprop:divisions	2 .
+@prefix ns52:	<http://wifo5-03.informatik.uni-mannheim.de/flickrwrappr/photos/> .
+dbpedia:Friedrichshain-Kreuzberg	dbpprop:hasPhotoCollection	ns52:Friedrichshain-Kreuzberg ;
+	dbpprop:name	"Friedrichshain-Kreuzberg"@en ;
+	dbpedia-owl:thumbnail	<http://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Berlin.svg?width=300> ;
+	dbpedia-owl:abstract	"Friedrichshain-Kreuzberg \u2013 drugi okr\u0119g administracyjny (Bezirk) Berlina. Liczy ponad 260 000 mieszka\u0144c\u00F3w. Powsta\u0142 w 2001 z po\u0142\u0105czenia dw\u00F3ch okr\u0119g\u00F3w administracyjnych: Friedrichshain z Berlina Wschodniego oraz Kreuzberg z Berlina Zachodniego. Pod wzgl\u0119dem powierzchni jest najmniejszym okr\u0119giem Berlina."@pl ,
+		"\u30D5\u30EA\u30FC\u30C9\u30EA\u30D2\u30B9\u30CF\u30A4\u30F3\uFF1D\u30AF\u30ED\u30A4\u30C4\u30D9\u30EB\u30AF\u533A (\u30C9\u30A4\u30C4\u8A9E: Bezirk Friedrichshain-Kreuzberg) \u306F\u30C9\u30A4\u30C4\u306E\u9996\u90FD\u30D9\u30EB\u30EA\u30F3\u306E\u533A\u3067\u3042\u308A\u3001\u533A\u30B3\u30FC\u30C9\u306F02\u3067\u3042\u308B\u30022001\u5E74\u306E\u533A\u57DF\u6539\u9769\u306B\u3088\u308A\u3001\u65E7\u6771\u30D9\u30EB\u30EA\u30F3\u306E\u65E7\u30D5\u30EA\u30FC\u30C9\u30EA\u30D2\u30B9\u30CF\u30A4\u30F3\u533A\u3068\u65E7\u897F\u30D9\u30EB\u30EA\u30F3\u306E\u65E7\u30AF\u30ED\u30A4\u30C4\u30D9\u30EB\u30AF\u533A\u304C\u5408\u4F75\u3057\u3066\u6210\u7ACB\u3057\u305F\u3002\u30AA\u30EB\u30BF\u30CA\u30C6\u30A3\u30D6\u3001\u30AF\u30EA\u30A8\u30A4\u30C6\u30A3\u30D6\u306A\u5730\u533A\u3068\u3057\u3066\u77E5\u3089\u308C\u3001\u69D8\u3005\u306A\u5DE6\u7FFC\u653F\u515A\u3001\u3068\u308A\u308F\u3051\u7DD1\u306E\u515A\u306E\u7259\u57CE\u3067\u3042\u308B\u3002\u672C\u533A\u306F\u30D9\u30EB\u30EA\u30F3\u3067\u5E73\u5747\u5E74\u9F62\u304C\u6700\u3082\u82E5\u3044\u533A\u3067\u3042\u308A\u3001\u307E\u305F\u4EBA\u53E3\u5BC6\u5EA6\u30821\u5E73\u65B9\u30AD\u30ED\u30E1\u30FC\u30C8\u30EB\u5F53\u305F\u308A1\u4E073,000\u4EBA\u3068\u3001\u30D9\u30EB\u30EA\u30F3\u516812\u533A\u4E2D\u3067\u4ED6\u306B\u5927\u304D\u304F\u5DEE\u3092\u3064\u3051\u6700\u9AD8\u3067\u3042\u308B\u3002\u6D41\u884C\u306E\u6700\u5148\u7AEF\u5730\u57DF\u306B\u6570\u3048\u3089\u308C\u3001\u305D\u306E\u305F\u3081\u306B\u30B8\u30A7\u30F3\u30C8\u30EA\u30D5\u30A3\u30B1\u30FC\u30B7\u30E7\u30F3\u306B\u898B\u821E\u308F\u308C\u3066\u3044\u308B\u3002"@ja ,
+		"Friedrichshain-Kreuzberg est le 2e arrondissement administratif (Bezirk) de Berlin, form\u00E9 en 2001 par la fusion des anciens districts de Friedrichshain et Kreuzberg, constituant ainsi deux nouveaux quartiers.Cet arrondissement est le seul, avec celui de Mitte, \u00E0 m\u00EAler des anciens districts de Berlin-Ouest et de Berlin-Est.L'arrondissement couvre une superficie de 20,2 km\u00B2 pour une population totale de : 278 579 hab. (au 30/11/2012), une densit\u00E9 de 13 791 hab./km\u00B2."@fr ,
+		"Il distretto di Friedrichshain-Kreuzberg \u00E8 il secondo distretto (Bezirk) di Berlino.Con una superficie di soli 20,2 km\u00B2, \u00E8 il meno esteso fra i distretti cittadini.Con una popolazione (2006) di 265.592 abitanti, costituisce il distretto con la pi\u00F9 alta densit\u00E0 di popolazione."@it ,
+		"\u0424\u0440\u0438\u0434\u0440\u0438\u0445\u0441\u0445\u0430\u0439\u043D-\u041A\u0440\u043E\u0439\u0446\u0431\u0435\u0440\u0433 (\u043D\u0435\u043C. Friedrichshain-Kreuzberg) \u2014 \u0430\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u0438\u0432\u043D\u044B\u0439 \u043E\u043A\u0440\u0443\u0433 \u0411\u0435\u0440\u043B\u0438\u043D\u0430, \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u0431\u044B\u043B \u043E\u0431\u0440\u0430\u0437\u043E\u0432\u0430\u043D \u0438\u0437 \u043E\u043A\u0440\u0443\u0433\u043E\u0432 \u0424\u0440\u0438\u0434\u0440\u0438\u0445\u0441\u0445\u0430\u0439\u043D (\u0412\u043E\u0441\u0442\u043E\u0447\u043D\u044B\u0439 \u0411\u0435\u0440\u043B\u0438\u043D) \u0438 \u041A\u0440\u043E\u0439\u0446\u0431\u0435\u0440\u0433 (\u0417\u0430\u043F\u0430\u0434\u043D\u044B\u0439 \u0411\u0435\u0440\u043B\u0438\u043D)."@ru ,
+		"\u5F17\u91CC\u5FB7\u91CC\u5E0C\u65AF\u6D77\u56E0-\u514B\u7F57\u4F0A\u8328\u8D1D\u683C\uFF08Friedrichshain-Kreuzberg\uFF09\u662F\u67CF\u6797\u7684\u4E00\u4E2A\u884C\u653F\u533A\uFF0C2001\u5E74\u5408\u5E76\u8FC7\u53BB\u4E1C\u67CF\u6797\u7684\u5F17\u91CC\u5FB7\u91CC\u5E0C\u65AF\u6D77\u56E0\u533A\u548C\u524D\u897F\u67CF\u6797\u7684\u514B\u7F57\u4F0A\u8328\u8D1D\u683C\u533A\u6210\u7ACB\u3002\u8FDE\u63A5\u4E24\u4E2A\u65E7\u533A\uFF0C\u65BD\u666E\u96F7\u6CB3\u4E0A\u7684\u5965\u4F2F\u9C8D\u59C6\u6865\u6210\u4E3A\u8FD9\u4E2A\u65B0\u533A\u7684\u5730\u6807\u3002\u514B\u7F57\u4F0A\u8328\u8D1D\u683C\u5177\u6709\u7684\u53CD\u6587\u5316\u4F20\u7EDF\uFF0C\u4F7F\u5F97\u8BE5\u533A\u6210\u4E3A\u67CF\u6797\u552F\u4E00\u7EFF\u515A\u83B7\u591A\u6570\u9009\u7968\u7684\u533A\uFF0C\u5F53\u5730\u7684\u56FD\u4F1A\u8BAE\u5458Hans-Christian Str\u00F6bele\u662F\u552F\u4E00\u76F4\u63A5\u9009\u5165\u8054\u90A6\u8BAE\u4F1A\u7684\u7EFF\u515A\u653F\u6CBB\u5BB6\u3002"@zh ,
+		"Friedrichshain-Kreuzberg is the second borough of Berlin, formed in 2001 by merging the former East Berlin borough of Friedrichshain and the former West Berlin borough of Kreuzberg. The historic Oberbaum Bridge, formerly a Berlin border crossing for pedestrians, links both districts across the river Spree as the new borough's landmark (as featured in the coat of arms)."@en ,
+		"Friedrichshain-Kreuzberg \u00E9 o segundo borough de Berlim, formado em 2001 pela aglutina\u00E7\u00E3o de Friedrichshain, antigo borough de Berlim Oriental e Kreuzberg, antigo borough de Berlim Ocidental. A Oberbaumbr\u00FCcke sobre o rio Spree liga Friedrichshain com Kreuzberg."@pt ,
+		"Friedrichshain-Kreuzberg is een van de 12 districten van Berlijn. Het district bestaat uit de stadsdelen Friedrichshain (voormalig Oost-Berlijn) en Kreuzberg (voormalig West-Berlijn). In het wapen van het district is de Oberbaumbr\u00FCcke afgebeeld, die de enige verbinding vormt tussen de twee samenstellende stadsdelen.Kreuzberg en Friedrichshain staan bekend als alternatieve wijken met veel kunstenaars en studenten."@nl ,
+		"Friedrichshain-Kreuzberg es el segundo distrito de Berl\u00EDn, Alemania. Este distrito se form\u00F3 en 2001 por la fusi\u00F3n de Friedrichshain y Kreuzberg."@es ,
+		"Friedrichshain-Kreuzberg ist der zweite Verwaltungsbezirk von Berlin und z\u00E4hlt rund 265.000 Einwohner. Er entstand per 1. Januar 2001 durch Fusion des bis dato eigenst\u00E4ndigen Ost-Bezirks Friedrichshain und des West-Bezirks Kreuzberg.Der Bezirk gilt als alternativ, kreativ und ist eine Hochburg linker Parteien, insbesondere der Gr\u00FCnen. Friedrichshain-Kreuzberg hat sowohl die j\u00FCngste Bev\u00F6lkerung als auch mit rund 13.000 Einwohnern pro Quadratkilometer mit Abstand die h\u00F6chste Bev\u00F6lkerungsdichte aller zw\u00F6lf Berliner Bezirke."@de ;
+	dbpedia-owl:wikiPageID	390615 ;
+	dbpedia-owl:wikiPageRevisionID	566718740 ;
+	dbpprop:population	278579 ;
+	dbpprop:populationAsOf	"2012-11-30+02:00"^^xsd:date ;
+	dbpedia-owl:populationTotal	278579 .
+@prefix ns53:	<http://dbpedia.org/resource/Alliance_\u002790/> .
+dbpedia:Friedrichshain-Kreuzberg	dbpprop:party	ns53:The_Greens ;
+	dbpprop:mayor	"Monika Herrmann"@en ;
+	dbpedia-owl:leaderParty	ns53:The_Greens ;
+	dbpedia-owl:populationAsOf	"2012-11-30+02:00"^^xsd:date ;
+	dbpprop:area	20.16 ;
+	dbpprop:licence	"B"@en ;
+	dbpprop:imageCoa	"Coat of arms of borough Friedrichshain-Kreuzberg.svg"@en ;
+	dbpprop:latDeg	52 ;
+	dbpprop:latMin	30 ;
+	dbpprop:lonDeg	13 ;
+	dbpprop:lonMin	27 ;
+	dbpedia-owl:areaCode	"B" ;
+	dbpedia-owl:areaTotal	2.016e+07 .
+@prefix ns54:	<http://dbpedia.org/datatype/> .
+@prefix ns55:	<http://dbpedia.org/ontology/PopulatedPlace/> .
+dbpedia:Friedrichshain-Kreuzberg	ns55:areaTotal	"20.16"^^ns54:squareKilometre .
+@prefix virtrdf:	<http://www.openlinksw.com/schemas/virtrdf#> .
+dbpedia:Friedrichshain-Kreuzberg	geo:geometry	"POINT(13.450000 52.500000)"^^virtrdf:Geometry ;
+	dbpprop:type	"Borough"@en ;
+	dbpedia-owl:type	dbpedia:Boroughs_and_localities_of_Berlin ;
+	dbpedia-owl:city	dbpedia:Berlin ;
+	dbpprop:state	"Berlin"@en ;
+	dbpprop:city	"Berlin"@en ;
+	dbpprop:website	<http://www.friedrichshain-kreuzberg.de> ;
+	dbpedia-owl:wikiPageExternalLink	<http://www.berlin.de/english/> ,
+		<http://www.friedrichshain-kreuzberg.de> ,
+		<http://www.friedrichshain-kreuzberg.de/> ,
+		<http://www.xhain.info/> ;
+	dbpedia-owl:country	dbpedia:Germany ;
+	dbpprop:article	"of"@en ;
+	dbpprop:ofCityCoa	"Coat_of_arms_of_Berlin.svg"@en ;
+	dbpprop:imagePlan	"Berlin Bezirk Friedrichshain-Kreuzberg .svg"@en ;
+	dbpprop:plantext	"Location of Friedrichshain-Kreuzberg in Berlin"@en .
+dbpedia:Berlin_Wriezener_Bahnhof	dbpprop:borough	dbpedia:Friedrichshain-Kreuzberg ;
+	dbpedia-owl:location	dbpedia:Friedrichshain-Kreuzberg .
+dbpedia:Berlin_Old_Ostbahnhof	dbpprop:borough	dbpedia:Friedrichshain-Kreuzberg ;
+	dbpedia-owl:location	dbpedia:Friedrichshain-Kreuzberg .
+<http://dbpedia.org/resource/Berlin_G%C3%B6rlitzer_Bahnhof>	dbpprop:borough	dbpedia:Friedrichshain-Kreuzberg ;
+	dbpedia-owl:location	dbpedia:Friedrichshain-Kreuzberg .
+<http://dbpedia.org/resource/Berlin_Warschauer_Stra%C3%9Fe_station>	dbpprop:borough	dbpedia:Friedrichshain-Kreuzberg ;
+	dbpedia-owl:location	dbpedia:Friedrichshain-Kreuzberg .
+dbpedia:Berlin_Anhalter_Bahnhof	dbpprop:borough	dbpedia:Friedrichshain-Kreuzberg ;
+	dbpedia-owl:location	dbpedia:Friedrichshain-Kreuzberg .
+dbpedia:Berlin_Dresdner_Bahnhof	dbpprop:borough	dbpedia:Friedrichshain-Kreuzberg ;
+	dbpedia-owl:location	dbpedia:Friedrichshain-Kreuzberg .
+dbpedia:Bezirk_Friedrichshain-Kreuzberg	dbpedia-owl:wikiPageRedirects	dbpedia:Friedrichshain-Kreuzberg .
+dbpedia:Kreuzberg	dbpedia-owl:administrativeDistrict	dbpedia:Friedrichshain-Kreuzberg .
+dbpedia:Friedrichshain	dbpedia-owl:administrativeDistrict	dbpedia:Friedrichshain-Kreuzberg .

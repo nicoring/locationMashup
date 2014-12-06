@@ -1,0 +1,41 @@
+prefix dbpedia-owl: <http://dbpedia.org/ontology/>
+prefix dbpedia: <http://dbpedia.org/>
+prefix voyont: <http://localhost/wikivoyage/vocabulary#>
+insert data into <http://localhost/wikivoyage> {
+ <http://localhost/wikivoyage/Berlin>
+    owl:sameAs dbpedia:Berlin;
+    voyont:part dbpedia:Berlin.
+
+ <http://localhost/wikivoyage/Berlin%2FCity+West>
+    owl:sameAs dbpedia:Charlottenburg-Wilmersdorf;
+    voyont:part dbpedia:Charlottenburg-Wilmersdorf;
+    dc:description """Ku'Damm (short for Kurfürstendamm) is, along with Tauentzienstraße, one of the main shopping streets in former West Berlin, especially for luxury goods. Many great restaurants and hotels are here and also on the side roads. The district also contains the Schloss Charlottenburg, Tiergarten and the Olympic Stadium. Schöneberg is generally a cosy area for ageing hippies, young families, and LGBT people.""".
+
+ <http://localhost/wikivoyage/Berlin%2FEast+Central>
+    owl:sameAs dbpedia:Friedrichshain-Kreuzberg;
+    voyont:part dbpedia:Friedrichshain-Kreuzberg;
+    dc:description """Associated with the left wing youth culture, artists, and Turkish immigrants, this district is somewhat noisier than most, packed with lots of cafés, bars, clubs, and trendy shops, but also with some museums in Kreuzberg near the border to Mitte. These districts are undergoing gentrification as they are popular with students, artists and media professionals alike.""".
+
+ <http://localhost/wikivoyage/Berlin/East>
+    voyont:part dbpedia:Lichtenberg;
+    voyont:part dbpedia:Marzahn-Hellersdorf;
+    dc:description """The museum at the site of the 1945 surrender to the Soviet army is of interest, as well as the former Stasi prison, an essential visit for anyone interested in East German history. Marzahn-Hellersdorf has an undeserved reputation for being a vast collection of dull high-rise apartment blocks, as it also contains the "Gardens of the World", a large park where various ethnic styles of garden design are explored.""".
+
+ <http://localhost/wikivoyage/Berlin/Mitte>
+    owl:sameAs dbpedia:Mitte;
+    voyont:part dbpedia:Mitte;
+    dc:description """The historical centre of Berlin, the nucleus of the former East Berlin, and the emerging city centre. Cafés, restaurants, museums, galleries, and clubs are abundant throughout the district, along with many sites of historic interest.""".
+
+ <http://localhost/wikivoyage/Berlin/North>
+    voyont:part dbpedia:Spandau;
+    voyont:part dbpedia:Pankow;
+    voyont:part <http://dbpedia.org/resource/Reinickendorf_(locality)>;
+    dc:description """Spandau and Reinickendorf are beautiful old towns, which feel much more spacious than the inner city. Pankow was once synonymous with the East German government, and the villas the East German "socialist" leaders inhabited still exist.""".
+
+ <http://localhost/wikivoyage/Berlin/South> 
+    voyont:part dbpedia:Steglitz-Zehlendorf;
+    voyont:part dbpedia:Tempelhof-Schöneberg;
+    voyont:part dbpedia:Neukölln;
+    voyont:part dbpedia:Treptow-Köpenick;
+    dc:description """The South is a mixed bag of different boroughs. Zehlendorf is one of the greenest and wealthiest boroughs in Berlin, while Neukölln is one of the city's poorest. Köpenick's swaths of forest around Berlin's largest lake, Müggelsee, and the nice old town of Köpenick itself beg to be discovered on bikes and using the S-Bahn.""".
+}

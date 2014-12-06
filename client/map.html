@@ -1,0 +1,133 @@
+<html>
+  <head>
+    <title>Google Maps Example</title>
+  </head>
+  <body>
+    <h1>Google Maps Example</h1>
+    <select id="typeSelect">
+      <option value="/activity/eat" selected="selected">eat</option>
+      <option value="/activity/drink">drink</option>
+      <option value="/activity/do">do</option>
+      <option value="/activity/see">see</option>
+      <option value="/activity/sleep">sleep</option>
+      <option value="/activity/buy">buy</option>
+      <option value="/tourpedia/eat">TP Restaurant</option>
+    </select>
+    <div id="googleMap" style="width:1800px;height:800px;"></div>
+    <script charset="utf-8" src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDkd1CXkqBrHLXzmpdHMnDk2sU9RUEsJ-g&language=de&libraries=places"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script>
+
+function initialize() {
+  var mapProp = {
+    center: new google.maps.LatLng(52.516666, 13.383333), // center on berlin
+    zoom: 12,
+    mapTypeId:google.maps.MapTypeId.ROADMAP,
+    minZoom: 9
+  };
+
+  var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+  var infowindow = new google.maps.InfoWindow();
+
+  // bounds of the desired area -- berlin bounds
+  var allowedBounds = new google.maps.LatLngBounds(
+       new google.maps.LatLng(52.341823, 13.088209),
+       new google.maps.LatLng(52.669724, 13.760610)
+  );
+  var lastValidCenter = map.getCenter();
+
+  google.maps.event.addListener(map, 'center_changed', function() {
+      if (allowedBounds.contains(map.getCenter())) {
+          // still within valid bounds, so save the last valid position
+          lastValidCenter = map.getCenter();
+          return;
+      }
+
+      // not valid anymore => return to last valid position
+      map.setCenter(lastValidCenter);
+  });
+
+  var markers = [];
+
+  function placeMarker(lat, lng, title) {
+    var point = new google.maps.LatLng(lat, lng);
+
+    var marker = new google.maps.Marker({
+      position: point,
+      title: title
+    });
+
+    marker.setMap(map);
+
+    // show info popup containg the place name on click
+    google.maps.event.addListener(marker, 'click', function() {
+      infowindow.setContent(title);
+      infowindow.open(map, this);
+    });
+
+    markers.push(marker);
+  }
+
+  function deleteMarkers() {
+    markers.forEach(function (marker) {
+      marker.setMap(null);
+    })
+    markers = [];
+  }
+
+  function placeMarkers(data) {
+    deleteMarkers();
+    data.forEach(function (elem) {
+      placeMarker(elem.lat, elem.lng, elem.label);
+    })
+  }
+
+  var $typeSelect = $('#typeSelect');
+  $typeSelect.change(getPlaces);
+
+  function getPlaces() {
+    var url = $typeSelect[0].value;
+    // var url = '/activity/' + type;
+    $.ajax(url)
+      .done(function(data) {
+        console.log(data)
+        placeMarkers(data)
+      });
+  }
+
+  getPlaces();
+
+  /*// handles places api
+  var placeService = new google.maps.places.PlacesService(map);
+
+  // request drayton bar place
+  placeService.getDetails({ placeId: "ChIJEYw4xMRRqEcRczW4C-ueET8" }, handlePlace) 
+
+  function handlePlace(placeResults, placeServiceStatus) {
+    // break when request failed
+    if (placeServiceStatus !== google.maps.places.PlacesServiceStatus.OK) {
+      return;
+    }
+
+    // create and display a marker on the map
+    var marker = new google.maps.Marker({
+      map: map,
+      position: placeResults.geometry.location
+    });
+
+    // show info popup containg the place name on click
+    google.maps.event.addListener(marker, 'click', function() {
+      infowindow.setContent(placeResults.name);
+      infowindow.open(map, this);
+    });
+  }*/
+
+}
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+
+
+</script>
+  </body>
+</html>

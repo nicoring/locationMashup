@@ -1,0 +1,4 @@
+locationMashup
+==============
+
+'grunt serve'

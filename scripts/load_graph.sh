@@ -13,8 +13,8 @@ path - path to dataset directory
 #   exit 1;
 # fi
 
-graph='http://localhost/wikivoyage/berlin'
-path="./data/import"
+graph='http://localhost/wikivoyage'
+path="./data/wikivoyage"
 
 if [ $# -gt 0 ]; then
   graph=$1

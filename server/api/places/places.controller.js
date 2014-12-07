@@ -8,7 +8,7 @@ var sparqler = new TourpediaSparqler();
 // Get list of all places
 exports.index = function(req, res) {
   sparqler.getAllOverview( function(result) {
-  	res.json(resut);
+  	res.json(result);
   });
 };
 

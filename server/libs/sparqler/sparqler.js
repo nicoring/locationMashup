@@ -98,18 +98,18 @@ Sparqler.prototype.execute = function(query, callback) {
   function errorHandler(callback) {
     return function(error, response, body) {
       if (!error && response.statusCode === 200) {
-        console.log("Response:", response);
+        // console.log("Response:", response);
         callback(body);
       } else {
-        console.log("Response:", response);
-        console.log("Sparql query failed!", error);
-        callback(null);
+        // console.log("Response:", response);
+        console.error("Sparql query failed!", error);
+        console.log("response body", body)
       }
     };
   }
 
   query = this.parsePrefixes(query) + query;
-  console.log("query", query);
+  // console.log("query", query);
 
   // perform update on INSERT or DELETE
   var requestBody;
@@ -151,7 +151,7 @@ Sparqler.prototype.sparqlFlatten = function(sparqlJson) {
     return _.mapValues(binding, "value");
   });
 
-  return flatResults;
+  return { "results": flatResults };
 };
 
 /*! ################# Special Methods #################
@@ -167,7 +167,7 @@ Sparqler.prototype.sparqlFlatten = function(sparqlJson) {
 */
 Sparqler.prototype.getResource = function(resource, callback) {
   var query = "select * where { dbpedia:$resource ?p ?o }";
-  var sQuery = new SparqlerQuery(this, query);
+  var sQuery = this.createQuery(query);
 
   sQuery
     .setParameter("resource", resource)
@@ -183,7 +183,7 @@ Sparqler.prototype.getResource = function(resource, callback) {
 */
 Sparqler.prototype.getTypesOf = function(resource, callback) {
   var query = "select ?o where { dbpedia:$resource rdf:type ?o }";
-  var sQuery = new SparqlerQuery(this, query);
+  var sQuery = this.createQuery(query);
 
   sQuery
     .setParameter("resource", resource)
@@ -198,7 +198,7 @@ Sparqler.prototype.getTypesOf = function(resource, callback) {
  */
 Sparqler.prototype.getSameAs = function (resource, callback) {
   var query = "select ?o where { $resource owl:sameAs ?o }";
-  var sQuery = new SparqlerQuery(this, query);
+  var sQuery = this.createQuery(query);
 
   sQuery
     .setParameter("resource", resource)
@@ -208,11 +208,12 @@ Sparqler.prototype.getSameAs = function (resource, callback) {
 /**
  * Get all resources inside a given rectangular bounding box
  *
- *
+ * @param {Object} bbox Boundingbox object, must contain: north, west, south, east
+ * @param {Function} callback Callback which is executed after the query
  */
 Sparqler.prototype.getResourcesInBBox = function(bbox, callback) {
-  var query = "select * where { ?r geo:lat ?lat ; geo:long ?long . filter ( ?lat < $north && ?lat > $south && ?long < $east && $long > $west ) } ";
-  var sQuery = new SparqlerQuery(this, query);
+  var query = "select * where { ?r geo:lat ?lat ; geo:long ?long . filter ( ?lat < $north && ?lat > $south && ?long < $east && ?long > $west ) } ";
+  var sQuery = this.createQuery(query);
 
   sQuery
     .setParameter("north", bbox.north)

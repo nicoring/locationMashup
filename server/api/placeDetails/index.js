@@ -5,12 +5,8 @@ var controller = require('./placeDetails.controller');
 
 var router = express.Router();
 
-router.get('/', controller.index);
-// router.get('/details', controller.details);
-// router.get('/reviews', controller.reviews);
-// router.get('/image', comtroller.image)
-
-// test
-router.get('/activity/:type', controller.activity);
+router.get('/:id', controller.index);
+router.get('/reviews/:id', controller.reviews);
+router.get('/image/:id', controller.image)
 
 module.exports = router;

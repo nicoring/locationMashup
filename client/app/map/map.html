@@ -1,15 +1,26 @@
-<div class="container">
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <h3>{{message}}</h3>
+    </div>
+  </div>
 	<div class="row">
-		<div class="col-md-12">
-			<h3>{{message}}</h3>
+		<div class="col-md-10">
 			<ui-gmap-google-map id='map'
 				center='map.center'
 				zoom='map.zoom'
 				bounds='map.bounds'
 				options='map.options'>
-				<ui-gmap-markers models="markers" coords="'self'"></ui-gmap-markers>
-				</div>
+				<ui-gmap-markers models="markers" coords="'self'" doCluster="true" click="markerClicked"></ui-gmap-markers>
 			</ui-gmap-google-map>
 		</div>
-	</div>	
+    <div class="col-md-2">
+      <div ng-show="isMarkerSelected">
+        <p>Title: {{selected.title}}</p>
+        <p>ID: {{selected.id}}</p>
+        <button class="btn btn-default" ng-click="closeInfo()">Close</button>
+        <button class="btn btn-default" ng-click="showMore()">Show More</button>
+      </div>
+    </div>
+	</div>
 </div>

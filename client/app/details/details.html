@@ -1,10 +1,21 @@
-<div class="col-md-12">
-This is the details view.
-</br>
-Details:</br>
-<samp>{{details}}</samp>
-</br>
-</br>
-Reviews:</br>
-{{reviews}}
+<div class="container">
+  <dv class="row">
+    <h3>{{details.label}}</h3>
+    <div class="col-md-6">
+      <h4>Details</h4>
+      <div ng-repeat="(key, value) in details">
+        <p><strong>{{key}}:</strong> {{value}}</p>
+      </div>
+      <img ng-src="{{imgUrl}}" ng-show="isImageAvailable">
+    </div>
+    <div class="col-md-6">
+      <h4>Reviews</h4>
+      <div ng-repeat="review in reviews">
+        <p>
+          {{review.text}} </br>
+          Rating: {{review.rating}} Polarity: {{review.polarity}}
+        </p>
+      </div>
+    </div>
+  </dv>
 </div>

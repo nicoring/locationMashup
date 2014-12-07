@@ -34,7 +34,7 @@ angular.module('locationMashupApp')
     var reponsePromise = $http.get('/api/places')
       .success(function(data, status, headers, config) {
         console.log(data);
-        var newMarkers = _.map(data.results, function (el) {
+        var newMarkers = _.map(data, function (el) {
           return {
             id: el.s.replace('http://tour-pedia.org/resource/', ''),
             latitude: el.lat,

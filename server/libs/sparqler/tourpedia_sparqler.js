@@ -2,7 +2,7 @@ var Sparqler = require('./sparqler');
 var _ = require('lodash');
 
 var tourpediaEnpoint = 'http://localhost:10002/sparql';
-var defaultGraph = "<http://localhost/tourpedia>";
+
 
 function TourpediaSparqler() {
   Sparqler.call(this, tourpediaEnpoint);
@@ -17,9 +17,14 @@ function TourpediaSparqler() {
 	};
 
   this.base = 'http://tour-pedia.org/resource/';
+  this.defaultGraph = "<http://localhost/tourpedia>";
 }
 
 TourpediaSparqler.prototype = _.create(Sparqler.prototype);
+
+TourpediaSparqler.prototype.createUriFromId = function(id) {
+  return '<' + this.base + id + '>'
+};
 
 TourpediaSparqler.prototype.getAllOverview = function(callback) {
 
@@ -29,7 +34,7 @@ TourpediaSparqler.prototype.getAllOverview = function(callback) {
 	var _this = this;
 
 	var sQuery = this.createQuery(queryString)
-		.setParameter('graph', defaultGraph)
+		.setParameter('graph', this.defaultGraph)
 	  .execute(function(body) {
 	    callback(_this.sparqlFlatten(body));
 	 	});
@@ -45,14 +50,44 @@ TourpediaSparqler.prototype.getAllOverviewOfClass = function(tClass, callback) {
 
 	var sQuery = this.createQuery(queryString)
   	.setParameter('class', tClass)
-  	.setParameter('graph', defaultGraph)
+  	.setParameter('graph', this.defaultGraph)
 	  .execute(function(body) {
 	    callback(_this.sparqlFlatten(body));
 	 	});
 };
 
-TourpediaSparqler.prototype.createUriFromId = function(id) {
-  return '<' + this.base + id + '>'
+TourpediaSparqler.prototype.getPlaceById = function(id, callback) {
+  var resource = this.createUriFromId(id);
+
+  var query = 'SELECT * FROM $graph WHERE { ' +
+                '{ $resource a ?type. } UNION ' +
+                '{ $resource rdf:label ?label. } UNION ' +
+                '{ $resource dbpedia-owl:address ?address. } UNION ' +
+                '{ $resource gr:location ?grLocation. } UNION ' +
+                '{ $resource vcard:hasTelephone ?phone. } UNION ' +
+                '{ $resource foaf:primaryTopic ?primaryTopic. } UNION ' +
+                '{ $resource dbpedia-owl:wikiPageExternalLink ?wikiLink. } UNION ' +
+                '{ $resource rdfs:label ?rdfsLabel. } UNION ' +
+                '{ $resource vcard:fn ?fn. } UNION ' +
+                '{ $resource vcard:hasUrl ?url. } UNION ' +
+                '{ $resource vcard:latitude ?lat. } UNION ' +
+                '{ $resource vcard:longitude ?lng. }' +
+              '}';
+
+  // var query = 'select * from $graph where { ?s ?p ?o }';
+
+  var _this = this;
+
+  var sQuery = this.createQuery(query)
+    .setParameter('graph', this.defaultGraph)
+    .setParameter('resource', resource)
+    .execute(function(result) {
+      result = _this.sparqlFlatten(result);
+      result = _.reduce(result, _.assign, {});
+      callback(result);
+    });
 };
+
+
 
 module.exports = TourpediaSparqler;

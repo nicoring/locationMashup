@@ -151,7 +151,7 @@ Sparqler.prototype.sparqlFlatten = function(sparqlJson) {
     return _.mapValues(binding, "value");
   });
 
-  return { "results": flatResults };
+  return flatResults;
 };
 
 /*! ################# Special Methods #################

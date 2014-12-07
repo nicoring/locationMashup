@@ -9,6 +9,8 @@ angular.module('locationMashupApp')
     $scope.imgUrl = '';
     $scope.reviews = [];
 
+    $scope.isImageAvailable = false;
+
     $http.get('/api/placeDetails/' + id)
       .success(function(data) {
         $scope.details = data;
@@ -19,6 +21,10 @@ angular.module('locationMashupApp')
 
     $http.get('/api/placeDetails/reviews/' + id)
       .success(function(data) {
+        data = _.filter(data, function (review) {
+          return review.language == 'en' && review.wordsCount < 30;
+        });
+
         $scope.reviews = data;
       })
       .error(function(error) {
@@ -26,8 +32,9 @@ angular.module('locationMashupApp')
       });
 
     $http.get('/api/placeDetails/image/' + id)
-      .success(function() {
-
+      .success(function(data) {
+        $scope.imgUrl = data.url;
+        $scope.isImageAvailable = true;
       })
       .error(function() {
         console.log('image loading failed');

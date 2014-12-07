@@ -12,16 +12,9 @@ var tourSparqler = new TourpediaSparqler();
 // Get list of placeDetails
 exports.index = function(req, res) {
   var id = req.params.id;
-  var resource = tourSparqler.createUriFromId(id);
-
-  var query = 'select * where { $resource ?p ?o }';
-
-  var sQuery = tourSparqler.createQuery(query)
-    .setParameter('resource', resource)
-    .execute(function(result) {
-      result = tourSparqler.sparqlFlatten(result);
-      res.json(result);
-    });
+  tourSparqler.getPlaceById(id, function (result) {
+    res.json(result);
+  });
 };
 
 exports.reviews = function(req, res) {
@@ -41,5 +34,15 @@ exports.reviews = function(req, res) {
 
 exports.image = function(req, res) {
   var id = req.params.id;
-  res.json([]);
+  var resource = tourSparqler.createUriFromId(id);
+
+  var query = 'select ?url from $graph where { $resource vcard:hasPhoto ?url }';
+
+  var sQuery = tourSparqler.createQuery(query)
+    .setParameter('graph', tourSparqler.defaultGraph)
+    .setParameter('resource', resource)
+    .execute(function(result) {
+      result = tourSparqler.sparqlFlatten(result)[0];
+      res.json(result);
+    });
 };

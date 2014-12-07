@@ -17,7 +17,7 @@ angular.module('locationMashupApp', [
     $locationProvider.html5Mode(true);
 
     GoogleMapApiProviders.configure({
-        key: 'AIzaSyDkd1CXkqBrHLXzmpdHMnDk2sU9RUEsJ-g',
+        // key: 'AIzaSyDkd1CXkqBrHLXzmpdHMnDk2sU9RUEsJ-g',
         libraries: 'geometry, visualization'
     });
   }]);

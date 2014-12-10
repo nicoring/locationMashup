@@ -3,7 +3,7 @@
 angular.module('locationMashupApp')
   .controller('MapCtrl', function ($scope, $http, $location, uiGmapGoogleMapApi) {
 
-  	$scope.message = "Berlin Map!";
+  	$scope.message = 'Berlin Map!';
     $scope.markers = [];
 
     $scope.isMarkerSelected = false;
@@ -16,7 +16,6 @@ angular.module('locationMashupApp')
     		longitude: 13.383333
     	},
     	zoom: 12,
-    	minZoom: 9,
     	options: {
     		minZoom: 9
     	}
@@ -31,8 +30,8 @@ angular.module('locationMashupApp')
     // 	}
     // ]
 
-    var reponsePromise = $http.get('/api/places')
-      .success(function(data, status, headers, config) {
+    $http.get('/api/places')
+      .success(function(data) {
         console.log(data);
         var newMarkers = _.map(data, function (el) {
           return {
@@ -40,7 +39,7 @@ angular.module('locationMashupApp')
             latitude: el.lat,
             longitude: el.lng,
             title: el.label,
-          }
+          };
         });
         $scope.markers = newMarkers;
         $scope.data = data;
@@ -53,19 +52,19 @@ angular.module('locationMashupApp')
       var model = marker.model;
       $scope.selected = model;
       $scope.isMarkerSelected = true;
-    }
+    };
 
     $scope.closeInfo = function() {
       $scope.selected = {};
       $scope.isMarkerSelected = false;
-    }
+    };
 
     $scope.showMore = function() {
       var id = $scope.selected.id;
       console.log('show more for', id);
       $location.path('/details/' + id);
-    }
+    };
 
-    uiGmapGoogleMapApi.then( function (argument) {
-    });
+    // uiGmapGoogleMapApi.then( function (argument) {
+    // });
   });

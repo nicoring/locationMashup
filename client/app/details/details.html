@@ -1,21 +1,53 @@
 <div class="container">
-  <dv class="row">
+  <div class="row">
     <h3>{{details.label}}</h3>
+
     <div class="col-md-6">
       <h4>Details</h4>
       <div ng-repeat="(key, value) in details">
         <p><strong>{{key}}:</strong> {{value}}</p>
       </div>
       <img ng-src="{{imgUrl}}" ng-show="isImageAvailable">
+      </br>
+      <div id="interesting-places">
+        <ui-gmap-google-map id="detail-map"
+          center='map.center'
+          zoom='map.zoom'
+          bounds='map.bounds'
+          options='map.options'>
+          <ui-gmap-marker coords="mainMarker.coords" idKey="'main'" icon="'/assets/images/pins3.png'"></ui-gmap-marker>
+          <ui-gmap-markers
+            models="markers"
+            coords="'self'"
+            click="markerClicked">
+          </ui-gmap-markers>
+        </ui-gmap-google-map>
+        <div id="interesting-place-details" ng-show="true">
+          <div ng-repeat="(key, value) in selectedInterestingPlace">
+            <p><strong>{{key}}:</strong> {{value}}</p>
+          </div>
+        </div>
+      </div>
+
     </div>
+    <!-- end colum -->
+
     <div class="col-md-6">
-      <h4>Reviews</h4>
-      <div ng-repeat="review in reviews">
-        <p>
-          {{review.text}} </br>
-          Rating: {{review.rating}} Polarity: {{review.polarity}}
-        </p>
+      <div ng-show="reviews.length > 0">
+        <h4>Reviews</h4>
+        <div ng-repeat="review in reviews">
+          <p>
+            {{review.text}} </br>
+            Rating: {{review.rating}} Polarity: {{review.polarity}}
+          </p>
+        </div>
       </div>
     </div>
-  </dv>
+    <!-- end colum -->
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div>Icon made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
+    </div>
+  </div>
 </div>

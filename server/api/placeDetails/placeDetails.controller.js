@@ -9,6 +9,7 @@ var wikiSparqler = new WikivoyageSparqler();
 var TourpediaSparqler = require('../../libs/sparqler/tourpedia_sparqler');
 var tourSparqler = new TourpediaSparqler();
 
+
 // Get list of placeDetails
 exports.index = function(req, res) {
   var id = req.params.id;
@@ -16,6 +17,7 @@ exports.index = function(req, res) {
     res.json(result);
   });
 };
+
 
 exports.reviews = function(req, res) {
   var id = req.params.id;
@@ -32,6 +34,7 @@ exports.reviews = function(req, res) {
   });
 };
 
+
 exports.image = function(req, res) {
   var id = req.params.id;
   var resource = tourSparqler.createUriFromId(id);
@@ -45,4 +48,32 @@ exports.image = function(req, res) {
       result = tourSparqler.sparqlFlatten(result)[0];
       res.json(result);
     });
+};
+
+
+exports.places = function(req, res) {
+  var lat = parseFloat(req.query.lat);
+  var lng = parseFloat(req.query.lng);
+
+  var radius = 0.01;
+
+  var bbox = {
+    'north': lat + radius,
+    'west': lng - radius,
+    'south': lat - radius,
+    'east': lng + radius
+  }
+
+  wikiSparqler.getResourcesInBBox(bbox, function (result) {
+    result = wikiSparqler.sparqlFlatten(result);
+    res.json(result);
+  });
+};
+
+exports.locationInfo = function(req, res) {
+  var location = req.query.location;
+
+  wikiSparqler.getDetailsByUri(location, function (result) {
+    res.json(result);
+  });
 };

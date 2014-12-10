@@ -63,7 +63,6 @@ TourpediaSparqler.prototype.getPlaceById = function(id, callback) {
                 '{ $resource a ?type. } UNION ' +
                 '{ $resource rdf:label ?label. } UNION ' +
                 '{ $resource dbpedia-owl:address ?address. } UNION ' +
-                '{ $resource gr:location ?grLocation. } UNION ' +
                 '{ $resource vcard:hasTelephone ?phone. } UNION ' +
                 '{ $resource foaf:primaryTopic ?primaryTopic. } UNION ' +
                 '{ $resource dbpedia-owl:wikiPageExternalLink ?wikiLink. } UNION ' +
@@ -78,7 +77,7 @@ TourpediaSparqler.prototype.getPlaceById = function(id, callback) {
 
   var _this = this;
 
-  var sQuery = this.createQuery(query)
+  this.createQuery(query)
     .setParameter('graph', this.defaultGraph)
     .setParameter('resource', resource)
     .execute(function(result) {
@@ -87,6 +86,27 @@ TourpediaSparqler.prototype.getPlaceById = function(id, callback) {
       callback(result);
     });
 };
+
+
+/**
+* Get all resources inside a given rectangular bounding box
+*
+* @param {Object} bbox Boundingbox object, must contain: north, west, south, east
+* @param {Function} callback Callback which is executed after the query
+*/
+TourpediaSparqler.prototype.getResourcesInBBox = function(bbox, callback) {
+  var query = "select * from $graph where { ?s vcard:latitude ?lat ; vcard:longitude ?long ; rdfs:label ?label . filter ( ?lat < $north && ?lat > $south && ?long < $east && ?long > $west ) } ";
+  var sQuery = this.createQuery(query);
+
+  sQuery
+    .setParameter("north", bbox.north)
+    .setParameter("west", bbox.west)
+    .setParameter("south", bbox.south)
+    .setParameter("east", bbox.east)
+    .setParameter("graph", this.defaultGraph)
+    .execute(callback);
+};
+
 
 
 

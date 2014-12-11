@@ -143,13 +143,18 @@ angular.module('locationMashupApp')
     }
 
     function getLocationInfo(places) {
-      var locationURI = getLocationOfPlaces(places);
+      if (places.length > 0) {
+        var locationURI = getLocationOfPlaces(places);
+      } else {
+        var locationURI = 'http:localhost/wikivoyage/Berlin'
+      }
+
+
 
       var url = '/api/placeDetails/locationInfo?location=' + encodeURI(locationURI);
       $http.get(url)
         .success(function (data) {
           $scope.locationInfo = data[0];
-          console.log('locationInfo', $scope.locationInfo);
         })
         .error(function (error) {
           console.log('locationInfo loading failed', error);

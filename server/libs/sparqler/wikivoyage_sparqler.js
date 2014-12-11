@@ -34,7 +34,7 @@ WikivoyageSparqler.prototype.getAllOfCategory = function(category, callback) {
 
 WikivoyageSparqler.prototype.getDetailsByUri = function(uri, callback) {
 
-  var query = 'SELECT ?label ?description FROM $graph WHERE { $uri dc:description ?description ; rdfs:label ?label . }'
+  var query = 'SELECT ?label ?description FROM $graph WHERE { $uri dcterms:description ?description ; rdfs:label ?label . }'
   var uri = '<' + encodeURI(uri) + '>';
 
   var _this = this;

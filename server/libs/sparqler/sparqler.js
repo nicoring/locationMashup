@@ -48,7 +48,8 @@ var defaults = {
     "acco"       : "http://purl.org/acco/ns#",
     "h"          : "http://wafi.iit.cnr.it/angelica/Hontology.owl#",
     "gr"         : "http://purl.org/goodrelations/v1#",
-    "opener"     : "http://tour-pedia.org/resource/"
+    "opener"     : "http://tour-pedia.org/resource/",
+    "dcterms"    : "http://purl.org/dc/terms/"
   }
 };
 

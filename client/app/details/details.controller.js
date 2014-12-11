@@ -12,14 +12,18 @@ angular.module('locationMashupApp')
     $scope.reviews = [];
     var interestingPlaces = [];
     $scope.selectedInterestingPlace = {}
-    $scope.location = '';
+    $scope.locationInfo = {};
 
-    $scope.isImageAvailable = false;
 
-    $scope.mainMarker = {
-      coords: {}
-    };
-    $scope.markers = [];
+    $scope.isImageAvailable = function() {
+      return $scope.imgUrl !== '';
+    }
+
+    $scope.isLocationInfoAvailable = function() {
+      return _.keys($scope.locationInfo).length > 0;
+    }
+
+    // google map options
     $scope.map = {
       // center is the selected attraction
       center: {
@@ -31,6 +35,12 @@ angular.module('locationMashupApp')
         minZoom: 9
       }
     };
+
+    // markers on the map
+    $scope.mainMarker = {
+      coords: {}
+    };
+    $scope.markers = [];
 
     $scope.markerClicked = function (marker) {
       var model = marker.model;
@@ -78,7 +88,6 @@ angular.module('locationMashupApp')
     $http.get('/api/placeDetails/image/' + id)
       .success(function(data) {
         $scope.imgUrl = data.url;
-        $scope.isImageAvailable = true;
       })
       .error(function() {
         console.log('image loading failed');
@@ -125,6 +134,7 @@ angular.module('locationMashupApp')
 
       _.forEach(placeCounts, function (count, location) {
         if (count > bestCount) {
+          bestCount = count;
           mostProbablyLocation = location;
         }
       });
@@ -135,11 +145,11 @@ angular.module('locationMashupApp')
     function getLocationInfo(places) {
       var locationURI = getLocationOfPlaces(places);
 
-      var url = '/api/placeDetails/locationInfo?location=' + locationURI;
+      var url = '/api/placeDetails/locationInfo?location=' + encodeURI(locationURI);
       $http.get(url)
         .success(function (data) {
-          $scope.locationInfo = data;
-          console.log('locationInfo', data);
+          $scope.locationInfo = data[0];
+          console.log('locationInfo', $scope.locationInfo);
         })
         .error(function (error) {
           console.log('locationInfo loading failed', error);

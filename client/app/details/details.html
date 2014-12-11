@@ -10,6 +10,7 @@
       <img ng-src="{{imgUrl}}" ng-show="isImageAvailable">
       </br>
       <div id="interesting-places">
+        <h4>Interesting Places around</h4>
         <ui-gmap-google-map id="detail-map"
           center='map.center'
           zoom='map.zoom'
@@ -27,6 +28,11 @@
             <p><strong>{{key}}:</strong> {{value}}</p>
           </div>
         </div>
+      </div>
+      <div id="locationinfo" ng-show="isLocationInfoAvailable">
+        <h4>Location</h4>
+        <p>This attraction is located in <strong>{{locationInfo.label}}</strong></p>
+        <p>{{locationInfo.description}}</p>
       </div>
 
     </div>

@@ -7,6 +7,7 @@
 <http://localhost/wikivoyage/Berlin>
     owl:sameAs dbpedia:Berlin;
     voyont:part dbpedia:Berlin.
+    dcterms:description """Berlin is best known for its historical associations as the German capital, internationalism and tolerance, lively nightlife, its many cafés, clubs, and bars, street art, and numerous museums, palaces, and other sites of historic interest. Berlin's architecture is quite varied. Although badly damaged in the final years of World War II and broken apart during the Cold War, Berlin has reconstructed itself greatly, especially with the reunification push after the fall of the Berlin Wall in 1989."""
 
  <http://localhost/wikivoyage/Berlin%2FCity+West>
     owl:sameAs dbpedia:Charlottenburg-Wilmersdorf;
@@ -34,7 +35,7 @@
     voyont:part <http://dbpedia.org/resource/Reinickendorf_(locality)>;
     dcterms:description """Spandau and Reinickendorf are beautiful old towns, which feel much more spacious than the inner city. Pankow was once synonymous with the East German government, and the villas the East German "socialist" leaders inhabited still exist.""".
 
- <http://localhost/wikivoyage/Berlin-South> 
+ <http://localhost/wikivoyage/Berlin-South>
     voyont:part dbpedia:Steglitz-Zehlendorf;
     voyont:part dbpedia:Tempelhof-Schöneberg;
     voyont:part dbpedia:Neukölln;

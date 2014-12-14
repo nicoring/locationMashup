@@ -27,6 +27,7 @@ angular.module('locationMashupApp')
       return _.keys($scope.locationInfo).length > 0;
     }
 
+
     // google map options
     $scope.map = {
       // center is the selected attraction
@@ -42,13 +43,13 @@ angular.module('locationMashupApp')
 
     // markers on the map
     $scope.mainMarker = {
-      coords: {}
+      coords: {},
+      label: ''
     };
     $scope.markers = [];
 
     $scope.markerClicked = function (marker) {
       var model = marker.model;
-      console.log(model)
       $scope.selectedInterestingPlace = interestingPlaces[model.id]
 
     }
@@ -59,7 +60,6 @@ angular.module('locationMashupApp')
         $scope.data = data;
         $scope.details = data; // ability to leave out some entries
 
-
         var position = {
           latitude: data.lat,
           longitude: data.lng
@@ -69,7 +69,8 @@ angular.module('locationMashupApp')
         // set the center of the map
         $scope.map.center = position;
 
-        getInterestingPlaces(data.lat, data.lng);
+        // after loading the place details, get interesting places around
+        getInterestingPlaces(data.lat, data.lng, data.type);
       })
       .error(function() {
         console.log('details loading failed');
@@ -79,7 +80,7 @@ angular.module('locationMashupApp')
     $http.get('/api/placeDetails/reviews/' + id)
       .success(function(data) {
         data = _.filter(data, function (review) {
-          return review.language === 'en' && review.wordsCount < 50;
+          return (review.language === 'en' || review.language === 'de') && review.wordsCount < 50;
         });
 
         $scope.reviews = data;
@@ -93,16 +94,37 @@ angular.module('locationMashupApp')
       .success(function(data) {
         $scope.imgUrl = data.url;
       })
-      .error(function() {
-        console.log('image loading failed');
+      .error(function(error) {
+        console.log('image loading failed', error);
       });
 
 
-    function getInterestingPlaces(lat, lng) {
+      var mapping = {
+        'Restaurant': ['DrinkActivity', 'DoActivity', 'SeeActivity', 'BuyActivity', 'Activity'],
+        'Sightseeing': ['DrinkActivity', 'EatActivity', 'DoActivity', 'SeeActivity', 'BuyActivity', 'Activity'],
+        'PointsOfInterest': ['DrinkActivity', 'EatActivity', 'DoActivity', 'SeeActivity', 'BuyActivity', 'Activity'],
+        'Accomodation': ['DrinkActivity', 'EatActivity', 'DoActivity', 'SeeActivity', 'BuyActivity', 'SleepActivity', 'Activity'],
+        'ProductOrService': ['DrinkActivity', 'EatActivity', 'Activity']
+      };
+
+    function getInterestingPlaces(lat, lng, type) {
+
+      // get type of selected place and get matching wikivoyage Activities based on the mapping above
+      type = type.split("#")[1];
+      var categories = mapping[type];
+
       var url = '/api/placeDetails/places?lat=' + lat + '&lng=' + lng;
       $http.get(url)
         .success(function (data) {
-          var croppedData = _.shuffle(data).slice(0,6);
+
+          var croppedData = _.filter(data, function (el) {
+            var elementType = el.type.split('#')[1];
+            return _.find(categories, function (category) {
+              return elementType === category;
+            });
+          });
+          croppedData = _.shuffle(croppedData).slice(0,6);
+
           $scope.markers = _.map(croppedData, function (el, i) {
             return {
               id: i,
@@ -111,10 +133,10 @@ angular.module('locationMashupApp')
               longitude: el.long,
               title: el.label,
             };
-          })
+          });
+
           interestingPlaces = croppedData;
           getLocationInfo(data);
-
         })
         .error(function (error) {
           console.log('places loading failed', error);
@@ -122,7 +144,29 @@ angular.module('locationMashupApp')
     }
 
 
+    function getLocationInfo(places) {
+      var locationURI = '';
+      if (places.length > 0) {
+        locationURI = getLocationOfPlaces(places);
+      } else {
+        locationURI = 'http:localhost/wikivoyage/Berlin'
+      }
+
+      var url = '/api/placeDetails/locationInfo?location=' + encodeURI(locationURI);
+      $http.get(url)
+        .success(function (data) {
+          if (data.length > 0) {
+            $scope.locationInfo = data[0];
+          }
+        })
+        .error(function (error) {
+          console.log('locationInfo loading failed', error);
+        })
+    }
+
+
     function getLocationOfPlaces(places) {
+
       var placeCounts = {};
       _.forEach(places, function (place) {
         var location = place.location;
@@ -135,7 +179,6 @@ angular.module('locationMashupApp')
 
       var mostProbablyLocation = "";
       var bestCount = -1;
-
       _.forEach(placeCounts, function (count, location) {
         if (count > bestCount) {
           bestCount = count;
@@ -144,25 +187,5 @@ angular.module('locationMashupApp')
       });
 
       return mostProbablyLocation;
-    }
-
-    function getLocationInfo(places) {
-      if (places.length > 0) {
-        var locationURI = getLocationOfPlaces(places);
-      } else {
-        var locationURI = 'http:localhost/wikivoyage/Berlin'
-      }
-
-
-
-      var url = '/api/placeDetails/locationInfo?location=' + encodeURI(locationURI);
-      $http.get(url)
-        .success(function (data) {
-          $scope.locationInfo = data[0];
-        })
-        .error(function (error) {
-          console.log('locationInfo loading failed', error);
-        })
-
     }
 });

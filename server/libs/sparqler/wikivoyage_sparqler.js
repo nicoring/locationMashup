@@ -52,7 +52,7 @@ WikivoyageSparqler.prototype.getDetailsByUri = function(uri, callback) {
 * @param {Function} callback Callback which is executed after the query
 */
 WikivoyageSparqler.prototype.getResourcesInBBox = function(bbox, callback) {
-  var query = "select * from $graph where { ?s geo:lat ?lat ; geo:long ?long ; rdfs:label ?label ; dbo:location ?location . filter ( ?lat < $north && ?lat > $south && ?long < $east && ?long > $west ) } ";
+  var query = "select * from $graph where { ?s a ?type; geo:lat ?lat ; geo:long ?long ; rdfs:label ?label ; dbo:location ?location . filter ( ?lat < $north && ?lat > $south && ?long < $east && ?long > $west ) } ";
   var sQuery = this.createQuery(query);
 
   sQuery

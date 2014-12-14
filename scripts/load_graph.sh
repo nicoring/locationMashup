@@ -25,4 +25,4 @@ if [ $# -gt 1 ]; then
 fi
 
 
-isql 10001 exec="ld_dir_all ('$path', '*', '$graph'); rdf_loader_run(); checkpoint;"
+isql 10001 exec="ld_dir_all ('$path', '*.ttl', '$graph'); rdf_loader_run(); checkpoint;"

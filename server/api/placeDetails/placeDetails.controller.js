@@ -51,7 +51,7 @@ exports.image = function(req, res) {
 };
 
 
-exports.places = function(req, res) {
+exports.interestingPlaces = function(req, res) {
   var lat = parseFloat(req.query.lat);
   var lng = parseFloat(req.query.lng);
 

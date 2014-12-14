@@ -5,7 +5,7 @@ var controller = require('./placeDetails.controller');
 
 var router = express.Router();
 
-router.get('/places', controller.places);
+router.get('/places', controller.interestingPlaces);
 router.get('/locationInfo', controller.locationInfo);
 router.get('/reviews/:id', controller.reviews);
 router.get('/image/:id', controller.image);

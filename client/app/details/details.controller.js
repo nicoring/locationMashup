@@ -15,6 +15,10 @@ angular.module('locationMashupApp')
     $scope.locationInfo = {};
 
 
+    $scope.areReviewsAvailable = function () {
+      return $scope.reviews.length > 0;
+    }
+
     $scope.isImageAvailable = function() {
       return $scope.imgUrl !== '';
     }

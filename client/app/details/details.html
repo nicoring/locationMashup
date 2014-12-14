@@ -7,7 +7,7 @@
       <div ng-repeat="(key, value) in details">
         <p><strong>{{key}}:</strong> {{value}}</p>
       </div>
-      <img ng-src="{{imgUrl}}" ng-show="isImageAvailable">
+      <img ng-src="{{imgUrl}}" ng-show="isImageAvailable()">
       </br>
       <div id="interesting-places">
         <h4>Interesting Places around</h4>
@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div id="locationinfo" ng-show="isLocationInfoAvailable">
+      <div id="locationinfo" ng-show="isLocationInfoAvailable()">
         <h4>Location</h4>
         <p>This attraction is located in <strong>{{locationInfo.label}}</strong></p>
         <p>{{locationInfo.description}}</p>
@@ -39,7 +39,7 @@
     <!-- end colum -->
 
     <div class="col-md-6">
-      <div ng-show="reviews.length > 0">
+      <div ng-show="areReviewsAvailable()">
         <h4>Reviews</h4>
         <div ng-repeat="review in reviews">
           <p>

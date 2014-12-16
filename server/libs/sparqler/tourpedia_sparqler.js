@@ -29,14 +29,15 @@ TourpediaSparqler.prototype.createUriFromId = function(id) {
 TourpediaSparqler.prototype.getAllOverview = function(callback) {
 
 	var queryString = "SELECT DISTINCT * FROM $graph WHERE {?s dbpedia-owl:location dbpedia:Berlin ;" +
-				  					"vcard:latitude ?lat ; vcard:longitude ?lng ; rdf:label ?label . }"
+				  					"vcard:latitude ?lat ; vcard:longitude ?lng ; rdfs:label ?label . }"
 
 	var _this = this;
 
 	var sQuery = this.createQuery(queryString)
 		.setParameter('graph', this.defaultGraph)
 	  .execute(function(body) {
-	    callback(_this.sparqlFlatten(body));
+      body = _this.sparqlFlatten(body);
+	    callback(body);
 	 	});
 }
 

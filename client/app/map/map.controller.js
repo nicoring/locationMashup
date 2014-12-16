@@ -32,7 +32,7 @@ angular.module('locationMashupApp')
 
     $http.get('/api/places')
       .success(function(data) {
-        console.log(data);
+        console.log(data.length);
         var newMarkers = _.map(data, function (el) {
           return {
             id: el.s.replace('http://tour-pedia.org/resource/', ''),

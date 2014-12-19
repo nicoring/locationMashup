@@ -18,3 +18,8 @@ exports.category = function(req, res) {
   	res.json(result);
   });
 };
+
+exports.fake = function(req, res) {
+  var data = require('../../../data/filtered/filtered.json');
+  res.json(data);
+};

@@ -224,4 +224,13 @@ Sparqler.prototype.getResourcesInBBox = function(bbox, callback) {
     .execute(callback);
 };
 
+Sparqler.prototype.getBBox = function(lat, lng, radius) {
+  return {
+    'north': lat + radius,
+    'west': lng - radius,
+    'south': lat - radius,
+    'east': lng + radius
+  }
+};
+
 module.exports = Sparqler;

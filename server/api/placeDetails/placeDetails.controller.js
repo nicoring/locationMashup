@@ -52,22 +52,37 @@ exports.image = function(req, res) {
 
 
 exports.interestingPlaces = function(req, res) {
+
+  function requestBBox() {
+    bbox = wikiSparqler.getBBox(lat, lng, radius);
+    wikiSparqler.getResourcesInBBox(bbox, function (res) {
+      result = wikiSparqler.sparqlFlatten(res);
+      handleResult();
+    });
+  }
+
+  function handleResult() {
+    console.log(radius);
+    if (result.length < 5) {
+      radius += 0.01;
+      requestBBox();
+    } else {
+      var response = {
+        result: result,
+        bbox: bbox
+      }
+      res.json(response);
+    }
+  }
+
   var lat = parseFloat(req.query.lat);
   var lng = parseFloat(req.query.lng);
 
   var radius = 0.01;
+  var bbox = {};
+  var result = {};
 
-  var bbox = {
-    'north': lat + radius,
-    'west': lng - radius,
-    'south': lat - radius,
-    'east': lng + radius
-  }
-
-  wikiSparqler.getResourcesInBBox(bbox, function (result) {
-    result = wikiSparqler.sparqlFlatten(result);
-    res.json(result);
-  });
+  requestBBox(radius);
 };
 
 exports.locationInfo = function(req, res) {

@@ -30,6 +30,7 @@ angular.module('locationMashupApp')
     // 	}
     // ]
 
+
     $http.get('/api/places/fake')
       .success(function(data) {
         console.log(data.length);

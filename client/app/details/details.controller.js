@@ -14,7 +14,6 @@ angular.module('locationMashupApp')
     $scope.locationInfo = {};
 
     var interestingPlaces = [];
-    var bounds = {};
 
     $scope.areReviewsAvailable = function () {
       return $scope.reviews.length > 0;
@@ -45,13 +44,36 @@ angular.module('locationMashupApp')
     var mapLoaded = new $.Deferred();
     var sdkLoaded = new $.Deferred();
     var boundsLoaded = new $.Deferred();
-    var mapControl;
-    var mapApi;
+    var mapControl, mapApi;
 
     $.when(mapLoaded, sdkLoaded, boundsLoaded).done(function () {
-      var southwest = new mapApi.LatLng(bounds.south, bounds.west);
-      var northeast = new mapApi.LatLng(bounds.north, bounds.east);
+      var south, north, west, east;
+      south = north = $scope.map.center.latitude;
+      west = east = $scope.map.center.longitude;
+
+      console.log(interestingPlaces);
+
+      _.forEach(interestingPlaces, function (place) {
+        if (place.lat > north)
+          north = place.lat
+        else if (place.lat < south)
+          south = place.lat
+
+        if (place.long > east)
+          east = place.long
+        else if (place.long < west)
+          west = place.long
+      });
+
+
+      // var southwest = new mapApi.LatLng(bounds.south, bounds.west);
+      // var northeast = new mapApi.LatLng(bounds.north, bounds.east);
+
+      var southwest = new mapApi.LatLng(south, west);
+      var northeast = new mapApi.LatLng(north, east);
+
       var box = new mapApi.LatLngBounds(southwest, northeast);
+      console.log(box)
       mapControl.fitBounds(box);
     });
 
@@ -153,8 +175,8 @@ angular.module('locationMashupApp')
           var data = res.result;
 
           // TODO: compute box based on markers
-          bounds = res.bbox;
-          boundsLoaded.resolve();
+          // bounds = res.bbox;
+          // boundsLoaded.resolve();
 
           var croppedData = _.filter(data, function (el) {
             var elementType = el.type.split('#')[1];
@@ -176,6 +198,7 @@ angular.module('locationMashupApp')
           });
 
           interestingPlaces = croppedData;
+          boundsLoaded.resolve();
           getLocationInfo(data);
         })
         .error(function (error) {

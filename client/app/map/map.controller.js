@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('locationMashupApp')
-  .controller('MapCtrl', function ($scope, $http, $location, uiGmapGoogleMapApi) {
+  .controller('MapCtrl', function ($scope, $http, $location) {
 
   	$scope.message = 'Berlin Map!';
     $scope.markers = [];
 
     $scope.isMarkerSelected = false;
-    $scope.selected = {};
+    $scope.selectedMarker = {};
 
     $scope.map = {
     	// center of berlin
@@ -51,17 +51,17 @@ angular.module('locationMashupApp')
 
     $scope.markerClicked = function(marker) {
       var model = marker.model;
-      $scope.selected = model;
+      $scope.selectedMarker = model;
       $scope.isMarkerSelected = true;
     };
 
     $scope.closeInfo = function() {
-      $scope.selected = {};
+      $scope.selectedMarker = {};
       $scope.isMarkerSelected = false;
     };
 
     $scope.showMore = function() {
-      var id = $scope.selected.id;
+      var id = $scope.selectedMarker.id;
       console.log('show more for', id);
       $location.path('/details/' + id);
     };

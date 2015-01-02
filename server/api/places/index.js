@@ -5,6 +5,7 @@ var controller = require('./places.controller');
 
 var router = express.Router();
 
+router.get('/tourpedia', controller.getPlaces);
 router.get('/fake', controller.fake);
 router.get('/', controller.index);
 router.get('/:category', controller.category);

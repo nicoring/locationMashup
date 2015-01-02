@@ -53,6 +53,13 @@ exports.image = function(req, res) {
 
 exports.interestingPlaces = function(req, res) {
 
+  var lat = parseFloat(req.query.lat);
+  var lng = parseFloat(req.query.lng);
+
+  var radius = 0.01;
+  var bbox = {};
+  var result = {};
+
   function requestBBox() {
     bbox = wikiSparqler.getBBox(lat, lng, radius);
     wikiSparqler.getResourcesInBBox(bbox, function (res) {
@@ -63,24 +70,18 @@ exports.interestingPlaces = function(req, res) {
 
   function handleResult() {
     console.log(radius);
+
+    // find at least 5 nearest resources
     if (result.length < 5) {
       radius += 0.01;
       requestBBox();
     } else {
-      var response = {
+      res.json({
         result: result,
         bbox: bbox
-      }
-      res.json(response);
+      });
     }
   }
-
-  var lat = parseFloat(req.query.lat);
-  var lng = parseFloat(req.query.lng);
-
-  var radius = 0.01;
-  var bbox = {};
-  var result = {};
 
   requestBBox(radius);
 };

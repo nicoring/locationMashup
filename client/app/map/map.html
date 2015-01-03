@@ -1,26 +1,27 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-      <h3>{{message}}</h3>
+      <h3>Berlin Locator Map</h3>
     </div>
   </div>
-	<div class="row">
-		<div class="col-md-10">
-			<ui-gmap-google-map id='map'
-				center='map.center'
-				zoom='map.zoom'
-				bounds='map.bounds'
-				options='map.options'>
-				<ui-gmap-markers models="markers" coords="'self'" doCluster="false" click="markerClicked"></ui-gmap-markers>
-			</ui-gmap-google-map>
-		</div>
+  <div class="row">
+    <div class="col-md-10">
+      <ui-gmap-google-map id='map'
+        center='map.center'
+        zoom='map.zoom'
+        bounds='map.bounds'
+        ptions='map.options'>
+        <ui-gmap-markers models="markers" coords="'self'" doCluster="true" clusterOptions="clusterOptions" click="markerClicked"></ui-gmap-markers>
+      </ui-gmap-google-map>
+    </div>
     <div class="col-md-2">
       <div ng-show="isMarkerSelected">
-        <p>Title: {{selected.title}}</p>
-        <p>ID: {{selected.id}}</p>
+        <p>Title: {{selectedMarker.title}}</p>
+        <p>ID: {{selectedMarker.id}}</p>
         <button class="btn btn-default" ng-click="closeInfo()">Close</button>
         <button class="btn btn-default" ng-click="showMore()">Show More</button>
       </div>
     </div>
-	</div>
+  </div>
 </div>
+<div id="place-details-overlay" class=""></div>

@@ -6,6 +6,8 @@ var Mapnificent = require('mapnificent');
 var randtoken = require('rand-token');
 var request = require('request');
 var $ = require('jquery-deferred');
+var Reviews = require('../../services/reviews.js');
+var Blacklist = require('../../services/blacklist.js');
 
 var sparqler = new TourpediaSparqler();
 var mapnificent = new Mapnificent({
@@ -32,17 +34,32 @@ var mapnificent = new Mapnificent({
 });
 mapnificent.init();
 
+/** HELPERS */
+
+/**
+ * Determine radius in meters depending on latitude.
+ */
+function getLngRadius(lat, mradius) {
+  var equatorLength = 40075017;
+  var DEG_TO_RAD = Math.PI / 180;
+    var hLength = equatorLength * Math.cos(DEG_TO_RAD * lat);
+
+    return (mradius / hLength) * 360;
+}
+
+/** EXPORTS **/
+
 // Get list of all places
 exports.index = function(req, res) {
   sparqler.getAllOverview( function(result) {
-  	res.json(result);
+    res.json(result);
   });
 };
 
 exports.category = function(req, res) {
-	var category = req.params.category
+  var category = req.params.category
   sparqler.getAllOverviewOfClass(category, function(result) {
-  	res.json(result);
+    res.json(result);
   });
 };
 
@@ -50,6 +67,7 @@ exports.fake = function(req, res) {
   var data = require('../../../data/filtered/reviews.json');
   res.json(data);
 };
+
 
 /**
  * Start places calculation and send a token with wich the result can be retreived.
@@ -77,63 +95,78 @@ exports.getPlaces = function(req, res) {
     lng: parseFloat(req.query.lng)
   };
   var time = parseInt(req.query.time);
-  var id = randtoken.uid(8);
-  var position = mapnificent.addPosition(latlng, time, id);
+  var token = randtoken.uid(8);
+
+  /** start mapnificent calculation ... **/
+  var position = mapnificent.addPosition(latlng, time, token);
   var deferredPosition = position.getAllStationsByDistanceAndTime();
 
-  if (req.query.noToken === "1") {
-    deferredPosition.done(function() {
-      var filterByReviews = function(data, callback) {
+  /** ... and fetch tourpedia data in parallel **/
+  var maxTransportationSpeed = 70 / 3.6; // estimated maximum public transportation speed in m/s
+  var maxDistance = getLngRadius(time * maxTransportationSpeed);
+  var bbox = sparqler.getBbox(latlng.lat, latlng.lng, maxDistance);
+  var deferredPlaces = new $.Deferred();
 
-        var deferreds = [];
-
-        var reviews = {};
-        _.each(data, function(place) {
-          var id = place.s.replace('http://tour-pedia.org/resource/', '');
-          var url = 'http://tour-pedia.org/api/getReviewsByPlaceId?placeId=' + id;
-
-          var def = new $.Deferred();
-          deferreds.push(def);
-          request(url, function(error, response, body) {
-            if (!error && response.statusCode === 200) {
-              body = JSON.parse(body);
-              // console.log(body);
-              reviews[id] = body.length > 0;
-              def.resolve();
-            }
-          });
-        });
-
-        var waiter = $.when.apply(this, deferreds);
-        waiter.done(function() {
-          var filtered =  _.filter(data, function(place) {
-            var id = place.s.replace('http://tour-pedia.org/resource/', '');
-            console.log(id, reviews[id]);
-            return reviews[id];
-          });
-
-          callback(filtered);
-        });
-
+  // apply filtering
+  var deferredPlacesFiltered = deferredPlaces.then(function(places) {
+    return _.filter(places, function(place) {
+      // filter by blacklist
+      var label = place.label;
+      if (Blacklist.contains(label)) {
+        return false;
       }
 
-      var intersectPlaces = function(data) {
-        console.log(data);
-        var places = sparqler.sparqlFlatten(data);
-        var filteredPlaces = position.intersectPointsWithStations(places);
+      // filter by reviews
+      var id = place.s.replace('http://tour-pedia.org/resource/', '');
+      var reviews = Reviews.getById(id);
 
-        filteredPlaces = filterByReviews(filteredPlaces, function(data) {
-           var fs = require('fs');
-           fs.writeFile("reviews.json", JSON.stringify(data), function() {
-            console.log('done');
-           });
-          // res.json(filteredPlaces);
-        });
-      };
+      if (reviews === null || reviews.length === 0) {
+        return false;
+      }
 
-      console.log(position.stationsAABB);
-      sparqler.getResourcesInBBox(position.stationsAABB, intersectPlaces);
+      // filter by rating and polarity
+      var rating = 0;
+      var ratingCount = 0;
+      var polarity = 0;
+      var polarityCount = 0;
+
+      _.each(reviews, function(review) {
+        if (review.rating > 0) {
+          rating += review.rating;
+          ratingCount++;
+        }
+
+        if (review.polarity > 0) {
+          polarity += review.polarity;
+          polarityCount++;
+        }
+      });
+
+      rating = rating / ratingCount;
+      polarity = polarity / polarityCount;
+
+      if ((rating > 0 && rating < 3) || (polarity > 0 && polarity < 5)) {
+        return false;
+      }
+
+      // seems ok
+      return true;
     });
+  });
+
+  // start request
+  sparqler.getResourcesInBBox(bbox, function(data) {
+    var places = sparqler.sparqlFlatten(data);
+    deferredPlaces.resolve(places);
+  });
+
+  if (req.query.noToken === "1") {
+
+    $.when(deferredPlacesFiltered, deferredPosition).done(function(places) {
+      var intersectedPlaces = position.intersectPointsWithStations(places);
+      res.json(intersectedPlaces);
+    });
+
   } else {
     res.status(501);
     res.send('not implemented yet');

@@ -25,17 +25,17 @@ WikivoyageSparqler.prototype.getAllOfCategory = function(category, callback) {
 
   this.createQuery(query)
     .setParameter('activity', activity)
-    .setParameter('graph', defaultGraph)
+    .setParameter('graph', this.defaultGraph)
     .execute(function(body) {
       callback(_this.sparqlFlatten(body));
     });
 }
 
 
-WikivoyageSparqler.prototype.getDetailsByUri = function(uri, callback) {
+WikivoyageSparqler.prototype.getLocationDetailsByUri = function(uri, callback) {
 
-  var query = 'SELECT ?label ?description FROM $graph WHERE { $uri dcterms:description ?description ; rdfs:label ?label . }'
-  var uri = '<' + encodeURI(uri) + '>';
+  var query = 'SELECT ?label ?description FROM $graph WHERE { $uri dcterms:description ?description ; rdfs:label ?label . }';
+  uri = '<' + encodeURI(uri) + '>';
 
   var _this = this;
   this.createQuery(query)

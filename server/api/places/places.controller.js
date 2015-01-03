@@ -135,7 +135,8 @@ exports.getPlaces = function(req, res) {
       sparqler.getResourcesInBBox(position.stationsAABB, intersectPlaces);
     });
   } else {
-    res.json({ success: false, message: 'not implemented' });
+    res.status(501);
+    res.send('not implemented yet');
   }
 
 };

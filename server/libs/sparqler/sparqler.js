@@ -224,14 +224,6 @@ Sparqler.prototype.getResourcesInBBox = function(bbox, callback) {
     .execute(callback);
 };
 
-/**
- * Get axis-aligned bounding box for a given circle.
- *
- * @param  {Number} lat
- * @param  {Number} lng
- * @param  {Number} radius radius given as lng
- * @return {Object}        aabb containing `north`, `east`, `south` and `west`
- */
 Sparqler.prototype.getBBox = function(lat, lng, radius) {
   return {
     'north': lat + radius,

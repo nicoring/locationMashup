@@ -118,6 +118,7 @@ exports.getPlaces = function(req, res) {
       }
 
       var intersectPlaces = function(data) {
+        console.log(data);
         var places = sparqler.sparqlFlatten(data);
         var filteredPlaces = position.intersectPointsWithStations(places);
 

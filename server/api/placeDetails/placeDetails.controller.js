@@ -89,7 +89,7 @@ exports.interestingPlaces = function(req, res) {
 exports.locationInfo = function(req, res) {
   var location = req.query.location;
 
-  wikiSparqler.getDetailsByUri(location, function (result) {
+  wikiSparqler.getLocationDetailsByUri(location, function (result) {
     res.json(result);
   });
 };

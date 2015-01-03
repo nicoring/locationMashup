@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var request = require('request');
+var reviews = require('../../services/reviews.js');
 
 var WikivoyageSparqler = require('../../libs/sparqler/wikivoyage_sparqler');
 var wikiSparqler = new WikivoyageSparqler();
@@ -21,17 +22,30 @@ exports.index = function(req, res) {
 
 exports.reviews = function(req, res) {
   var id = req.params.id;
-  var url = 'http://tour-pedia.org/api/getReviewsByPlaceId?placeId=' + id;
+  // var url = 'http://tour-pedia.org/api/getReviewsByPlaceId?placeId=' + id;
 
-  request(url, function(error, response, body) {
-    if (!error && response.statusCode === 200) {
-      body = JSON.parse(body);
-      res.json(body);
-    } else {
-      console.log("Review Request failed", error);
-      res.status(500).send('review request to "http://tour-pedia.org/api/getReviewsByPlaceId" failed');
-    }
-  });
+  // request(url, function(error, response, body) {
+  //   if (!error && response.statusCode === 200) {
+  //     body = JSON.parse(body);
+  //     res.json(body);
+  //   } else {
+  //     console.log("Review Request failed", error);
+  //     res.status(500).send('review request to "http://tour-pedia.org/api/getReviewsByPlaceId" failed');
+  //   }
+  // });
+  reviews.getById(id)
+    .done(function(reviews) {
+      if (reviews =! null) {
+        res.json(reviews);
+      } else {
+        console.log("Review Request failed");
+        res.status(500).send('review request to "http://tour-pedia.org/api/getReviewsByPlaceId" failed');
+      }
+    });
+    // .fail(function() {
+    //   console.log("Review Request failed");
+    //   res.status(500).send('review request to "http://tour-pedia.org/api/getReviewsByPlaceId" failed');
+    // });
 };
 
 
@@ -69,7 +83,7 @@ exports.interestingPlaces = function(req, res) {
   }
 
   function handleResult() {
-    console.log(radius);
+    // console.log(radius);
 
     // find at least 5 nearest resources
     if (result.length < 5) {

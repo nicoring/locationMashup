@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('locationMashupApp')
-  .controller('DetailsCtrl', function ($scope, $routeParams, $http, uiGmapIsReady, uiGmapGoogleMapApi) {
+  .controller('DetailsCtrl', function ($scope, $routeParams, $http, $location, uiGmapIsReady, uiGmapGoogleMapApi) {
 
     var id = $routeParams.id;
 
@@ -25,6 +25,11 @@ angular.module('locationMashupApp')
 
     $scope.isLocationInfoAvailable = function() {
       return _.keys($scope.locationInfo).length > 0;
+    };
+
+
+    $scope.goBack = function() {
+      $location.path('/');
     };
 
 

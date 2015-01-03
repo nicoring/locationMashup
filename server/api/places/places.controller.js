@@ -107,7 +107,7 @@ exports.getPlaces = function(req, res) {
   /** ... and fetch tourpedia data in parallel **/
   var maxTransportationSpeed = 70 / 3.6; // estimated maximum public transportation speed in m/s
   var maxDistance = getLngRadius(time * maxTransportationSpeed);
-  var bbox = sparqler.getBbox(latlng.lat, latlng.lng, maxDistance);
+  var bbox = sparqler.getBBox(latlng.lat, latlng.lng, maxDistance);
   var deferredPlaces = new $.Deferred();
 
   // apply filtering
@@ -121,6 +121,8 @@ exports.getPlaces = function(req, res) {
 
       // filter by reviews
       var id = place.s.replace('http://tour-pedia.org/resource/', '');
+      console.log('was here places');
+      // TODO: getById returns a deferred
       var reviews = Reviews.getById(id);
 
       if (reviews === null || reviews.length === 0) {

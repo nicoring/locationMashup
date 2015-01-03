@@ -3,7 +3,6 @@
 angular.module('locationMashupApp')
   .controller('MapCtrl', function ($scope, $http, $location) {
 
-  	$scope.message = 'Berlin Map!';
     $scope.markers = [];
 
     $scope.isMarkerSelected = false;
@@ -21,6 +20,12 @@ angular.module('locationMashupApp')
     	}
     };
 
+    $scope.clusterOptions = {
+      averageCenter: true,
+      batchSize: 5000,
+      maxZoom: 15
+    }
+
     // $scope.markers = [
     // 	{
     // 			id: 1,
@@ -31,7 +36,7 @@ angular.module('locationMashupApp')
     // ]
 
     var berlinZoo = {lat: 52.5074, lng: 13.3326};
-    $http.get('api/places/fake') //('api/places/tourpedia?lat='+berlinZoo.lat+'&lng='+berlinZoo.lng+'&time='+ 10*60 +'&noToken=1') // '/api/places/fake'
+    $http.get('api/places/fake', { cache: 'true'}) //('api/places/tourpedia?lat='+berlinZoo.lat+'&lng='+berlinZoo.lng+'&time='+ 10*60 +'&noToken=1') // '/api/places/fake'
       .success(function(data) {
         console.log(data.length);
         var newMarkers = _.map(data, function (el) {

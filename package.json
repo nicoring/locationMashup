@@ -16,6 +16,7 @@
     "lodash": "~2.4.1",
     "mapnificent": "git://github.com/nicoring/Mapnificent.git#nodejs",
     "method-override": "~1.0.0",
+    "mongoose": "^3.8.21",
     "morgan": "~1.0.0",
     "rand-token": "^0.2.1",
     "request": "^2.47.0",

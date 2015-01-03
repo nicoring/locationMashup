@@ -9,7 +9,10 @@ var $ = require('jquery-deferred');
 var Reviews = require('../../services/reviews.js');
 var Blacklist = require('../../services/blacklist.js');
 
+/** INITIALIZATION **/
+
 var sparqler = new TourpediaSparqler();
+
 var mapnificent = new Mapnificent({
   active: true,
   added: '2010-10-03T12:05:26.240272',

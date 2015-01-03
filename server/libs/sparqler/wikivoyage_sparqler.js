@@ -51,6 +51,7 @@ WikivoyageSparqler.prototype.getDetailsByUri = function(uri, callback) {
 * @param {Object} bbox Boundingbox object, must contain: north, west, south, east
 * @param {Function} callback Callback which is executed after the query
 */
+// TODO: long to lng
 WikivoyageSparqler.prototype.getResourcesInBBox = function(bbox, callback) {
   var query = "select * from $graph where { ?s a ?type; geo:lat ?lat ; geo:long ?long ; rdfs:label ?label ; dbo:location ?location . filter ( ?lat < $north && ?lat > $south && ?long < $east && ?long > $west ) } ";
   var sQuery = this.createQuery(query);

@@ -110,7 +110,7 @@ Sparqler.prototype.execute = function(query, callback) {
   }
 
   query = this.parsePrefixes(query) + query;
-  // console.log("query", query);
+  console.log("query", query);
 
   // perform update on INSERT or DELETE
   var requestBody;

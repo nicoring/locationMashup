@@ -31,7 +31,7 @@ angular.module('locationMashupApp')
     // ]
 
     var berlinZoo = {lat: 52.5074, lng: 13.3326};
-    $http.get('api/places/tourpedia?lat='+berlinZoo.lat+'&lng='+berlinZoo.lng+'&time='+ 10*60 +'&noToken=1') // '/api/places/fake'
+    $http.get('api/places/fake') //('api/places/tourpedia?lat='+berlinZoo.lat+'&lng='+berlinZoo.lng+'&time='+ 10*60 +'&noToken=1') // '/api/places/fake'
       .success(function(data) {
         console.log(data.length);
         var newMarkers = _.map(data, function (el) {

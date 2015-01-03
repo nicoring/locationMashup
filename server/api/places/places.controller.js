@@ -4,6 +4,8 @@ var _ = require('lodash');
 var TourpediaSparqler = require('../../libs/sparqler/tourpedia_sparqler');
 var Mapnificent = require('mapnificent');
 var randtoken = require('rand-token');
+var request = require('request');
+var $ = require('jquery-deferred');
 
 var sparqler = new TourpediaSparqler();
 var mapnificent = new Mapnificent({
@@ -45,7 +47,7 @@ exports.category = function(req, res) {
 };
 
 exports.fake = function(req, res) {
-  var data = require('../../../data/filtered/filtered.json');
+  var data = require('../../../data/filtered/reviews.json');
   res.json(data);
 };
 
@@ -81,13 +83,52 @@ exports.getPlaces = function(req, res) {
 
   if (req.query.noToken === "1") {
     deferredPosition.done(function() {
+      var filterByReviews = function(data, callback) {
+
+        var deferreds = [];
+
+        var reviews = {};
+        _.each(data, function(place) {
+          var id = place.s.replace('http://tour-pedia.org/resource/', '');
+          var url = 'http://tour-pedia.org/api/getReviewsByPlaceId?placeId=' + id;
+
+          var def = new $.Deferred();
+          deferreds.push(def);
+          request(url, function(error, response, body) {
+            if (!error && response.statusCode === 200) {
+              body = JSON.parse(body);
+              // console.log(body);
+              reviews[id] = body.length > 0;
+              def.resolve();
+            }
+          });
+        });
+
+        var waiter = $.when.apply(this, deferreds);
+        waiter.done(function() {
+          var filtered =  _.filter(data, function(place) {
+            var id = place.s.replace('http://tour-pedia.org/resource/', '');
+            console.log(id, reviews[id]);
+            return reviews[id];
+          });
+
+          callback(filtered);
+        });
+
+      }
+
       var intersectPlaces = function(data) {
         console.log(data);
         var places = sparqler.sparqlFlatten(data);
-        // TODO: places are empty ... maybe i have a wrong virtuoso setup :(
-        console.log(places);
         var filteredPlaces = position.intersectPointsWithStations(places);
-        res.json(filteredPlaces);
+
+        filteredPlaces = filterByReviews(filteredPlaces, function(data) {
+           var fs = require('fs');
+           fs.writeFile("reviews.json", JSON.stringify(data), function() {
+            console.log('done');
+           });
+          // res.json(filteredPlaces);
+        });
       };
 
       console.log(position.stationsAABB);

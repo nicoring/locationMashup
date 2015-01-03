@@ -10,22 +10,22 @@ angular.module('locationMashupApp')
     $scope.details = {};
     $scope.imgUrl = '';
     $scope.reviews = [];
-    $scope.selectedInterestingPlace = {}
+    $scope.selectedInterestingPlace = {};
     $scope.locationInfo = {};
 
     var interestingPlaces = [];
 
     $scope.areReviewsAvailable = function () {
       return $scope.reviews.length > 0;
-    }
+    };
 
     $scope.isImageAvailable = function() {
       return $scope.imgUrl !== '';
-    }
+    };
 
     $scope.isLocationInfoAvailable = function() {
       return _.keys($scope.locationInfo).length > 0;
-    }
+    };
 
 
     // google map options
@@ -55,14 +55,14 @@ angular.module('locationMashupApp')
 
       _.forEach(interestingPlaces, function (place) {
         if (place.lat > north)
-          north = place.lat
+          north = place.lat;
         else if (place.lat < south)
-          south = place.lat
+          south = place.lat;
 
         if (place.long > east)
-          east = place.long
+          east = place.long;
         else if (place.long < west)
-          west = place.long
+          west = place.long;
       });
 
 
@@ -73,7 +73,7 @@ angular.module('locationMashupApp')
       var northeast = new mapApi.LatLng(north, east);
 
       var box = new mapApi.LatLngBounds(southwest, northeast);
-      console.log(box)
+      console.log(box);
       mapControl.fitBounds(box);
     });
 
@@ -212,7 +212,7 @@ angular.module('locationMashupApp')
       if (places.length > 0) {
         locationURI = getLocationOfPlaces(places);
       } else {
-        locationURI = 'http:localhost/wikivoyage/Berlin'
+        locationURI = 'http:localhost/wikivoyage/Berlin';
       }
 
       var url = '/api/placeDetails/locationInfo?location=' + encodeURI(locationURI);
@@ -224,7 +224,7 @@ angular.module('locationMashupApp')
         })
         .error(function (error) {
           console.log('locationInfo loading failed', error);
-        })
+        });
     }
 
 
@@ -233,14 +233,14 @@ angular.module('locationMashupApp')
       var placeCounts = {};
       _.forEach(places, function (place) {
         var location = place.location;
-        if (placeCounts[location] != null) {
+        if (placeCounts[location] !== null) {
           placeCounts[location] += 1;
         } else {
           placeCounts[location] = 1;
         }
       });
 
-      var mostProbablyLocation = "";
+      var mostProbablyLocation = '';
       var bestCount = -1;
       _.forEach(placeCounts, function (count, location) {
         if (count > bestCount) {

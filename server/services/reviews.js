@@ -94,7 +94,7 @@ function updateReviewEntry(id) {
     });
 
     // load updates into in-memory cache
-    inMemoryCache[el.id] = el.reviews;
+    inMemoryCache[reviews.id] = reviews.reviews;
   });
 }
 
@@ -103,7 +103,7 @@ exports.cleanReviews = function() {
   console.log('cleaned Cache');
   ReviewsEntry.remove(function(err) {
     if (err) {
-      console.log('db clean failed:', error);
+      console.log('db clean failed:', err);
     } else {
       console.log('cleaned DB');
     }

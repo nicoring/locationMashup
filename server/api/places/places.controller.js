@@ -113,8 +113,6 @@ exports.getPlaces = function(req, res) {
 
   // setup filter
   var deferredPlacesFiltered = deferredPlaces.then(function(places) {
-    console.log('There are '+ places.length +' places to filter.');
-
     var dfdFiltered = new $.Deferred();
     var filteredPlaces = [];
 
@@ -147,12 +145,17 @@ exports.getPlaces = function(req, res) {
         }
 
         // filter by rating and polarity
+        var reviewCount = 0;
         var rating = 0;
         var ratingCount = 0;
         var polarity = 0;
         var polarityCount = 0;
 
         _.each(reviews, function(review) {
+          if (!review) {
+            return;
+          }
+
           if (review.rating > 0) {
             rating += review.rating;
             ratingCount++;
@@ -162,7 +165,15 @@ exports.getPlaces = function(req, res) {
             polarity += review.polarity;
             polarityCount++;
           }
+
+          reviewCount++;
         });
+
+        // validate reviews
+        if (reviewCount !== reviews.length) {
+          resolvePlace(false, placeIndex);
+          return;
+        }
 
         rating = rating / ratingCount;
         polarity = polarity / polarityCount;
@@ -189,21 +200,33 @@ exports.getPlaces = function(req, res) {
   if (req.query.noToken === "1") {
 
     // wait for mapnificent to finish
+    time = Date.now();
     $.when(deferredPosition).done(function() {
-      console.log('done mapnificent!', position.stationsAABB);
+      console.log('done mapnificent!');
+      console.log('took ', Date.now() - time +'ms');
 
       // start request with approximate bbox from mapnificent
+      time = Date.now();
       sparqler.getResourcesInBBox(position.stationsAABB, function(data) {
         var places = sparqler.sparqlFlatten(data);
+        console.log('done fetching places!', places.length + ' places.');
+        console.log('took ', Date.now() - time +'ms');
+
+        time = Date.now();
         deferredPlaces.resolve(places);
       });
 
       // wait for sparql to finish
       $.when(deferredPlacesFiltered).done(function(places) {
-        console.log('done places!', places);
+        console.log('done filtering places!', places.length +' places remain.');
+        console.log('took ', Date.now() - time +'ms');
 
         // intersect tourpedia places with mapnificent's station map
+        time = Date.now();
         var intersectedPlaces = position.intersectPointsWithStations(places);
+        console.log('done intersecting places!', intersectedPlaces.length +' places remain.');
+        console.log('took ', Date.now() - time +'ms');
+
         res.json(intersectedPlaces);
       });
     });

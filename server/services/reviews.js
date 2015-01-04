@@ -97,14 +97,20 @@ function updateReviewEntry(id) {
 
 exports.updateReviewEntries = function() {
   console.log('start updating db entries');
+
   ReviewsEntry.find(function(err, allEntries) {
-    _.forEach(allEntries, function(el) {
+    _.each(allEntries, function(el) {
       var lastUpdate = el.timestamp.getTime();
       var now = Date.now();
       if ((now - lastUpdate) > updateIntervall) {
         updateReviewEntry(el.id);
+
+        // load updates into in-memory cache
+        inMemoryCache[el.id] = el.reviews;
       }
     });
+  });
+};
 
 exports.warmUpCache = function() {
   console.log('warm up');

@@ -145,12 +145,17 @@ exports.getPlaces = function(req, res) {
         }
 
         // filter by rating and polarity
+        var reviewCount = 0;
         var rating = 0;
         var ratingCount = 0;
         var polarity = 0;
         var polarityCount = 0;
 
         _.each(reviews, function(review) {
+          if (!review) {
+            return;
+          }
+
           if (review.rating > 0) {
             rating += review.rating;
             ratingCount++;
@@ -160,7 +165,15 @@ exports.getPlaces = function(req, res) {
             polarity += review.polarity;
             polarityCount++;
           }
+
+          reviewCount++;
         });
+
+        // validate reviews
+        if (reviewCount !== reviews.length) {
+          resolvePlace(false, placeIndex);
+          return;
+        }
 
         rating = rating / ratingCount;
         polarity = polarity / polarityCount;

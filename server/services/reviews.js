@@ -98,6 +98,18 @@ function updateReviewEntry(id) {
   });
 }
 
+exports.cleanReviews = function() {
+  inMemoryCache = {};
+  console.log('cleaned Cache');
+  ReviewsEntry.remove(function(err) {
+    if (err) {
+      console.log('db clean failed:', error);
+    } else {
+      console.log('cleaned DB');
+    }
+  });
+};
+
 exports.updateReviewEntries = function() {
   console.log('start updating db entries');
 

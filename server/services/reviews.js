@@ -147,8 +147,8 @@ exports.getById = function(id, callback) {
             });
         } else {
           // console.log('cache-hit: db');
-          addReviewsToCache(id, reviewsEntry.reviews);
           dfd.resolve(reviewsEntry.reviews);
+          addReviewsToCache(id, reviewsEntry.reviews);
         }
       }).fail( function() {
         dfd.resolve(null);

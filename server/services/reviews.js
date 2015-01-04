@@ -66,7 +66,7 @@ function getReviewsFromApi(id) {
   var dfd = new $.Deferred();
 
   var url = 'http://tour-pedia.org/api/getReviewsByPlaceId?placeId=' + id;
-  request(url, function(error, response, body) {
+  request({url: url, timeout: 1000}, function(error, response, body) {
     if (!error && response.statusCode === 200) {
       body = JSON.parse(body);
       dfd.resolve(body);
@@ -120,7 +120,6 @@ exports.warmUpCache = function() {
       inMemoryCache[reviewsEntry.id] = reviewsEntry.reviews;
     });
     console.log('done warm up in ', Date.now() - t +'ms');
-
   });
 }
 

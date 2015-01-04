@@ -5,7 +5,6 @@ var $ = require('jquery-deferred');
 var request = require('request');
 var _ = require('lodash');
 
-var updateIntervall = 1000 * 60 * 60 * 24 * 7;
 
 var reviewSchema = mongoose.Schema({
   id: Number,
@@ -82,6 +81,7 @@ function getReviewsFromApi(id) {
 
 function updateReviewEntry(id) {
   getReviewsFromApi(id).done( function(reviews){
+
     console.log('update');
     ReviewsEntry.update({ id: id }, {
       timestamp: Date.now(),
@@ -92,6 +92,9 @@ function updateReviewEntry(id) {
       }
       console.log('updated entry with id', id);
     });
+
+    // load updates into in-memory cache
+    inMemoryCache[el.id] = el.reviews;
   });
 }
 
@@ -100,14 +103,7 @@ exports.updateReviewEntries = function() {
 
   ReviewsEntry.find(function(err, allEntries) {
     _.each(allEntries, function(el) {
-      var lastUpdate = el.timestamp.getTime();
-      var now = Date.now();
-      if ((now - lastUpdate) > updateIntervall) {
-        updateReviewEntry(el.id);
-
-        // load updates into in-memory cache
-        inMemoryCache[el.id] = el.reviews;
-      }
+      updateReviewEntry(el.id);
     });
   });
 };

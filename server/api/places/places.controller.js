@@ -108,68 +108,33 @@ exports.getPlaces = function(req, res) {
   var position = mapnificent.addPosition(latlng, time, token);
   var deferredPosition = position.getAllStationsByDistanceAndTime();
 
-  /** ... and fetch tourpedia data in parallel **/
-  // var maxTransportationSpeed = 50 / 3.6; // estimated maximum public transportation speed in m/s
-  // var maxDistance = getLngRadius(latlng.lat, time * maxTransportationSpeed);
-  // console.log('time only distance', maxDistance);
-
-  // var bbox = sparqler.getBBox(latlng.lat, latlng.lng, maxDistance);
-  // console.log('time only bbox', bbox);
-
+  /** ... and setup tourpedia data **/
   var deferredPlaces = new $.Deferred();
 
-  // apply filtering
+  // setup filter
   var deferredPlacesFiltered = deferredPlaces.then(function(places) {
-    console.log('loaded '+ places.length +' places');
+    console.log('There are '+ places.length +' places to filter.');
 
     var dfdFiltered = new $.Deferred();
     var filteredPlaces = [];
-    var dfdPoolCount = 0;
-    var placeIndex = 0;
 
-    var resolveFilter = function(data) {
-      if (data.keep) {
-        filteredPlaces.push(data.place);
+    var resolvePlace = function(keep, placeIndex) {
+      if (keep) {
+        filteredPlaces.push(places[placeIndex]);
       }
 
-      dfdPoolCount--;
-      // console.log('dfdPoolCount', dfdPoolCount);
-
-      filterNextPlace();
-    };
-
-    var filterNextPlace = function() {
-      // console.log('current place', placeIndex);
-
-      if (dfdPoolCount < places.length && placeIndex < places.length) {
-        // get current place
-        var place = places[placeIndex]; // = ...;
-        placeIndex++;
-
-        var dfd = new $.Deferred();
-        dfdPoolCount++;
-        // console.log('dfdPoolCount', dfdPoolCount);
-
-        dfd.done(resolveFilter);
-
-        // start current filter
-        filterPlace(dfd, place);
-
-        // try next place immediately
-        filterNextPlace();
-      }
-
-      if (dfdFiltered.state() === "pending" && placeIndex >= places.length) {
-        console.log('done with filtering');
+      if (parseInt(placeIndex) === places.length - 1) {
         dfdFiltered.resolve(filteredPlaces);
       }
-    };
+    }
 
-    var filterPlace = function(dfd, place) {
+    var filterPlace = function(placeIndex) {
+      var place = places[placeIndex];
+
       // filter by blacklist
       var label = place.label;
       if (Blacklist.contains(label)) {
-        dfd.resolve({ keep: false });
+        resolvePlace(false, placeIndex);
         return;
       }
 
@@ -177,7 +142,7 @@ exports.getPlaces = function(req, res) {
       var id = place.s.replace('http://tour-pedia.org/resource/', '');
       Reviews.getById(id).done(function(reviews) {
         if (reviews === null || reviews.length === 0) {
-          dfd.resolve({ keep: false });
+          resolvePlace(false, placeIndex);
           return;
         }
 
@@ -203,33 +168,41 @@ exports.getPlaces = function(req, res) {
         polarity = polarity / polarityCount;
 
         if ((rating > 0 && rating < 3) || (polarity > 0 && polarity < 5)) {
-          dfd.resolve({ keep: false });
+          resolvePlace(false, placeIndex);
           return;
         }
 
         // seems ok
-        dfd.resolve({ keep: true, place: place });
+        resolvePlace(true, placeIndex);
       });
     }
 
-    filterNextPlace();
+    // apply filter for each place
+    for (var placeIndex in places) {
+      filterPlace(placeIndex);
+    }
+
     return dfdFiltered;
   });
 
 
   if (req.query.noToken === "1") {
 
+    // wait for mapnificent to finish
     $.when(deferredPosition).done(function() {
       console.log('done mapnificent!', position.stationsAABB);
 
-      // start request
+      // start request with approximate bbox from mapnificent
       sparqler.getResourcesInBBox(position.stationsAABB, function(data) {
         var places = sparqler.sparqlFlatten(data);
         deferredPlaces.resolve(places);
       });
 
+      // wait for sparql to finish
       $.when(deferredPlacesFiltered).done(function(places) {
         console.log('done places!', places);
+
+        // intersect tourpedia places with mapnificent's station map
         var intersectedPlaces = position.intersectPointsWithStations(places);
         res.json(intersectedPlaces);
       });

@@ -97,14 +97,20 @@ function updateReviewEntry(id) {
 
 exports.updateReviewEntries = function() {
   console.log('start updating db entries');
+
   ReviewsEntry.find(function(err, allEntries) {
-    _.forEach(allEntries, function(el) {
+    _.each(allEntries, function(el) {
       var lastUpdate = el.timestamp.getTime();
       var now = Date.now();
       if ((now - lastUpdate) > updateIntervall) {
         updateReviewEntry(el.id);
+
+        // load updates into in-memory cache
+        inMemoryCache[el.id] = el.reviews;
       }
     });
+  });
+};
 
 exports.warmUpCache = function() {
   console.log('warm up');
@@ -123,8 +129,10 @@ exports.getById = function(id, callback) {
 
   var reviews = getReviewsFromCache(id);
   if (reviews !== null) {
+    // console.log('cache hit: in-memory');
     dfd.resolve(reviews);
   } else {
+    // console.log('cache-miss: in-memory');
     getReviewsById(id)
       .done(function (reviewsEntry) {
         if (reviewsEntry === null) {
@@ -138,6 +146,7 @@ exports.getById = function(id, callback) {
               dfd.resolve(null);
             });
         } else {
+          // console.log('cache-hit: db');
           dfd.resolve(reviewsEntry.reviews);
           addReviewsToCache(id, reviewsEntry.reviews);
         }

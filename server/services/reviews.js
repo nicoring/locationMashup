@@ -138,8 +138,8 @@ exports.getById = function(id, callback) {
               dfd.resolve(null);
             });
         } else {
-          addReviewsToCache(id, reviewsEntry.reviews);
           dfd.resolve(reviewsEntry.reviews);
+          addReviewsToCache(id, reviewsEntry.reviews);
         }
       }).fail( function() {
         dfd.resolve(null);

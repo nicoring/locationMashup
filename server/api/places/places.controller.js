@@ -37,6 +37,10 @@ var mapnificent = new Mapnificent({
 });
 mapnificent.init();
 
+
+// warm up review cache
+Reviews.warmUpCache();
+
 /** HELPERS */
 
 /**

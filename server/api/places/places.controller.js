@@ -97,6 +97,13 @@ exports.getPlaces = function(req, res) {
       - noToken --> "1"
    */
 
+  var running = true;
+
+  req.on('close', function() {
+    console.log('connection closed');
+    running = false;
+  });
+
   var latlng = {
     lat: parseFloat(req.query.lat),
     lng: parseFloat(req.query.lng)

@@ -93,8 +93,10 @@ exports.getById = function(id, callback) {
 
   var reviews = getReviewsFromCache(id);
   if (reviews !== null) {
+    // console.log('cache hit: in-memory');
     dfd.resolve(reviews);
   } else {
+    // console.log('cache-miss: in-memory');
     getReviewsById(id)
       .done(function (reviewsEntry) {
         if (reviewsEntry === null) {
@@ -108,6 +110,7 @@ exports.getById = function(id, callback) {
               dfd.resolve(null);
             });
         } else {
+          // console.log('cache-hit: db');
           addReviewsToCache(id, reviewsEntry.reviews);
           dfd.resolve(reviewsEntry.reviews);
         }

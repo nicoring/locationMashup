@@ -37,6 +37,10 @@ var mapnificent = new Mapnificent({
 });
 mapnificent.init();
 
+
+// warm up review cache
+Reviews.warmUpCache();
+
 /** HELPERS */
 
 /**
@@ -105,71 +109,130 @@ exports.getPlaces = function(req, res) {
   var deferredPosition = position.getAllStationsByDistanceAndTime();
 
   /** ... and fetch tourpedia data in parallel **/
-  var maxTransportationSpeed = 70 / 3.6; // estimated maximum public transportation speed in m/s
-  var maxDistance = getLngRadius(time * maxTransportationSpeed);
-  var bbox = sparqler.getBBox(latlng.lat, latlng.lng, maxDistance);
+  // var maxTransportationSpeed = 50 / 3.6; // estimated maximum public transportation speed in m/s
+  // var maxDistance = getLngRadius(latlng.lat, time * maxTransportationSpeed);
+  // console.log('time only distance', maxDistance);
+
+  // var bbox = sparqler.getBBox(latlng.lat, latlng.lng, maxDistance);
+  // console.log('time only bbox', bbox);
+
   var deferredPlaces = new $.Deferred();
 
   // apply filtering
   var deferredPlacesFiltered = deferredPlaces.then(function(places) {
-    return _.filter(places, function(place) {
+    console.log('loaded '+ places.length +' places');
+
+    var dfdFiltered = new $.Deferred();
+    var filteredPlaces = [];
+    var dfdPoolCount = 0;
+    var placeIndex = 0;
+
+    var resolveFilter = function(data) {
+      if (data.keep) {
+        filteredPlaces.push(data.place);
+      }
+
+      dfdPoolCount--;
+      // console.log('dfdPoolCount', dfdPoolCount);
+
+      filterNextPlace();
+    };
+
+    var filterNextPlace = function() {
+      // console.log('current place', placeIndex);
+
+      if (dfdPoolCount < places.length && placeIndex < places.length) {
+        // get current place
+        var place = places[placeIndex]; // = ...;
+        placeIndex++;
+
+        var dfd = new $.Deferred();
+        dfdPoolCount++;
+        // console.log('dfdPoolCount', dfdPoolCount);
+
+        dfd.done(resolveFilter);
+
+        // start current filter
+        filterPlace(dfd, place);
+
+        // try next place immediately
+        filterNextPlace();
+      }
+
+      if (dfdFiltered.state() === "pending" && placeIndex >= places.length) {
+        console.log('done with filtering');
+        dfdFiltered.resolve(filteredPlaces);
+      }
+    };
+
+    var filterPlace = function(dfd, place) {
       // filter by blacklist
       var label = place.label;
       if (Blacklist.contains(label)) {
-        return false;
+        dfd.resolve({ keep: false });
+        return;
       }
 
       // filter by reviews
       var id = place.s.replace('http://tour-pedia.org/resource/', '');
-      console.log('was here places');
-      // TODO: getById returns a deferred
-      var reviews = Reviews.getById(id);
-
-      if (reviews === null || reviews.length === 0) {
-        return false;
-      }
-
-      // filter by rating and polarity
-      var rating = 0;
-      var ratingCount = 0;
-      var polarity = 0;
-      var polarityCount = 0;
-
-      _.each(reviews, function(review) {
-        if (review.rating > 0) {
-          rating += review.rating;
-          ratingCount++;
+      Reviews.getById(id).done(function(reviews) {
+        if (reviews === null || reviews.length === 0) {
+          dfd.resolve({ keep: false });
+          return;
         }
 
-        if (review.polarity > 0) {
-          polarity += review.polarity;
-          polarityCount++;
+        // filter by rating and polarity
+        var rating = 0;
+        var ratingCount = 0;
+        var polarity = 0;
+        var polarityCount = 0;
+
+        _.each(reviews, function(review) {
+          if (review.rating > 0) {
+            rating += review.rating;
+            ratingCount++;
+          }
+
+          if (review.polarity > 0) {
+            polarity += review.polarity;
+            polarityCount++;
+          }
+        });
+
+        rating = rating / ratingCount;
+        polarity = polarity / polarityCount;
+
+        if ((rating > 0 && rating < 3) || (polarity > 0 && polarity < 5)) {
+          dfd.resolve({ keep: false });
+          return;
         }
+
+        // seems ok
+        dfd.resolve({ keep: true, place: place });
       });
+    }
 
-      rating = rating / ratingCount;
-      polarity = polarity / polarityCount;
-
-      if ((rating > 0 && rating < 3) || (polarity > 0 && polarity < 5)) {
-        return false;
-      }
-
-      // seems ok
-      return true;
-    });
+    filterNextPlace();
+    return dfdFiltered;
   });
 
-  // start request
-  sparqler.getResourcesInBBox(bbox, function(data) {
-    var places = sparqler.sparqlFlatten(data);
-    deferredPlaces.resolve(places);
-  });
 
   if (req.query.noToken === "1") {
 
-    $.when(deferredPlacesFiltered, deferredPosition).done(function(places) {
-      var intersectedPlaces = position.intersectPointsWithStations(places);
-      res.json(intersectedPlaces);
+    $.when(deferredPosition).done(function() {
+      console.log('done mapnificent!', position.stationsAABB);
+
+      // start request
+      sparqler.getResourcesInBBox(position.stationsAABB, function(data) {
+        var places = sparqler.sparqlFlatten(data);
+        deferredPlaces.resolve(places);
+      });
+
+      $.when(deferredPlacesFiltered).done(function(places) {
+        console.log('done places!', places);
+        var intersectedPlaces = position.intersectPointsWithStations(places);
+        res.json(intersectedPlaces);
+      });
     });
 
   } else {

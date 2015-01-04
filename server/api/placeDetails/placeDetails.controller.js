@@ -35,7 +35,7 @@ exports.reviews = function(req, res) {
   // });
   reviews.getById(id)
     .done(function(reviews) {
-      if (reviews =! null) {
+      if (reviews !== null) {
         res.json(reviews);
       } else {
         console.log("Review Request failed");

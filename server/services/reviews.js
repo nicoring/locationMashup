@@ -3,6 +3,7 @@
 var mongoose = require('mongoose');
 var $ = require('jquery-deferred');
 var request = require('request');
+var _ = require('lodash');
 
 var reviewSchema = mongoose.Schema({
   id: Number,
@@ -11,7 +12,7 @@ var reviewSchema = mongoose.Schema({
 });
 
 var ReviewsEntry = mongoose.model('ReviewsEntry', reviewSchema);
-
+var inMemoryCache = {}; // object in memory to boost cache hits
 
 function getReviewsById(id) {
   var dfd = new $.Deferred();
@@ -26,6 +27,16 @@ function getReviewsById(id) {
   return dfd;
 }
 
+function addReviewsToCache(id, reviews) {
+  var reviewsEntry = new ReviewsEntry({
+    id: id,
+    timestamp: Date.now(),
+    reviews: reviews
+  });
+
+  inMemoryCache[id] = reviewsEntry;
+}
+
 function addReviewsToDB(id, reviews) {
   var reviewsEntry = new ReviewsEntry({
     id: id,
@@ -38,6 +49,15 @@ function addReviewsToDB(id, reviews) {
       console.error(err);
     }
   });
+}
+
+function getReviewsFromCache(id) {
+  if (id in inMemoryCache) {
+    return inMemoryCache[id];
+  }
+
+  // nothing found
+  return null;
 }
 
 function getReviewsFromApi(id) {
@@ -57,26 +77,44 @@ function getReviewsFromApi(id) {
   return dfd;
 }
 
+exports.warmUpCache = function() {
+  console.log('warm up');
+  var t = Date.now();
+  ReviewsEntry.find({}, function(err, allReviews) {
+    _.each(allReviews, function(reviewsEntry) {
+      inMemoryCache[reviewsEntry.id] = reviewsEntry.reviews;
+    });
+    console.log('done warm up in ', Date.now() - t +'ms');
+  });
+}
+
 exports.getById = function(id, callback) {
   var dfd = new $.Deferred();
 
-  getReviewsById(id).done(function (reviewsEntry) {
-
-    if (reviewsEntry === null) {
-      getReviewsFromApi(id)
-        .done(function (reviews) {
-          dfd.resolve(reviews);
-          addReviewsToDB(id, reviews);
-        })
-        .fail(function() {
-          dfd.resolve(null);
-        });
-    } else {
-      dfd.resolve(reviewsEntry.reviews);
-    }
-  }).fail( function() {
-    dfd.resolve(null);
-  });
+  var reviews = getReviewsFromCache(id);
+  if (reviews !== null) {
+    dfd.resolve(reviews);
+  } else {
+    getReviewsById(id)
+      .done(function (reviewsEntry) {
+        if (reviewsEntry === null) {
+          getReviewsFromApi(id)
+            .done(function (reviews) {
+              dfd.resolve(reviews);
+              addReviewsToDB(id, reviews);
+              addReviewsToCache(id, reviews);
+            })
+            .fail(function() {
+              dfd.resolve(null);
+            });
+        } else {
+          addReviewsToCache(id, reviewsEntry.reviews);
+          dfd.resolve(reviewsEntry.reviews);
+        }
+      }).fail( function() {
+        dfd.resolve(null);
+      });
+  }
 
   return dfd;
 }

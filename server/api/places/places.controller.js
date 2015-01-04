@@ -139,7 +139,15 @@ exports.getPlaces = function(req, res) {
       // filter by reviews
       var id = place.s.replace('http://tour-pedia.org/resource/', '');
       Reviews.getById(id).done(function(reviews) {
-        if (reviews === null || reviews.length === 0) {
+        // connection error
+        // we don't know anything
+        // so keep the place
+        if (reviews === null) {
+          resolvePlace(true, placeIndex);
+          return;
+        }
+
+        if (reviews.length === 0) {
           resolvePlace(false, placeIndex);
           return;
         }
@@ -153,7 +161,7 @@ exports.getPlaces = function(req, res) {
 
         _.each(reviews, function(review) {
           if (!review) {
-            return;
+            return false;
           }
 
           if (review.rating > 0) {

@@ -65,7 +65,7 @@ function getReviewsFromApi(id) {
   var dfd = new $.Deferred();
 
   var url = 'http://tour-pedia.org/api/getReviewsByPlaceId?placeId=' + id;
-  request(url, function(error, response, body) {
+  request({url: url, timeout: 1000}, function(error, response, body) {
     if (!error && response.statusCode === 200) {
       body = JSON.parse(body);
       dfd.resolve(body);
@@ -94,7 +94,7 @@ function updateReviewEntry(id) {
     });
 
     // load updates into in-memory cache
-    inMemoryCache[el.id] = el.reviews;
+    inMemoryCache[reviews.id] = reviews.reviews;
   });
 }
 
@@ -103,7 +103,7 @@ exports.cleanReviews = function() {
   console.log('cleaned Cache');
   ReviewsEntry.remove(function(err) {
     if (err) {
-      console.log('db clean failed:', error);
+      console.log('db clean failed:', err);
     } else {
       console.log('cleaned DB');
     }
@@ -128,7 +128,6 @@ exports.warmUpCache = function() {
       inMemoryCache[reviewsEntry.id] = reviewsEntry.reviews;
     });
     console.log('done warm up in ', Date.now() - t +'ms');
-
   });
 }
 

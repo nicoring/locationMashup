@@ -4,7 +4,7 @@ var _ = require('lodash');
 /** SETUP BLACKLIST **/
 
 var blacklist = require('../../data/blacklist');
-validateBlacklist();
+// validateBlacklist();
 
 
 /** HELPERS **/

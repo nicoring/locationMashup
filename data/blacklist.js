@@ -1,5 +1,8 @@
 module.exports = [
     'arzt',
+    'dr. ',
     'haltestelle',
-    'apotheke'
+    'apotheke',
+    's ',
+    'bhf'
 ];

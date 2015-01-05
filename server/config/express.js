@@ -14,7 +14,6 @@ var cookieParser = require('cookie-parser');
 var errorHandler = require('errorhandler');
 var path = require('path');
 var config = require('./environment');
-var mongoose = require('mongoose');
 
 module.exports = function(app) {
   var env = app.get('env');
@@ -27,13 +26,6 @@ module.exports = function(app) {
   app.use(bodyParser.json());
   app.use(methodOverride());
   app.use(cookieParser());
-
-  mongoose.connect(config.mongo.uri);
-  var db = mongoose.connection;
-  db.on('error', console.error.bind(console, 'connection error:'));
-  db.once('open', function () {
-    console.log('mongodb connection successfully loaded');
-  });
 
   if ('production' === env) {
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));

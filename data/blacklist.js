@@ -4,5 +4,9 @@ module.exports = [
     'haltestelle',
     'apotheke',
     's ',
-    'bhf'
+    's-bahn',
+    'u ',
+    'u-bahn',
+    'bhf',
+    'ice',
 ];

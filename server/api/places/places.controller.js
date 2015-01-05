@@ -101,6 +101,7 @@ exports.getPlaces = function(req, res) {
 
   req.on('close', function() {
     console.log('connection closed');
+    // computeProcess.kill('SIGHUP');
     running = false;
   });
 
@@ -212,17 +213,25 @@ exports.getPlaces = function(req, res) {
   });
 
 
-  if (req.query.noToken === "1") {
+  if (req.query.noToken === "1" && running) {
 
     // wait for mapnificent to finish
     time = Date.now();
     $.when(deferredPosition).done(function() {
+      if (!running) {
+        return;
+      }
+
       console.log('done mapnificent!');
       console.log('took ', Date.now() - time +'ms');
 
       // start request with approximate bbox from mapnificent
       time = Date.now();
       sparqler.getResourcesInBBox(position.stationsAABB, function(data) {
+        if (!running) {
+          return;
+        }
+
         var places = sparqler.sparqlFlatten(data);
         console.log('done fetching places!', places.length + ' places.');
         console.log('took ', Date.now() - time +'ms');
@@ -233,6 +242,10 @@ exports.getPlaces = function(req, res) {
 
       // wait for sparql to finish
       $.when(deferredPlacesFiltered).done(function(places) {
+        if (!running) {
+          return;
+        }
+
         console.log('done filtering places!', places.length +' places remain.');
         console.log('took ', Date.now() - time +'ms');
 
@@ -241,6 +254,10 @@ exports.getPlaces = function(req, res) {
         var intersectedPlaces = position.intersectPointsWithStations(places);
         console.log('done intersecting places!', intersectedPlaces.length +' places remain.');
         console.log('took ', Date.now() - time +'ms');
+
+        if (!running) {
+          return;
+        }
 
         res.json(intersectedPlaces);
       });

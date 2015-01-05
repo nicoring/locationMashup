@@ -57,11 +57,16 @@ angular.module('locationMashupApp')
       $location.path('/details/' + id);
     };
 
+    var position = {
+      lat: 52.516666,
+      lng: 13.383333
+    };
+
     // draggable position marker
     $scope.positionMarker = {
       coords: {
-        latitude: 52.516666,
-        longitude: 13.383333
+        latitude: position.lat,
+        longitude: position.lng
       },
       options: {
         draggable: true,
@@ -72,9 +77,9 @@ angular.module('locationMashupApp')
       },
       events: {
         dragend: function (marker, eventName, args) {
-          var lat = marker.getPosition().lat();
-          var lng = marker.getPosition().lng();
-          showMarkersForPosition(lat, lng);
+          position.lat = marker.getPosition().lat();
+          position.lng = marker.getPosition().lng();
+          showMarkersForPosition();
         }
       }
     }
@@ -82,9 +87,10 @@ angular.module('locationMashupApp')
     $scope.getUserLocation = function() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(geoposition) {
-          $scope.positionMarker.coords.latitude = geoposition.coords.latitude;
-          $scope.positionMarker.coords.longitude = geoposition.coords.longitude;
-          showMarkersForPosition(geoposition.coords.latitude, geoposition.coords.longitude);
+          position.lat = $scope.positionMarker.coords.latitude = geoposition.coords.latitude;
+          position.lng = $scope.positionMarker.coords.longitude = geoposition.coords.longitude;
+
+          showMarkersForPosition();
         });
       } else {
         // Todo: toast
@@ -92,18 +98,61 @@ angular.module('locationMashupApp')
       }
     }
 
+    /** time input slider **/
+
     // time inputslider
-    // $scope.timeInput = {
+    $scope.timeInput = 10;
+    var timeToTravel = $scope.timeInput * 60;
 
-    // }
+    $scope.$watch('timeInput', function (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        timeToTravel = newVal * 60;
+        console.log('timeInput', newVal);
+        showMarkersForPosition();
+      }
+    });
 
-    // var time = $scope.timeInput.time;
-    var berlinZoo = {lat: 52.5074, lng: 13.3326};
+    /** category select **/
 
+    $scope.categories = [
+        { value: 'all',   name: 'Show all'},
+        { value: 'eat',   name: 'Restaurant' },
+        { value: 'acco',  name: 'Accommodation' },
+        { value: 'buy',   name: 'ProductOrService' },
+        { value: 'do',    name: 'PointsOfInterest' },
+        { value: 'see',   name: 'Sightseeing' }
+    ];
+
+    $scope.selectedCategory = $scope.categories[0];
+    var category = $scope.selectedCategory.value;
+
+    $scope.$watch('selectedCategory', function (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        console.log('selectedCategory', newVal.value);
+        category = newVal.value;
+        showMarkersForPosition();
+      }
+    });
+
+    // var berlinZoo = {lat: 52.5074, lng: 13.3326};
+
+    // holds deferred object, which will be set on a reqest
+    // and will be resolved and reset after another request from the same client
     var httpTimeout = null;
-    function showMarkersForPosition(lat, lng) {
-      console.log(lat, lng);
-      var url = 'api/places/tourpedia?lat='+lat+'&lng='+lng+'&time='+ 10*60 +'&noToken=1';
+
+    function showMarkersForPosition() {
+
+      var url = 'api/places/' + '?lat=' + position.lat +
+                '&lng=' + position.lng +
+                '&time='+ timeToTravel +
+                '&noToken=1';
+
+      console.log('category', category);
+
+      if (category !== "all") {
+        url += '&category=' + category;
+        console.log('category', category);
+      }
       // var url = '/api/places/fake'
 
       if (httpTimeout !== null) {

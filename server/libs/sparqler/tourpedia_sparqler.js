@@ -109,6 +109,28 @@ TourpediaSparqler.prototype.getResourcesInBBox = function(bbox, callback) {
 };
 
 
+/**
+* Get all resources of a gicen category inside a given rectangular bounding box
+*
+* @param {Object} bbox Boundingbox object, must contain: north, west, south, east
+* @param {String} category tourpedia category based on `this.classes`, sleep maps on acco and hAcco
+* @param {Function} callback Callback which is executed after the query
+*/
+TourpediaSparqler.prototype.getResourcesOfCategoryInBBox = function(bbox, category, callback) {
+  var query = "select * from $graph where { ?s a $type; vcard:latitude ?lat ; vcard:longitude ?lng ; rdfs:label ?label . filter ( ?lat < $north && ?lat > $south && ?lng < $east && ?lng > $west ) } ";
+  var sQuery = this.createQuery(query);
+
+
+  sQuery
+    .setParameter("type", this.classes[category])
+    .setParameter("north", bbox.north)
+    .setParameter("west", bbox.west)
+    .setParameter("south", bbox.south)
+    .setParameter("east", bbox.east)
+    .setParameter("graph", this.defaultGraph)
+    .execute(callback);
+};
+
 
 
 module.exports = TourpediaSparqler;

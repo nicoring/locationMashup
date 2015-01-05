@@ -101,7 +101,6 @@ exports.getPlaces = function(req, res) {
 
   req.on('close', function() {
     console.log('connection closed');
-    // computeProcess.kill('SIGHUP');
     running = false;
   });
 
@@ -227,7 +226,16 @@ exports.getPlaces = function(req, res) {
 
       // start request with approximate bbox from mapnificent
       time = Date.now();
-      sparqler.getResourcesInBBox(position.stationsAABB, function(data) {
+      if (req.query.category) {
+        sparqler.getResourcesOfCategoryInBBox(
+          position.stationsAABB,
+          req.query.category,
+          handleResponse);
+      } else  {
+        sparqler.getResourcesInBBox(position.stationsAABB, handleResponse);
+      }
+
+      function handleResponse(data) {
         if (!running) {
           return;
         }
@@ -238,7 +246,7 @@ exports.getPlaces = function(req, res) {
 
         time = Date.now();
         deferredPlaces.resolve(places);
-      });
+      }
 
       // wait for sparql to finish
       $.when(deferredPlacesFiltered).done(function(places) {

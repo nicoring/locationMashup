@@ -34,7 +34,7 @@ angular.module('locationMashupApp')
       averageCenter: true,
       batchSize: 5000,
       maxZoom: 15
-    }
+    };
 
     // from user selected marker
     $scope.isMarkerSelected = false;
@@ -76,13 +76,13 @@ angular.module('locationMashupApp')
         title: 'position'
       },
       events: {
-        dragend: function (marker, eventName, args) {
+        dragend: function (marker) {
           position.lat = marker.getPosition().lat();
           position.lng = marker.getPosition().lng();
           showMarkersForPosition();
         }
       }
-    }
+    };
 
     $scope.getUserLocation = function() {
       if (navigator.geolocation) {
@@ -94,9 +94,9 @@ angular.module('locationMashupApp')
         });
       } else {
         // Todo: toast
-        console.log("Geolocation is not supported by this browser.");
+        console.log('Geolocation is not supported by this browser.');
       }
-    }
+    };
 
     /** time input slider **/
 
@@ -149,7 +149,7 @@ angular.module('locationMashupApp')
 
       console.log('category', category);
 
-      if (category !== "all") {
+      if (category !== 'all') {
         url += '&category=' + category;
         console.log('category', category);
       }

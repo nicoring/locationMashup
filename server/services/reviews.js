@@ -11,6 +11,7 @@ var reviewSchema = mongoose.Schema({
   timestamp: Date,
   reviews: Array
 });
+reviewSchema.index({ id: 1 });
 
 var ReviewsEntry = mongoose.model('ReviewsEntry', reviewSchema);
 var inMemoryCache = {}; // object in memory to boost cache hits

@@ -41,19 +41,6 @@ mapnificent.init();
 // warm up review cache
 Reviews.warmUpCache();
 
-/** HELPERS */
-
-/**
- * Determine radius in meters depending on latitude.
- */
-function getLngRadius(lat, mradius) {
-  var equatorLength = 40075017;
-  var DEG_TO_RAD = Math.PI / 180;
-    var hLength = equatorLength * Math.cos(DEG_TO_RAD * lat);
-
-    return (mradius / hLength) * 360;
-}
-
 /** EXPORTS **/
 
 // Get list of all places
@@ -99,11 +86,6 @@ exports.getPlaces = function(req, res) {
 
   var running = true;
 
-  req.on('close', function() {
-    console.log('connection closed');
-    running = false;
-  });
-
   var latlng = {
     lat: parseFloat(req.query.lat),
     lng: parseFloat(req.query.lng)
@@ -117,6 +99,12 @@ exports.getPlaces = function(req, res) {
 
   /** ... and setup tourpedia data **/
   var deferredPlaces = new $.Deferred();
+
+  req.on('close', function() {
+    console.log('connection closed');
+    position.destroy();
+    running = false;
+  });
 
   // setup filter
   var deferredPlacesFiltered = deferredPlaces.then(function(places) {
@@ -205,6 +193,11 @@ exports.getPlaces = function(req, res) {
 
     // apply filter for each place
     for (var placeIndex in places) {
+      if (!running) {
+        dfdFiltered.resolve(null);
+        break;
+      }
+
       filterPlace(placeIndex);
     }
 

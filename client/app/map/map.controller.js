@@ -169,6 +169,7 @@ angular.module('locationMashupApp')
               latitude: el.lat,
               longitude: el.lng,
               title: el.label,
+              type: el.type
             };
           });
 

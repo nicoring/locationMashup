@@ -27,6 +27,7 @@ angular.module('locationMashupApp')
     	}
     };
 
+    /** place map controls **/
     uiGmapGoogleMapApi.then(function (mapApi) {
       $scope.map.options.streetViewControlOptions.position = mapApi.ControlPosition.LEFT_CENTER;
       $scope.map.options.zoomControlOptions.position = mapApi.ControlPosition.LEFT_CENTER;
@@ -48,8 +49,7 @@ angular.module('locationMashupApp')
     $scope.selectedMarker = {};
 
     $scope.markerClicked = function(marker) {
-      var model = marker.model;
-      $scope.selectedMarker = model;
+      $scope.selectedMarker = marker.model;
       $scope.isMarkerSelected = true;
     };
 
@@ -58,14 +58,8 @@ angular.module('locationMashupApp')
       $scope.isMarkerSelected = false;
     };
 
-    $scope.showDetailsPage = false;
-
     $scope.showMore = function() {
-      var id = $scope.selectedMarker.id;
-      $scope.showDetailsPage = true;
-      console.log('show more for', id);
-      console.log('scope', $scope);
-      $location.path('/details/' + id);
+      $location.path('/details/' + $scope.selectedMarker.id);
     };
 
     // draggable position marker
@@ -173,10 +167,11 @@ angular.module('locationMashupApp')
 
       $http.get(url, { cache: 'true', timeout: httpTimeout.promise()})
         .success(function(places) {
-          console.log(places.length);
-          var newMarkers = _.map(places, function (el) {
+
+          $scope.markers = _.map(places, function (el) {
             var type = typeMapping[el.type];
             var url = '/assets/images/' + type + '.png';
+
             return {
               id: getIdOfResource(el.s),
               latitude: el.lat,
@@ -186,7 +181,6 @@ angular.module('locationMashupApp')
             };
           });
 
-          $scope.markers = newMarkers;
         })
         .error(function(places, status) {
           console.error('places loading failed', status);

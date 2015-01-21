@@ -7,9 +7,15 @@ function WikivoyageSparqler() {
   Sparqler.call(this, wikivoyageEnpoint);
 
   this.defaultGraph = "<http://localhost/wikivoyage>";
+  this.base = "http://localhost/wikivoyage";
 }
 
 WikivoyageSparqler.prototype = _.create(Sparqler.prototype);
+
+
+WikivoyageSparqler.prototype.createUriFromName = function(name) {
+  return '<' + this.base + name + '>'
+};
 
 WikivoyageSparqler.prototype.getAllOfCategory = function(category, callback) {
   var query = 'SELECT ?label ?lat ?lng FROM $graph WHERE {' +
@@ -53,7 +59,7 @@ WikivoyageSparqler.prototype.getLocationDetailsByUri = function(uri, callback) {
 */
 // TODO: long to lng
 WikivoyageSparqler.prototype.getResourcesInBBox = function(bbox, callback) {
-  var query = "select * from $graph where { ?s a ?type; geo:lat ?lat ; geo:long ?long ; rdfs:label ?label ; dbo:location ?location . filter ( ?lat < $north && ?lat > $south && ?long < $east && ?long > $west ) } ";
+  var query = "select * from $graph where { ?s a ?type; geo:lat ?lat ; geo:long ?long ; rdfs:label ?label ; dbo:location ?location ; dcterms:description ?description. filter ( ?lat < $north && ?lat > $south && ?long < $east && ?long > $west ) } ";
   var sQuery = this.createQuery(query);
 
   sQuery
@@ -63,6 +69,17 @@ WikivoyageSparqler.prototype.getResourcesInBBox = function(bbox, callback) {
   .setParameter("east", bbox.east)
   .setParameter("graph", this.defaultGraph)
   .execute(callback);
+};
+
+
+WikivoyageSparqler.prototype.getResourceById = function(name, callback) {
+  var resource = this.createUriFromName(name);
+  var query = "select * from $graph where { $resource ?p ?o}";
+
+  var sQuery = this.createQuery(query)
+    .setParameter("graph", this.defaultGraph)
+    .setParameter("resource", resource)
+    .execute(callback);
 };
 
 

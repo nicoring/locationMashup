@@ -73,6 +73,10 @@ angular.module('locationMashupApp')
         interestingPlaces = [],
         userLocation;
 
+
+    // lodash range in scope
+    $scope.range = _.range;
+
     /** expose to template **/
 
     $scope.details = {};
@@ -80,6 +84,15 @@ angular.module('locationMashupApp')
     $scope.reviews = [];
     $scope.selectedInterestingPlace = {};
     $scope.locationInfo = {};
+
+
+    $scope.hasReviews = function () {
+      return $scope.reviews.length > 0;
+    };
+
+    $scope.hasLocationInfo = function() {
+      return _.keys($scope.locationInfo).length > 0;
+    };
 
     /** map options **/
 
@@ -140,6 +153,12 @@ angular.module('locationMashupApp')
       }
     };
 
+    $scope.hasLabel = false;
+
+    $scope.isInDetails = function(key) {
+      return key in $scope.details;
+    };
+
     $scope.navigateToPlace = function() {
       var place = userLocation;
       var url = 'https://www.google.com/maps/dir/' + place.lat + ',' + place.lng + '/' + $scope.mainMarker.coords.latitude + ',' + $scope.mainMarker.coords.longitude + '/';
@@ -153,10 +172,23 @@ angular.module('locationMashupApp')
     getReviews(id);
     getImageUrl(id);
 
+
     function getDetails(placeId) {
 
       $http.get('/api/placeDetails/' + placeId)
         .success(function(place) {
+
+          // just store one label
+          if ('label' in place) {
+            $scope.hasLabel = true;
+          } else if ('rdfsLabel' in place) {
+            place.label = place.rdfsLabel;
+            $scope.hasLabel = true;
+          } else if ('fn' in place) {
+            place.label = place.fn;
+            $scope.hasLabel = true;
+          }
+
           $scope.details = place;
 
           var position = {
@@ -256,4 +288,4 @@ angular.module('locationMashupApp')
 
     }
 
-});
+  });

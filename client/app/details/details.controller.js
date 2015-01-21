@@ -4,26 +4,23 @@ angular.module('locationMashupApp')
   .controller('DetailsCtrl', function ($scope, $stateParams, $http, $location, uiGmapIsReady, uiGmapGoogleMapApi) {
     var id = $stateParams.id;
 
-    $scope.goBack = function() {
-      $location.path('/');
-    };
-
-    // if (!$scope.showDetailsPage) {
-    //   $scope.goBack();
-    // }
-
-    if (!id) {
-      $scope.hasValidPlaceId = true;
-      $scope.goBack();
-    } else {
-      $scope.hasValidPlaceId = false;
-    }
 
     $scope.details = {};
     $scope.imgUrl = '';
     $scope.reviews = [];
     $scope.selectedInterestingPlace = {};
     $scope.locationInfo = {};
+
+    /** map options **/
+
+    $scope.detailsMap = {
+      center: $scope.map.center,
+      zoom: 14,
+      options: {
+        minZoom: 9
+      }
+    };
+
 
     var interestingPlaces = [];
 
@@ -39,88 +36,16 @@ angular.module('locationMashupApp')
       return _.keys($scope.locationInfo).length > 0;
     };
 
-
-    // google map options
-    $scope.detailsMap = {
-      // center is the selected attraction
-      // center: {
-      //   latitude: 52.516666,
-      //   longitude: 13.383333
-      // },
-      center: $scope.map.center,
-      zoom: 14,
-      options: {
-        minZoom: 9
-      }
+    $scope.goBack = function() {
+      $location.path('/');
     };
-
-    // var mapLoaded = new $.Deferred();
-    // var sdkLoaded = new $.Deferred();
-    // var placesLoaded = new $.Deferred();
-    // var mapControl, mapApi;
-
-    // $.when(mapLoaded, sdkLoaded, boundsLoaded).done(function () {
-    //   var south, north, west, east;
-    //   south = north = $scope.detailsMap.center.latitude;
-    //   west = east = $scope.detailsMap.center.longitude;
-
-    //   console.log(interestingPlaces);
-
-    //   _.forEach(interestingPlaces, function (place) {
-    //     if (place.lat > north) {
-    //       north = place.lat;
-    //     } else if (place.lat < south) {
-    //       south = place.lat;
-    //     }
-
-    //     if (place.long > east) {
-    //       east = place.long;
-    //     } else if (place.long < west) {
-    //       west = place.long;
-    //     }
-    //   });
-
-
-    //   // var southwest = new mapApi.LatLng(bounds.south, bounds.west);
-    //   // var northeast = new mapApi.LatLng(bounds.north, bounds.east);
-
-    //   var southwest = new mapApi.LatLng(south, west);
-    //   var northeast = new mapApi.LatLng(north, east);
-
-    //   var box = new mapApi.LatLngBounds(southwest, northeast);
-    //   console.log(box);
-    //   mapControl.fitBounds(box);
-    // });
-
-    // uiGmapIsReady.promise(2).then(function (instances) {
-    //   _.each(instances, function(instance) {
-    //     console.log(instance.map._id);
-    //   });
-
-    //   mapControl = instances[0].map;
-    //   console.log(mapControl);
-    //   mapLoaded.resolve();
-    // });
-
-    // uiGmapGoogleMapApi.then(function (mapapi) {
-    //   mapApi = mapapi;
-    //   sdkLoaded.resolve();
-    // });
-
-
-    // markers on the map
-    $scope.mainMarker = {
-      coords: {},
-      label: ''
-    };
-    $scope.detailsMarkers = [];
 
     $scope.markerClicked = function (marker) {
       var model = marker.model;
       $scope.selectedInterestingPlace = interestingPlaces[model.id];
     };
 
-    $scope.showRouteToBtn = function() {
+    $scope.supportsGeoLoctation = function() {
       if (navigator.geolocation) {
         return true;
       } else {
@@ -128,22 +53,32 @@ angular.module('locationMashupApp')
       }
     };
 
-    var userLocation;
-    navigator.geolocation.getCurrentPosition(function(geoposition) {
-      userLocation = {
-        lat: geoposition.coords.latitude,
-        lng: geoposition.coords.longitude
-      };
-    });
+    /** marker options **/
 
-    $scope.navigateToPlace = function() {
-      var place = userLocation;
+    $scope.mainMarker = {
+      coords: {},
+      label: ''
+    };
+    $scope.detailsMarkers = [];
+
+
+    var userLocation;
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(geoposition) {
+        userLocation = {
+          lat: geoposition.coords.latitude,
+          lng: geoposition.coords.longitude
+        };
+      });
+    }
+
+    // $scope.navigateToPlace = function() {
+      // var place = userLocation;
       // var url = 'https://www.google.com/maps/dir/' + place.lat + ',' + place.lng + '/' + placePosition.latitude + ',' + placePosition.longitude + '/';
       // url = $state.href(url);
       // window.open(url,'_blank');
-    };
+    // };
 
-    var placePosition;
     $http.get('/api/placeDetails/' + id)
       .success(function(place) {
         $scope.details = place; // ability to leave out some entries
@@ -153,7 +88,10 @@ angular.module('locationMashupApp')
           longitude: place.lng
         };
 
-        $scope.mainMarker.coords = _.cloneDeep(placePosition);
+        // marker position in wikivoyage map should not update
+        // thus make a deep copy
+        $scope.mainMarker.coords = _.cloneDeep(position);
+
         // set the center of the map
         $scope.detailsMap.center = position;
 

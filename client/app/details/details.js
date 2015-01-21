@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('locationMashupApp')
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/details/:id', {
+  .config(function ($stateProvider) {
+    $stateProvider
+      .state('map.details', {
+        url: '^/details/:id',
         templateUrl: 'app/details/details.html',
         controller: 'DetailsCtrl'
       });

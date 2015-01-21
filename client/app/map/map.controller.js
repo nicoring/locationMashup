@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('locationMashupApp')
-  .controller('MapCtrl', function ($scope, $http, $location) {
+  .controller('MapCtrl', function ($scope, $http, $location, uiGmapGoogleMapApi) {
 
     // whole place data
     $scope.data = [];
@@ -9,16 +9,25 @@ angular.module('locationMashupApp')
     /** map options **/
 
     $scope.map = {
-    	// center of berlin
-    	center: {
-    		latitude: 52.516666,
-    		longitude: 13.383333
-    	},
-    	zoom: 12,
-    	options: {
-    		minZoom: 9
-    	}
+      // center of berlin
+      center: {
+        latitude: 52.516666,
+        longitude: 13.383333
+      },
+      zoom: 12,
+      options: {
+        minZoom: 9,
+        mapTypeControl: false,
+        panControl: false,
+        streetViewControlOptions: {},
+        zoomControlOptions: {}
+      }
     };
+
+    uiGmapGoogleMapApi.then(function (mapapi) {
+      $scope.map.options.streetViewControlOptions.position = mapapi.ControlPosition.LEFT_CENTER;
+      $scope.map.options.zoomControlOptions.position = mapapi.ControlPosition.LEFT_CENTER;
+    });
 
 
     /** marker options **/
@@ -84,19 +93,19 @@ angular.module('locationMashupApp')
       }
     };
 
-    $scope.getUserLocation = function() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(geoposition) {
-          position.lat = $scope.positionMarker.coords.latitude = geoposition.coords.latitude;
-          position.lng = $scope.positionMarker.coords.longitude = geoposition.coords.longitude;
+    // $scope.getUserLocation = function() {
+    //   if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition(function(geoposition) {
+    //       position.lat = $scope.positionMarker.coords.latitude = geoposition.coords.latitude;
+    //       position.lng = $scope.positionMarker.coords.longitude = geoposition.coords.longitude;
 
-          showMarkersForPosition();
-        });
-      } else {
-        // Todo: toast
-        console.log('Geolocation is not supported by this browser.');
-      }
-    };
+    //       showMarkersForPosition();
+    //     });
+    //   } else {
+    //     // Todo: toast
+    //     console.log('Geolocation is not supported by this browser.');
+    //   }
+    // };
 
     /** time input slider **/
 
@@ -140,6 +149,15 @@ angular.module('locationMashupApp')
     // and will be resolved and reset after another request from the same client
     var httpTimeout = null;
 
+    var typeMapping = {
+      'http://dbpedia.org/ontology/Restaurant': 'Restaurant',
+      'http://protege.cim3.net/file/pub/ontologies/travel/travel.owl#Sightseeing': 'Sightseeing',
+      'http://wafi.iit.cnr.it/angelica/Hontology.owl#PointsOfInterest': 'PointsOfInterest',
+      'http://purl.org/acco/ns#Accommodation': 'Accommodation',
+      'http://wafi.iit.cnr.it/angelica/Hontology.owl#Accommodation': 'Accommodation',
+      'http://purl.org/goodrelations/v1#ProductOrService': 'ProductOrService'
+    };
+
     function showMarkersForPosition() {
 
       var url = 'api/places/' + '?lat=' + position.lat +
@@ -151,7 +169,6 @@ angular.module('locationMashupApp')
 
       if (category !== 'all') {
         url += '&category=' + category;
-        console.log('category', category);
       }
       // var url = '/api/places/fake'
 
@@ -164,12 +181,14 @@ angular.module('locationMashupApp')
         .success(function(data) {
           console.log(data.length);
           var newMarkers = _.map(data, function (el) {
+            var type = typeMapping[el.type];
+            var url = '/assets/images/' + type + '.png';
             return {
               id: el.s.replace('http://tour-pedia.org/resource/', ''),
               latitude: el.lat,
               longitude: el.lng,
               title: el.label,
-              type: el.type
+              iconUrl: url
             };
           });
 
@@ -180,6 +199,8 @@ angular.module('locationMashupApp')
           console.log('places loading failed', data, status);
         });
     }
+
+    showMarkersForPosition();
 
     // uiGmapGoogleMapApi.then( function (argument) {
     // });

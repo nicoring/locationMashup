@@ -1,27 +1,30 @@
 'use strict';
 
+function getIdOfResource(resource) {
+  return resource.replace('http://tour-pedia.org/resource/', '');
+}
+
 angular.module('locationMashupApp')
   .controller('MapCtrl', function ($scope, $http, $location, uiGmapGoogleMapApi) {
 
-    // whole place data
-    $scope.data = [];
+    /** default start position **/
+    var position = {
+      latitude: 52.516666,
+      longitude: 13.383333
+    };
 
     /** map options **/
 
     $scope.map = {
-      // center of berlin
-      center: {
-        latitude: 52.516666,
-        longitude: 13.383333
-      },
-      zoom: 12,
-      options: {
-        minZoom: 9,
+    	center: position,
+    	zoom: 12,
+    	options: {
+    		minZoom: 9,
         mapTypeControl: false,
         panControl: false,
         streetViewControlOptions: {},
         zoomControlOptions: {}
-      }
+    	}
     };
 
     uiGmapGoogleMapApi.then(function (mapApi) {
@@ -29,15 +32,10 @@ angular.module('locationMashupApp')
       $scope.map.options.zoomControlOptions.position = mapApi.ControlPosition.LEFT_CENTER;
     });
 
-
     /** marker options **/
 
     // all markers
     $scope.markers = [];
-     //  [{ id: 1,
-     //     latitude: 52.516666,
-     //     longitude: 13.383333,
-     //     title: 'Marker title' }]
 
     $scope.clusterOptions = {
       averageCenter: true,
@@ -60,38 +58,37 @@ angular.module('locationMashupApp')
       $scope.isMarkerSelected = false;
     };
 
+    $scope.showDetailsPage = false;
+
     $scope.showMore = function() {
       var id = $scope.selectedMarker.id;
+      $scope.showDetailsPage = true;
       console.log('show more for', id);
+      console.log('scope', $scope);
       $location.path('/details/' + id);
-    };
-
-    var position = {
-      lat: 52.516666,
-      lng: 13.383333
     };
 
     // draggable position marker
     $scope.positionMarker = {
       coords: {
-        latitude: position.lat,
-        longitude: position.lng
+        latitude: position.latitude,
+        longitude: position.longitude
       },
       options: {
         draggable: true,
         clickable: false,
         crossOnDrag: true,
-        curser: 'pointer',
-        title: 'position'
+        curser: 'pointer'
       },
       events: {
         dragend: function (marker) {
-          position.lat = marker.getPosition().lat();
-          position.lng = marker.getPosition().lng();
+          position.latitude = marker.getPosition().lat();
+          position.longitude = marker.getPosition().lng();
           showMarkersForPosition();
         }
       }
     };
+
 
     // $scope.getUserLocation = function() {
     //   if (navigator.geolocation) {
@@ -135,15 +132,12 @@ angular.module('locationMashupApp')
     $scope.selectedCategory = $scope.categories[0];
     var category = $scope.selectedCategory.value;
 
-    $scope.$watch('selectedCategory', function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        console.log('selectedCategory', newVal.value);
-        category = newVal.value;
+    $scope.$watch('selectedCategory', function (newCategory, oldCategory) {
+      if (newCategory !== oldCategory) {
+        category = newCategory.value;
         showMarkersForPosition();
       }
     });
-
-    // var berlinZoo = {lat: 52.5074, lng: 13.3326};
 
     // holds deferred object, which will be set on a reqest
     // and will be resolved and reset after another request from the same client
@@ -160,8 +154,8 @@ angular.module('locationMashupApp')
 
     function showMarkersForPosition() {
 
-      var url = 'api/places/' + '?lat=' + position.lat +
-                '&lng=' + position.lng +
+      var url = 'api/places/' + '?lat=' + position.latitude +
+                '&lng=' + position.longitude +
                 '&time='+ timeToTravel +
                 '&noToken=1';
 
@@ -178,13 +172,13 @@ angular.module('locationMashupApp')
       httpTimeout = new $.Deferred();
 
       $http.get(url, { cache: 'true', timeout: httpTimeout.promise()})
-        .success(function(data) {
-          console.log(data.length);
-          var newMarkers = _.map(data, function (el) {
+        .success(function(places) {
+          console.log(places.length);
+          var newMarkers = _.map(places, function (el) {
             var type = typeMapping[el.type];
             var url = '/assets/images/' + type + '.png';
             return {
-              id: el.s.replace('http://tour-pedia.org/resource/', ''),
+              id: getIdOfResource(el.s),
               latitude: el.lat,
               longitude: el.lng,
               title: el.label,
@@ -193,10 +187,9 @@ angular.module('locationMashupApp')
           });
 
           $scope.markers = newMarkers;
-          $scope.data = data;
         })
-        .error(function(data, status) {
-          console.log('places loading failed', data, status);
+        .error(function(places, status) {
+          console.error('places loading failed', status);
         });
     }
 

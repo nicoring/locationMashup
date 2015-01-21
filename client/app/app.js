@@ -4,15 +4,13 @@ angular.module('locationMashupApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute',
+  //'ngRoute',
   'ui.bootstrap',
+  'ui.router',
   'uiGmapgoogle-maps'
 ])
-  .config(['$routeProvider', '$locationProvider', 'uiGmapGoogleMapApiProvider', function ($routeProvider, $locationProvider, GoogleMapApiProviders) {
-    $routeProvider
-      .otherwise({
-        redirectTo: '/'
-      });
+  .config(['$urlRouterProvider', '$locationProvider', 'uiGmapGoogleMapApiProvider', function ($urlRouterProvider, $locationProvider, GoogleMapApiProviders) {
+    $urlRouterProvider.otherwise('/');
 
     $locationProvider.html5Mode(true);
 

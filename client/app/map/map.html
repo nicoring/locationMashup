@@ -16,10 +16,11 @@
       max="30"
       id="timeSlider">
   </div>
+
   <div class="optionWrapper">
       <p id="timeText">time to travel: {{timeInput}} minutes</p>
   </div>
-</div>
+</div> <!-- end #options -->
 
 <!--
 <div id="locateMe" class="mapOverlay">
@@ -35,24 +36,30 @@
 </div>
 
 <div id="map">
-  <ui-gmap-google-map id='map'
-    center='map.center'
-    zoom='map.zoom'
-    options='map.options'>
 
-    <ui-gmap-marker
-      idKey="'position'"
-      coords="positionMarker.coords"
-      options="positionMarker.options"
-      icon="'/assets/images/pins3.png'"
-      events="positionMarker.events"></ui-gmap-marker>
+    <ui-gmap-google-map
+        id="tourpedia-map"
+        center="map.center"
+        zoom="map.zoom"
+        options="map.options">
 
-    <ui-gmap-markers
-      models="markers"
-      coords="'self'"
-      doCluster="true"
-      clusterOptions="clusterOptions"
-      click="markerClicked"
-      icon="'iconUrl'"></ui-gmap-markers>
-  </ui-gmap-google-map>
-</div>
+        <ui-gmap-marker
+          idKey="position-marker"
+          coords="positionMarker.coords"
+          options="positionMarker.options"
+          icon="'/assets/images/pins3.png'"
+          events="positionMarker.events"></ui-gmap-marker>
+
+        <ui-gmap-markers
+          models="markers"
+          coords="'self'"
+          doCluster="true"
+          clusterOptions="clusterOptions"
+          click="markerClicked"
+          icon="'iconUrl'"></ui-gmap-markers>
+
+    </ui-gmap-google-map>
+
+</div> <!-- end #map -->
+
+<div id="place-details-overlay" ui-view></div>

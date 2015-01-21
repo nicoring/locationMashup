@@ -6,16 +6,35 @@
       <div class="container">
 
         <div class="row">
-          <h3>{{details.label}}</h3>
+          <h3 ng-show="hasLabel">{{details.label}}</h3>
 
           <div class="col-md-6">
             <h4>Details</h4>
-            <div ng-repeat="(key, value) in details">
+
+            <p ng-show="isInDetails('address')">{{details.address}}</p>
+            <p ng-show="isInDetails('phone')">phone: {{details.phone}}</p>
+            <p ng-show="isInDetails('url')">website: <a ng-href="{{details.url}}" target="_blank">{{details.url}}</a></p>
+            <p ng-show="isInDetails('wikiLink')">link: <a ng-href="{{details.wikiLink}}" target="_blank">{{details.wikiLink}}</a></p>
+            <!-- <div ng-repeat="(key, value) in details">
               <p><strong>{{key}}:</strong> {{value}}</p>
-            </div>
+            </div> -->
             <button class="btn btn-default" id="route-there" ng-click="navigateToPlace()">Go There</button>
-            <img ng-src="{{imgUrl}}" ng-show="isImageAvailable()">
             </br>
+            <div ng-show="hasReviews()">
+              <h4>Reviews</h4>
+              <div ng-repeat="review in reviews">
+                <p>
+                  {{review.text}} </br>
+                  <!-- Rating: {{review.rating}} Polarity: {{review.polarity}} -->
+                  <span id="rating" ng-show="review.rating > 0" ng-repeat="n in range(0,review.rating)" class="glyphicon glyphicon-star"></span>
+                </p>
+              </div>
+            </div>
+
+          </div>
+          <!-- end colum -->
+
+          <div class="col-md-6">
             <div id="interesting-places">
               <h4>Interesting Places around</h4>
               <ui-gmap-google-map
@@ -38,28 +57,17 @@
 
               </ui-gmap-google-map>
               <div id="interesting-place-details" ng-show="true">
-                <div ng-repeat="(key, value) in selectedInterestingPlace">
+                  <p><strong>{{selectedInterestingPlace.label}}</strong></p>
+                  <p>{{selectedInterestingPlace.description}}</p>
+                <!-- <div ng-repeat="(key, value) in selectedInterestingPlace">
                   <p><strong>{{key}}:</strong> {{value}}</p>
-                </div>
+                </div> -->
               </div>
             </div>
-            <div id="locationinfo" ng-show="isLocationInfoAvailable()">
+            <div id="locationinfo" ng-show="hasLocationInfo()">
               <h4>Location</h4>
               <p>This attraction is located in <strong>{{locationInfo.label}}</strong></p>
               <p>{{locationInfo.description}}</p>
-            </div>
-          </div>
-          <!-- end colum -->
-
-          <div class="col-md-6">
-            <div ng-show="areReviewsAvailable()">
-              <h4>Reviews</h4>
-              <div ng-repeat="review in reviews">
-                <p>
-                  {{review.text}} </br>
-                  Rating: {{review.rating}} Polarity: {{review.polarity}}
-                </p>
-              </div>
             </div>
           </div>
           <!-- end colum -->

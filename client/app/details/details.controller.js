@@ -1,12 +1,15 @@
 'use strict';
 
 angular.module('locationMashupApp')
-  .controller('DetailsCtrl', function ($scope, $stateParams, $http, $state, $location, uiGmapIsReady, uiGmapGoogleMapApi) {
+  .controller('DetailsCtrl', function ($scope, $stateParams, $http, $state, $location) {
     var id = $stateParams.id;
 
     $scope.goBack = function() {
       $location.path('/');
     };
+
+    // lodash range in scope
+    $scope.range = _.range;
 
     // if (!$scope.showDetailsPage) {
     //   $scope.goBack();
@@ -20,15 +23,11 @@ angular.module('locationMashupApp')
 
     var interestingPlaces = [];
 
-    $scope.areReviewsAvailable = function () {
+    $scope.hasReviews = function () {
       return $scope.reviews.length > 0;
     };
 
-    $scope.isImageAvailable = function() {
-      return $scope.imgUrl !== '';
-    };
-
-    $scope.isLocationInfoAvailable = function() {
+    $scope.hasLocationInfo = function() {
       return _.keys($scope.locationInfo).length > 0;
     };
 
@@ -121,6 +120,12 @@ angular.module('locationMashupApp')
       }
     };
 
+    $scope.hasLabel = false;
+
+    $scope.isInDetails = function(key) {
+      return key in $scope.details;
+    };
+
     var userLocation;
     navigator.geolocation.getCurrentPosition(function(geoposition) {
       userLocation = {
@@ -139,7 +144,21 @@ angular.module('locationMashupApp')
     var placePosition;
     $http.get('/api/placeDetails/' + id)
       .success(function(place) {
+
+        // just store one label
+        if ('label' in place) {
+          $scope.hasLabel = true;
+        } else if ('rdfsLabel' in place) {
+          place.label = place.rdfsLabel;
+          $scope.hasLabel = true;
+        } else if ('fn' in place) {
+          place.label = place.fn;
+          $scope.hasLabel = true;
+        }
+
         $scope.details = place; // ability to leave out some entries
+
+        console.log(place);
 
         var position = {
           latitude: place.lat,

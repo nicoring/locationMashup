@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('locationMashupApp')
-  .controller('DetailsCtrl', function ($scope, $stateParams, $http, $location, uiGmapIsReady, uiGmapGoogleMapApi) {
+  .controller('DetailsCtrl', function ($scope, $stateParams, $http, $state, $location, uiGmapIsReady, uiGmapGoogleMapApi) {
     var id = $stateParams.id;
 
     $scope.goBack = function() {
@@ -11,13 +11,6 @@ angular.module('locationMashupApp')
     // if (!$scope.showDetailsPage) {
     //   $scope.goBack();
     // }
-
-    if (!id) {
-      $scope.hasValidPlaceId = true;
-      $scope.goBack();
-    } else {
-      $scope.hasValidPlaceId = false;
-    }
 
     $scope.details = {};
     $scope.imgUrl = '';
@@ -138,9 +131,9 @@ angular.module('locationMashupApp')
 
     $scope.navigateToPlace = function() {
       var place = userLocation;
-      // var url = 'https://www.google.com/maps/dir/' + place.lat + ',' + place.lng + '/' + placePosition.latitude + ',' + placePosition.longitude + '/';
-      // url = $state.href(url);
-      // window.open(url,'_blank');
+      var url = 'https://www.google.com/maps/dir/' + place.lat + ',' + place.lng + '/' + placePosition.latitude + ',' + placePosition.longitude + '/';
+      url = $state.href(url);
+      window.open(url,'_blank');
     };
 
     var placePosition;

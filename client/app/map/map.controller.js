@@ -83,21 +83,6 @@ angular.module('locationMashupApp')
       }
     };
 
-
-    // $scope.getUserLocation = function() {
-    //   if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(function(geoposition) {
-    //       position.lat = $scope.positionMarker.coords.latitude = geoposition.coords.latitude;
-    //       position.lng = $scope.positionMarker.coords.longitude = geoposition.coords.longitude;
-
-    //       showMarkersForPosition();
-    //     });
-    //   } else {
-    //     // Todo: toast
-    //     console.log('Geolocation is not supported by this browser.');
-    //   }
-    // };
-
     /** time input slider **/
 
     // time inputslider

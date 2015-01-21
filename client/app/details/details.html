@@ -18,7 +18,7 @@
             <!-- <div ng-repeat="(key, value) in details">
               <p><strong>{{key}}:</strong> {{value}}</p>
             </div> -->
-            <button class="btn btn-default" id="route-there" ng-click="navigateToPlace()">Go There</button>
+            <button class="btn btn-default" id="route-there" ng-click="navigateToPlace()" ng-show="gotGeoLocation()">Go There</button>
             </br>
             <div ng-show="hasReviews()">
               <h4>Reviews</h4>

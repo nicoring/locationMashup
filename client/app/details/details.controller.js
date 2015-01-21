@@ -153,6 +153,10 @@ angular.module('locationMashupApp')
       }
     };
 
+    $scope.gotGeoLocation = function() {
+      return userLocation !== undefined;
+    };
+
     $scope.hasLabel = false;
 
     $scope.isInDetails = function(key) {

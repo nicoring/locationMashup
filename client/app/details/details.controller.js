@@ -1,11 +1,23 @@
 'use strict';
 
 angular.module('locationMashupApp')
-  .controller('DetailsCtrl', function ($scope, $routeParams, $http, $location, uiGmapIsReady, uiGmapGoogleMapApi) {
+  .controller('DetailsCtrl', function ($scope, $stateParams, $http, $location, uiGmapIsReady, uiGmapGoogleMapApi) {
+    var id = $stateParams.id;
 
-    var id = $routeParams.id;
+    $scope.goBack = function() {
+      $location.path('/');
+    };
 
-    $scope.data = {};
+    // if (!$scope.showDetailsPage) {
+    //   $scope.goBack();
+    // }
+
+    if (!id) {
+      $scope.hasValidPlaceId = true;
+      $scope.goBack();
+    } else {
+      $scope.hasValidPlaceId = false;
+    }
 
     $scope.details = {};
     $scope.imgUrl = '';
@@ -28,70 +40,72 @@ angular.module('locationMashupApp')
     };
 
 
-    $scope.goBack = function() {
-      $location.path('/');
-    };
-
-
     // google map options
-    $scope.map = {
+    $scope.detailsMap = {
       // center is the selected attraction
-      center: {
-        latitude: 52.516666,
-        longitude: 13.383333
-      },
+      // center: {
+      //   latitude: 52.516666,
+      //   longitude: 13.383333
+      // },
+      center: $scope.map.center,
       zoom: 14,
       options: {
         minZoom: 9
       }
     };
 
-    var mapLoaded = new $.Deferred();
-    var sdkLoaded = new $.Deferred();
-    var boundsLoaded = new $.Deferred();
-    var mapControl, mapApi;
+    // var mapLoaded = new $.Deferred();
+    // var sdkLoaded = new $.Deferred();
+    // var boundsLoaded = new $.Deferred();
+    // var mapControl, mapApi;
 
-    $.when(mapLoaded, sdkLoaded, boundsLoaded).done(function () {
-      var south, north, west, east;
-      south = north = $scope.map.center.latitude;
-      west = east = $scope.map.center.longitude;
+    // $.when(mapLoaded, sdkLoaded, boundsLoaded).done(function () {
+    //   var south, north, west, east;
+    //   south = north = $scope.detailsMap.center.latitude;
+    //   west = east = $scope.detailsMap.center.longitude;
 
-      console.log(interestingPlaces);
+    //   console.log(interestingPlaces);
 
-      _.forEach(interestingPlaces, function (place) {
-        if (place.lat > north)
-          north = place.lat;
-        else if (place.lat < south)
-          south = place.lat;
+    //   _.forEach(interestingPlaces, function (place) {
+    //     if (place.lat > north) {
+    //       north = place.lat;
+    //     } else if (place.lat < south) {
+    //       south = place.lat;
+    //     }
 
-        if (place.long > east)
-          east = place.long;
-        else if (place.long < west)
-          west = place.long;
-      });
+    //     if (place.long > east) {
+    //       east = place.long;
+    //     } else if (place.long < west) {
+    //       west = place.long;
+    //     }
+    //   });
 
 
-      // var southwest = new mapApi.LatLng(bounds.south, bounds.west);
-      // var northeast = new mapApi.LatLng(bounds.north, bounds.east);
+    //   // var southwest = new mapApi.LatLng(bounds.south, bounds.west);
+    //   // var northeast = new mapApi.LatLng(bounds.north, bounds.east);
 
-      var southwest = new mapApi.LatLng(south, west);
-      var northeast = new mapApi.LatLng(north, east);
+    //   var southwest = new mapApi.LatLng(south, west);
+    //   var northeast = new mapApi.LatLng(north, east);
 
-      var box = new mapApi.LatLngBounds(southwest, northeast);
-      console.log(box);
-      mapControl.fitBounds(box);
-    });
+    //   var box = new mapApi.LatLngBounds(southwest, northeast);
+    //   console.log(box);
+    //   mapControl.fitBounds(box);
+    // });
 
-    uiGmapIsReady.promise(1).then(function (instances) {
-      mapControl = instances[0].map;
-      console.log(mapControl);
-      mapLoaded.resolve();
-    });
+    // uiGmapIsReady.promise(2).then(function (instances) {
+    //   _.each(instances, function(instance) {
+    //     console.log(instance.map._id);
+    //   });
 
-    uiGmapGoogleMapApi.then(function (mapapi) {
-      mapApi = mapapi;
-      sdkLoaded.resolve();
-    });
+    //   mapControl = instances[0].map;
+    //   console.log(mapControl);
+    //   mapLoaded.resolve();
+    // });
+
+    // uiGmapGoogleMapApi.then(function (mapapi) {
+    //   mapApi = mapapi;
+    //   sdkLoaded.resolve();
+    // });
 
 
     // markers on the map
@@ -99,46 +113,44 @@ angular.module('locationMashupApp')
       coords: {},
       label: ''
     };
-    $scope.markers = [];
+    $scope.detailsMarkers = [];
 
     $scope.markerClicked = function (marker) {
       var model = marker.model;
-      $scope.selectedInterestingPlace = interestingPlaces[model.id]
-    }
-
+      $scope.selectedInterestingPlace = interestingPlaces[model.id];
+    };
 
     $http.get('/api/placeDetails/' + id)
-      .success(function(data) {
-        $scope.data = data;
-        $scope.details = data; // ability to leave out some entries
+      .success(function(place) {
+        $scope.details = place; // ability to leave out some entries
 
         var position = {
-          latitude: data.lat,
-          longitude: data.lng
+          latitude: place.lat,
+          longitude: place.lng
         };
 
         $scope.mainMarker.coords = _.cloneDeep(position);
         // set the center of the map
-        $scope.map.center = position;
+        $scope.detailsMap.center = position;
 
         // after loading the place details, get interesting places around
-        getInterestingPlaces(data.lat, data.lng, data.type);
+        getInterestingPlaces(place.lat, place.lng, place.type);
       })
       .error(function() {
-        console.log('details loading failed');
+        console.error('details loading failed');
       });
 
 
     $http.get('/api/placeDetails/reviews/' + id)
-      .success(function(data) {
-        data = _.filter(data, function (review) {
+      .success(function(reviews) {
+        reviews = _.filter(reviews, function (review) {
           return (review.language === 'en' || review.language === 'de') && review.wordsCount < 50;
         });
 
-        $scope.reviews = data;
+        $scope.reviews = reviews;
       })
       .error(function(error) {
-        console.log('reviews loading failed', error);
+        console.error('reviews loading failed', error);
       });
 
 
@@ -147,7 +159,7 @@ angular.module('locationMashupApp')
         $scope.imgUrl = data.url;
       })
       .error(function(error) {
-        console.log('image loading failed', error);
+        console.error('image loading failed', error);
       });
 
     var typeMapping = {
@@ -157,7 +169,7 @@ angular.module('locationMashupApp')
       'http://purl.org/acco/ns#Accommodation': 'Accommodation',
       'http://wafi.iit.cnr.it/angelica/Hontology.owl#Accommodation': 'Accommodation',
       'http://purl.org/goodrelations/v1#ProductOrService': 'ProductOrService'
-    }
+    };
 
     var mapping = {
       'Restaurant': ['DrinkActivity', 'DoActivity', 'SeeActivity', 'BuyActivity', 'Activity'],
@@ -192,7 +204,7 @@ angular.module('locationMashupApp')
 
           croppedData = _.shuffle(croppedData).slice(0,6);
 
-          $scope.markers = _.map(croppedData, function (el, i) {
+          $scope.detailsMarkers = _.map(croppedData, function (el, i) {
             return {
               id: i,
               resource: el.s,
@@ -203,7 +215,7 @@ angular.module('locationMashupApp')
           });
 
           interestingPlaces = croppedData;
-          boundsLoaded.resolve();
+          // boundsLoaded.resolve();
           getLocationInfo(data);
         })
         .error(function (error) {

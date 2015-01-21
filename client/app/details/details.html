@@ -1,4 +1,4 @@
-<button class="btn btn-default" id="back-button" ng-click="goBack()">Go Back</button>
+<button class="btn btn-default" id="back-button" ng-click="goBack()" ng-show="hasValidPlaceId">Go Back</button>
 <div class="container">
   <div class="row">
     <h3>{{details.label}}</h3>
@@ -12,17 +12,24 @@
       </br>
       <div id="interesting-places">
         <h4>Interesting Places around</h4>
-        <ui-gmap-google-map id="detail-map"
-          center='map.center'
-          zoom='map.zoom'
-          options='map.options'>
-          <ui-gmap-marker coords="mainMarker.coords" idKey="'main'" icon="'/assets/images/pins3.png'">
+        <ui-gmap-google-map
+          id="detail-map"
+          center='detailsMap.center'
+          zoom='detailsMap.zoom'
+          options='detailsMap.options'>
+
+          <ui-gmap-marker
+            idKey="wikivoyage-marker"
+            coords="mainMarker.coords"
+            icon="'/assets/images/pins3.png'">
           </ui-gmap-marker>
+
           <ui-gmap-markers
-            models="markers"
+            models="detailsMarkers"
             coords="'self'"
             click="markerClicked">
           </ui-gmap-markers>
+
         </ui-gmap-google-map>
         <div id="interesting-place-details" ng-show="true">
           <div ng-repeat="(key, value) in selectedInterestingPlace">

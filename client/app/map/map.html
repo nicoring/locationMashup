@@ -1,33 +1,44 @@
-<div class="container-fluid">
+<div id="label" class="mapOverlay">
+  <h3>Berlin Locator Map</h3>
+</div>
 
-  <div class="row">
-    <div class="col-md-12">
-      <h3>Berlin Locator Map</h3>
-      <!-- <p>lat: {{positionMarker.coords.latitude}}, lng: {{positionMarker.coords.longitude}}</p> -->
-      <button class="btn btn-default" ng-click="getUserLocation()">Locate me</button>
-
-      <select
-        ng-model="selectedCategory"
-        ng-options="category.name for category in categories">
-        <!--<option value="">show all</option>-->
-      </select>
-
-      <div id="timeSliderWrapper">
-        <input type="range"
-          ng-model="timeInput"
-          min="5"
-          max="30"
-          id="timeSlider">
-        <p>time to travel: {{timeInput}} minutes</p>
-      </div>
-    </div>
+<div id="options" class="mapOverlay box">
+  <div class="optionWrapper">
+    <select id="categorySelect"
+      ng-model="selectedCategory"
+      ng-options="category.name for category in categories">
+    </select>
+  </div>
+  <div class="optionWrapper">
+    <input type="range"
+      ng-model="timeInput"
+      min="5"
+      max="30"
+      id="timeSlider">
   </div>
 
-  <div class="row">
+  <div class="optionWrapper">
+      <p id="timeText">time to travel: {{timeInput}} minutes</p>
+  </div>
+</div> <!-- end #options -->
 
-    <div class="col-md-10">
-      <ui-gmap-google-map
-        id="map"
+<!--
+<div id="locateMe" class="mapOverlay">
+  <button class="btn btn-default" ng-click="getUserLocation()">Locate me</button>
+</div>
+-->
+
+<div id="placeInfo" ng-show="isMarkerSelected" class="mapOverlay box">
+  <p>Title: {{selectedMarker.title}}</p>
+  <p>ID: {{selectedMarker.id}}</p>
+  <span class="glyphicon glyphicon-remove" ng-click="closeInfo()"></span>
+  <button class="btn btn-default pull-right" ng-click="showMore()">Show More</button>
+</div>
+
+<div id="map">
+
+    <ui-gmap-google-map
+        id="tourpedia-map"
         center="map.center"
         zoom="map.zoom"
         options="map.options">
@@ -44,23 +55,11 @@
           coords="'self'"
           doCluster="true"
           clusterOptions="clusterOptions"
-          click="markerClicked"></ui-gmap-markers>
-      </ui-gmap-google-map>
-    </div>
+          click="markerClicked"
+          icon="'iconUrl'"></ui-gmap-markers>
 
-    <div class="col-md-2">
-      <div ng-show="isMarkerSelected">
-        <p>Title: {{selectedMarker.title}}</p>
-        <p>ID: {{selectedMarker.id}}</p>
-        <p>Type: {{selectedMarker.type}}</p>
-        <button class="btn btn-default" ng-click="closeInfo()">Close</button>
-        <button class="btn btn-default" ng-click="showMore()">Show More</button>
-      </div>
-    </div>
+    </ui-gmap-google-map>
 
-  </div>
-
-</div>
+</div> <!-- end #map -->
 
 <div id="place-details-overlay" ui-view></div>
-

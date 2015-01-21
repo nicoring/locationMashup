@@ -56,7 +56,7 @@ angular.module('locationMashupApp')
 
     // var mapLoaded = new $.Deferred();
     // var sdkLoaded = new $.Deferred();
-    // var boundsLoaded = new $.Deferred();
+    // var placesLoaded = new $.Deferred();
     // var mapControl, mapApi;
 
     // $.when(mapLoaded, sdkLoaded, boundsLoaded).done(function () {
@@ -120,6 +120,30 @@ angular.module('locationMashupApp')
       $scope.selectedInterestingPlace = interestingPlaces[model.id];
     };
 
+    $scope.showRouteToBtn = function() {
+      if (navigator.geolocation) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    var userLocation;
+    navigator.geolocation.getCurrentPosition(function(geoposition) {
+      userLocation = {
+        lat: geoposition.coords.latitude,
+        lng: geoposition.coords.longitude
+      };
+    });
+
+    $scope.navigateToPlace = function() {
+      var place = userLocation;
+      // var url = 'https://www.google.com/maps/dir/' + place.lat + ',' + place.lng + '/' + placePosition.latitude + ',' + placePosition.longitude + '/';
+      // url = $state.href(url);
+      // window.open(url,'_blank');
+    };
+
+    var placePosition;
     $http.get('/api/placeDetails/' + id)
       .success(function(place) {
         $scope.details = place; // ability to leave out some entries
@@ -129,7 +153,7 @@ angular.module('locationMashupApp')
           longitude: place.lng
         };
 
-        $scope.mainMarker.coords = _.cloneDeep(position);
+        $scope.mainMarker.coords = _.cloneDeep(placePosition);
         // set the center of the map
         $scope.detailsMap.center = position;
 
@@ -190,10 +214,6 @@ angular.module('locationMashupApp')
         .success(function (res) {
 
           var data = res.result;
-
-          // TODO: compute box based on markers
-          // bounds = res.bbox;
-          // boundsLoaded.resolve();
 
           var croppedData = _.filter(data, function (el) {
             var elementType = el.type.split('#')[1];

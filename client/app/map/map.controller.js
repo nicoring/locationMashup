@@ -5,7 +5,7 @@ function getIdOfResource(resource) {
 }
 
 angular.module('locationMashupApp')
-  .controller('MapCtrl', function ($scope, $http, $location) {
+  .controller('MapCtrl', function ($scope, $http, $location, uiGmapGoogleMapApi) {
 
     /** default start position **/
     var position = {
@@ -19,9 +19,18 @@ angular.module('locationMashupApp')
     	center: position,
     	zoom: 12,
     	options: {
-    		minZoom: 9
+    		minZoom: 9,
+        mapTypeControl: false,
+        panControl: false,
+        streetViewControlOptions: {},
+        zoomControlOptions: {}
     	}
     };
+
+    uiGmapGoogleMapApi.then(function (mapapi) {
+      $scope.map.options.streetViewControlOptions.position = mapapi.ControlPosition.LEFT_CENTER;
+      $scope.map.options.zoomControlOptions.position = mapapi.ControlPosition.LEFT_CENTER;
+    });
 
     /** marker options **/
 
@@ -80,19 +89,20 @@ angular.module('locationMashupApp')
       }
     };
 
-    $scope.getUserLocation = function() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(geoposition) {
-          position.latitude = $scope.positionMarker.coords.latitude = geoposition.coords.latitude;
-          position.longitude = $scope.positionMarker.coords.longitude = geoposition.coords.longitude;
 
-          showMarkersForPosition();
-        });
-      } else {
-        // Todo: toast
-        console.log('Geolocation is not supported by this browser.');
-      }
-    };
+    // $scope.getUserLocation = function() {
+    //   if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition(function(geoposition) {
+    //       position.lat = $scope.positionMarker.coords.latitude = geoposition.coords.latitude;
+    //       position.lng = $scope.positionMarker.coords.longitude = geoposition.coords.longitude;
+
+    //       showMarkersForPosition();
+    //     });
+    //   } else {
+    //     // Todo: toast
+    //     console.log('Geolocation is not supported by this browser.');
+    //   }
+    // };
 
     /** time input slider **/
 
@@ -133,6 +143,15 @@ angular.module('locationMashupApp')
     // and will be resolved and reset after another request from the same client
     var httpTimeout = null;
 
+    var typeMapping = {
+      'http://dbpedia.org/ontology/Restaurant': 'Restaurant',
+      'http://protege.cim3.net/file/pub/ontologies/travel/travel.owl#Sightseeing': 'Sightseeing',
+      'http://wafi.iit.cnr.it/angelica/Hontology.owl#PointsOfInterest': 'PointsOfInterest',
+      'http://purl.org/acco/ns#Accommodation': 'Accommodation',
+      'http://wafi.iit.cnr.it/angelica/Hontology.owl#Accommodation': 'Accommodation',
+      'http://purl.org/goodrelations/v1#ProductOrService': 'ProductOrService'
+    };
+
     function showMarkersForPosition() {
 
       var url = 'api/places/' + '?lat=' + position.latitude +
@@ -144,7 +163,6 @@ angular.module('locationMashupApp')
 
       if (category !== 'all') {
         url += '&category=' + category;
-        console.log('category', category);
       }
       // var url = '/api/places/fake'
 
@@ -157,12 +175,14 @@ angular.module('locationMashupApp')
         .success(function(places) {
           console.log(places.length);
           var newMarkers = _.map(places, function (el) {
+            var type = typeMapping[el.type];
+            var url = '/assets/images/' + type + '.png';
             return {
               id: getIdOfResource(el.s),
               latitude: el.lat,
               longitude: el.lng,
               title: el.label,
-              type: el.type
+              iconUrl: url
             };
           });
 
@@ -173,4 +193,8 @@ angular.module('locationMashupApp')
         });
     }
 
+    showMarkersForPosition();
+
+    // uiGmapGoogleMapApi.then( function (argument) {
+    // });
   });

@@ -162,7 +162,6 @@ angular.module('locationMashupApp')
     $scope.navigateToPlace = function() {
       var place = userLocation;
       var url = 'https://www.google.com/maps/dir/' + place.lat + ',' + place.lng + '/' + $scope.mainMarker.coords.latitude + ',' + $scope.mainMarker.coords.longitude + '/';
-      url = $state.href(url);
       window.open(url, '_blank');
     };
 

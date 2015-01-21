@@ -1,19 +1,83 @@
 'use strict';
 
+var typeMapping = {
+  'http://dbpedia.org/ontology/Restaurant': 'Restaurant',
+  'http://protege.cim3.net/file/pub/ontologies/travel/travel.owl#Sightseeing': 'Sightseeing',
+  'http://wafi.iit.cnr.it/angelica/Hontology.owl#PointsOfInterest': 'PointsOfInterest',
+  'http://purl.org/acco/ns#Accommodation': 'Accommodation',
+  'http://wafi.iit.cnr.it/angelica/Hontology.owl#Accommodation': 'Accommodation',
+  'http://purl.org/goodrelations/v1#ProductOrService': 'ProductOrService'
+};
+
+var tourpediaToWikivoyageMapping = {
+  'Restaurant': ['DrinkActivity', 'DoActivity', 'SeeActivity', 'BuyActivity', 'Activity'],
+  'Sightseeing': ['DrinkActivity', 'EatActivity', 'DoActivity', 'SeeActivity', 'BuyActivity', 'Activity'],
+  'PointsOfInterest': ['DrinkActivity', 'EatActivity', 'DoActivity', 'SeeActivity', 'BuyActivity', 'Activity'],
+  'Accommodation': ['DrinkActivity', 'EatActivity', 'DoActivity', 'SeeActivity', 'BuyActivity', 'SleepActivity', 'Activity'],
+  'ProductOrService': ['DrinkActivity', 'EatActivity', 'Activity']
+};
+
+function getHashTag(string) {
+  return string.split('#')[1];
+}
+
+function selectRandomPlacesByType(places, type) {
+
+  // get type of selected place and get matching wikivoyage Activities based on the mapping above
+  var categories = tourpediaToWikivoyageMapping[ typeMapping[type] ],
+      elementType;
+
+  return _(places)
+    .filter(function (el) {
+      elementType = getHashTag(el.type);
+      return _.find(categories, function (category) {
+        return elementType === category;
+      });
+    })
+    .shuffle()
+    .slice(0, 6)
+    .value();
+}
+
+function getDistrictOfPlaces(places) {
+
+  var placeCounts = {},
+      mostProbablyDistrict = '',
+      bestCount = -1,
+      location;
+
+  _.forEach(places, function (place) {
+    location = place.location;
+    if (placeCounts[location] !== null) {
+      placeCounts[location] += 1;
+    } else {
+      placeCounts[location] = 1;
+    }
+  });
+
+  _.forEach(placeCounts, function (count, location) {
+    if (count > bestCount) {
+      bestCount = count;
+      mostProbablyDistrict = location;
+    }
+  });
+
+  return mostProbablyDistrict;
+
+}
+
 angular.module('locationMashupApp')
   .controller('DetailsCtrl', function ($scope, $stateParams, $http, $state, $location) {
-    var id = $stateParams.id;
 
-    $scope.goBack = function() {
-      $location.path('/');
-    };
+    var id = $stateParams.id,
+        interestingPlaces = [],
+        userLocation;
+
 
     // lodash range in scope
     $scope.range = _.range;
 
-    // if (!$scope.showDetailsPage) {
-    //   $scope.goBack();
-    // }
+    /** expose to template **/
 
     $scope.details = {};
     $scope.imgUrl = '';
@@ -21,7 +85,6 @@ angular.module('locationMashupApp')
     $scope.selectedInterestingPlace = {};
     $scope.locationInfo = {};
 
-    var interestingPlaces = [];
 
     $scope.hasReviews = function () {
       return $scope.reviews.length > 0;
@@ -31,14 +94,9 @@ angular.module('locationMashupApp')
       return _.keys($scope.locationInfo).length > 0;
     };
 
+    /** map options **/
 
-    // google map options
     $scope.detailsMap = {
-      // center is the selected attraction
-      // center: {
-      //   latitude: 52.516666,
-      //   longitude: 13.383333
-      // },
       center: $scope.map.center,
       zoom: 14,
       options: {
@@ -46,73 +104,48 @@ angular.module('locationMashupApp')
       }
     };
 
-    // var mapLoaded = new $.Deferred();
-    // var sdkLoaded = new $.Deferred();
-    // var placesLoaded = new $.Deferred();
-    // var mapControl, mapApi;
+    /** marker options **/
 
-    // $.when(mapLoaded, sdkLoaded, boundsLoaded).done(function () {
-    //   var south, north, west, east;
-    //   south = north = $scope.detailsMap.center.latitude;
-    //   west = east = $scope.detailsMap.center.longitude;
-
-    //   console.log(interestingPlaces);
-
-    //   _.forEach(interestingPlaces, function (place) {
-    //     if (place.lat > north) {
-    //       north = place.lat;
-    //     } else if (place.lat < south) {
-    //       south = place.lat;
-    //     }
-
-    //     if (place.long > east) {
-    //       east = place.long;
-    //     } else if (place.long < west) {
-    //       west = place.long;
-    //     }
-    //   });
-
-
-    //   // var southwest = new mapApi.LatLng(bounds.south, bounds.west);
-    //   // var northeast = new mapApi.LatLng(bounds.north, bounds.east);
-
-    //   var southwest = new mapApi.LatLng(south, west);
-    //   var northeast = new mapApi.LatLng(north, east);
-
-    //   var box = new mapApi.LatLngBounds(southwest, northeast);
-    //   console.log(box);
-    //   mapControl.fitBounds(box);
-    // });
-
-    // uiGmapIsReady.promise(2).then(function (instances) {
-    //   _.each(instances, function(instance) {
-    //     console.log(instance.map._id);
-    //   });
-
-    //   mapControl = instances[0].map;
-    //   console.log(mapControl);
-    //   mapLoaded.resolve();
-    // });
-
-    // uiGmapGoogleMapApi.then(function (mapapi) {
-    //   mapApi = mapapi;
-    //   sdkLoaded.resolve();
-    // });
-
-
-    // markers on the map
     $scope.mainMarker = {
       coords: {},
       label: ''
     };
+
     $scope.detailsMarkers = [];
+
+    /** request geo location **/
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(geoposition) {
+        userLocation = {
+          lat: geoposition.coords.latitude,
+          lng: geoposition.coords.longitude
+        };
+      });
+    }
+
+    $scope.areReviewsAvailable = function () {
+      return $scope.reviews.length > 0;
+    };
+
+    $scope.isImageAvailable = function() {
+      return $scope.imgUrl !== '';
+    };
+
+    $scope.isLocationInfoAvailable = function() {
+      return _.keys($scope.locationInfo).length > 0;
+    };
+
+    $scope.goBack = function() {
+      $location.path('/');
+    };
 
     $scope.markerClicked = function (marker) {
       var model = marker.model;
       $scope.selectedInterestingPlace = interestingPlaces[model.id];
     };
 
-    $scope.showRouteToBtn = function() {
+    $scope.supportsGeoLoctation = function() {
       if (navigator.geolocation) {
         return true;
       } else {
@@ -126,117 +159,95 @@ angular.module('locationMashupApp')
       return key in $scope.details;
     };
 
-    var userLocation;
-    navigator.geolocation.getCurrentPosition(function(geoposition) {
-      userLocation = {
-        lat: geoposition.coords.latitude,
-        lng: geoposition.coords.longitude
-      };
-    });
-
     $scope.navigateToPlace = function() {
       var place = userLocation;
-      var url = 'https://www.google.com/maps/dir/' + place.lat + ',' + place.lng + '/' + placePosition.latitude + ',' + placePosition.longitude + '/';
+      var url = 'https://www.google.com/maps/dir/' + place.lat + ',' + place.lng + '/' + $scope.mainMarker.coords.latitude + ',' + $scope.mainMarker.coords.longitude + '/';
       url = $state.href(url);
-      window.open(url,'_blank');
+      window.open(url, '_blank');
     };
 
-    var placePosition;
-    $http.get('/api/placeDetails/' + id)
-      .success(function(place) {
+    /** dispatch all ajax requests **/
 
-        // just store one label
-        if ('label' in place) {
-          $scope.hasLabel = true;
-        } else if ('rdfsLabel' in place) {
-          place.label = place.rdfsLabel;
-          $scope.hasLabel = true;
-        } else if ('fn' in place) {
-          place.label = place.fn;
-          $scope.hasLabel = true;
-        }
-
-        $scope.details = place; // ability to leave out some entries
-
-        console.log(place);
-
-        var position = {
-          latitude: place.lat,
-          longitude: place.lng
-        };
-
-        $scope.mainMarker.coords = _.cloneDeep(placePosition);
-        // set the center of the map
-        $scope.detailsMap.center = position;
-
-        // after loading the place details, get interesting places around
-        getInterestingPlaces(place.lat, place.lng, place.type);
-      })
-      .error(function() {
-        console.error('details loading failed');
-      });
+    getDetails(id);
+    getReviews(id);
+    getImageUrl(id);
 
 
-    $http.get('/api/placeDetails/reviews/' + id)
-      .success(function(reviews) {
-        reviews = _.filter(reviews, function (review) {
-          return (review.language === 'en' || review.language === 'de') && review.wordsCount < 50;
+    function getDetails(placeId) {
+
+      $http.get('/api/placeDetails/' + placeId)
+        .success(function(place) {
+
+          // just store one label
+          if ('label' in place) {
+            $scope.hasLabel = true;
+          } else if ('rdfsLabel' in place) {
+            place.label = place.rdfsLabel;
+            $scope.hasLabel = true;
+          } else if ('fn' in place) {
+            place.label = place.fn;
+            $scope.hasLabel = true;
+          }
+
+          $scope.details = place;
+
+          var position = {
+            latitude: place.lat,
+            longitude: place.lng
+          };
+
+          // marker position in wikivoyage map should not update
+          // thus make a deep copy
+          $scope.mainMarker.coords = _.cloneDeep(position);
+
+          // set the center of the map
+          $scope.detailsMap.center = position;
+
+          // after loading the place details, get interesting places around
+          getInterestingPlaces(place.lat, place.lng, place.type);
+        })
+        .error(function() {
+          console.error('details loading failed');
         });
 
-        $scope.reviews = reviews;
-      })
-      .error(function(error) {
-        console.error('reviews loading failed', error);
-      });
+    }
 
+    function getReviews(placeId) {
 
-    $http.get('/api/placeDetails/image/' + id)
-      .success(function(data) {
-        $scope.imgUrl = data.url;
-      })
-      .error(function(error) {
-        console.error('image loading failed', error);
-      });
+      $http.get('/api/placeDetails/reviews/' + placeId)
+        .success(function(reviews) {
+          reviews = _.filter(reviews, function (review) {
+            return (review.language === 'en' || review.language === 'de') && review.wordsCount < 50;
+          });
 
-    var typeMapping = {
-      'http://dbpedia.org/ontology/Restaurant': 'Restaurant',
-      'http://protege.cim3.net/file/pub/ontologies/travel/travel.owl#Sightseeing': 'Sightseeing',
-      'http://wafi.iit.cnr.it/angelica/Hontology.owl#PointsOfInterest': 'PointsOfInterest',
-      'http://purl.org/acco/ns#Accommodation': 'Accommodation',
-      'http://wafi.iit.cnr.it/angelica/Hontology.owl#Accommodation': 'Accommodation',
-      'http://purl.org/goodrelations/v1#ProductOrService': 'ProductOrService'
-    };
+          $scope.reviews = reviews;
+        })
+        .error(function(error) {
+          console.error('reviews loading failed', error);
+        });
 
-    var mapping = {
-      'Restaurant': ['DrinkActivity', 'DoActivity', 'SeeActivity', 'BuyActivity', 'Activity'],
-      'Sightseeing': ['DrinkActivity', 'EatActivity', 'DoActivity', 'SeeActivity', 'BuyActivity', 'Activity'],
-      'PointsOfInterest': ['DrinkActivity', 'EatActivity', 'DoActivity', 'SeeActivity', 'BuyActivity', 'Activity'],
-      'Accommodation': ['DrinkActivity', 'EatActivity', 'DoActivity', 'SeeActivity', 'BuyActivity', 'SleepActivity', 'Activity'],
-      'ProductOrService': ['DrinkActivity', 'EatActivity', 'Activity']
-    };
+    }
+
+    function getImageUrl(placeId) {
+
+      $http.get('/api/placeDetails/image/' + placeId)
+        .success(function(data) {
+          $scope.imgUrl = data.url;
+        })
+        .error(function(error) {
+          console.error('image loading failed', error);
+        });
+
+    }
 
     function getInterestingPlaces(lat, lng, type) {
 
-      // get type of selected place and get matching wikivoyage Activities based on the mapping above
-      type = typeMapping[type];
-      var categories = mapping[type];
-
       var url = '/api/placeDetails/places?lat=' + lat + '&lng=' + lng;
       $http.get(url)
-        .success(function (res) {
+        .success(function (wikivoyagePlaces) {
 
-          var data = res.result;
-
-          var croppedData = _.filter(data, function (el) {
-            var elementType = el.type.split('#')[1];
-            return _.find(categories, function (category) {
-              return elementType === category;
-            });
-          });
-
-          croppedData = _.shuffle(croppedData).slice(0,6);
-
-          $scope.detailsMarkers = _.map(croppedData, function (el, i) {
+          interestingPlaces = selectRandomPlacesByType(wikivoyagePlaces.result, type);
+          $scope.detailsMarkers = _.map(interestingPlaces, function (el, i) {
             return {
               id: i,
               resource: el.s,
@@ -246,25 +257,25 @@ angular.module('locationMashupApp')
             };
           });
 
-          interestingPlaces = croppedData;
-          // boundsLoaded.resolve();
-          getLocationInfo(data);
+          getLocationInfo(wikivoyagePlaces.result);
         })
         .error(function (error) {
           console.log('places loading failed', error);
         });
     }
 
-
     function getLocationInfo(places) {
-      var locationURI = '';
+
+      var locationURI = '',
+          url;
+
       if (places.length > 0) {
-        locationURI = getLocationOfPlaces(places);
+        locationURI = getDistrictOfPlaces(places);
       } else {
         locationURI = 'http:localhost/wikivoyage/Berlin';
       }
 
-      var url = '/api/placeDetails/locationInfo?location=' + encodeURI(locationURI);
+      url = '/api/placeDetails/locationInfo?location=' + encodeURI(locationURI);
       $http.get(url)
         .success(function (data) {
           if (data.length > 0) {
@@ -274,30 +285,7 @@ angular.module('locationMashupApp')
         .error(function (error) {
           console.log('locationInfo loading failed', error);
         });
+
     }
 
-
-    function getLocationOfPlaces(places) {
-
-      var placeCounts = {};
-      _.forEach(places, function (place) {
-        var location = place.location;
-        if (placeCounts[location] !== null) {
-          placeCounts[location] += 1;
-        } else {
-          placeCounts[location] = 1;
-        }
-      });
-
-      var mostProbablyLocation = '';
-      var bestCount = -1;
-      _.forEach(placeCounts, function (count, location) {
-        if (count > bestCount) {
-          bestCount = count;
-          mostProbablyLocation = location;
-        }
-      });
-
-      return mostProbablyLocation;
-    }
-});
+  });

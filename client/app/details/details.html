@@ -37,6 +37,7 @@
           <div class="col-md-6">
             <div id="interesting-places">
               <h4>Interesting Places around</h4>
+
               <ui-gmap-google-map
                 id="detail-map"
                 center='detailsMap.center'
@@ -52,10 +53,12 @@
                 <ui-gmap-markers
                   models="detailsMarkers"
                   coords="'self'"
-                  click="markerClicked">
+                  click="markerClicked"
+                  fit="true">
                 </ui-gmap-markers>
 
               </ui-gmap-google-map>
+
               <div id="interesting-place-details" ng-show="true">
                   <p><strong>{{selectedInterestingPlace.label}}</strong></p>
                   <p>{{selectedInterestingPlace.description}}</p>

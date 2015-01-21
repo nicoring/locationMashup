@@ -24,9 +24,9 @@ angular.module('locationMashupApp')
       }
     };
 
-    uiGmapGoogleMapApi.then(function (mapapi) {
-      $scope.map.options.streetViewControlOptions.position = mapapi.ControlPosition.LEFT_CENTER;
-      $scope.map.options.zoomControlOptions.position = mapapi.ControlPosition.LEFT_CENTER;
+    uiGmapGoogleMapApi.then(function (mapApi) {
+      $scope.map.options.streetViewControlOptions.position = mapApi.ControlPosition.LEFT_CENTER;
+      $scope.map.options.zoomControlOptions.position = mapApi.ControlPosition.LEFT_CENTER;
     });
 
 
@@ -201,7 +201,4 @@ angular.module('locationMashupApp')
     }
 
     showMarkersForPosition();
-
-    // uiGmapGoogleMapApi.then( function (argument) {
-    // });
   });

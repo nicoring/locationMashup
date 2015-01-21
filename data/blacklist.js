@@ -2,11 +2,11 @@ module.exports = [
     'arzt',
     'dr. ',
     'haltestelle',
-    'apotheke',
+    { label: 'apotheke', types: ['PointOfInterest'] },
     's ',
     's-bahn',
     'u ',
     'u-bahn',
     'bhf',
-    'ice',
+    'ice'
 ];

@@ -41,6 +41,12 @@ mapnificent.init();
 // warm up review cache
 Reviews.warmUpCache();
 
+/** HELPERS **/
+
+function getPlaceType(placeType) {
+  return placeType.split('#')[1];
+}
+
 /** EXPORTS **/
 
 // Get list of all places
@@ -122,11 +128,12 @@ exports.getPlaces = function(req, res) {
     }
 
     var filterPlace = function(placeIndex) {
-      var place = places[placeIndex];
+      var place = places[placeIndex],
+          type = getPlaceType(place.type),
+          label = place.label;
 
       // filter by blacklist
-      var label = place.label;
-      if (Blacklist.contains(label)) {
+      if (Blacklist.contains(label, type)) {
         resolvePlace(false, placeIndex);
         return;
       }

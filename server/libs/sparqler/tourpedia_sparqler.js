@@ -28,8 +28,8 @@ TourpediaSparqler.prototype.createUriFromId = function(id) {
 
 TourpediaSparqler.prototype.getAllOverview = function(callback) {
 
-	var queryString = "SELECT DISTINCT * FROM $graph WHERE {?s dbpedia-owl:location dbpedia:Berlin ;" +
-				  					"vcard:latitude ?lat ; vcard:longitude ?lng ; rdfs:label ?label . }"
+  var queryString = "SELECT DISTINCT * FROM $graph WHERE {?s dbpedia-owl:location dbpedia:Berlin ;" +
+                    "vcard:latitude ?lat ; vcard:longitude ?lng ; rdfs:label ?label . }"
 
 	var _this = this;
 
@@ -38,23 +38,23 @@ TourpediaSparqler.prototype.getAllOverview = function(callback) {
 	  .execute(function(body) {
       body = _this.sparqlFlatten(body);
 	    callback(body);
-	 	});
+    });
 }
 
 TourpediaSparqler.prototype.getAllOverviewOfClass = function(tClass, callback) {
 	tClass = this.classes[tClass];
 
 	var queryString = "SELECT DISTINCT * FROM $graph WHERE {?s dbpedia-owl:location dbpedia:Berlin ; a $class; " +
-				  					"vcard:latitude ?lat ; vcard:longitude ?lng ; rdf:label ?label . }"
+                    "vcard:latitude ?lat ; vcard:longitude ?lng ; rdf:label ?label . }"
 
 	var _this = this;
 
 	var sQuery = this.createQuery(queryString)
-  	.setParameter('class', tClass)
-  	.setParameter('graph', this.defaultGraph)
+    .setParameter('class', tClass)
+    .setParameter('graph', this.defaultGraph)
 	  .execute(function(body) {
 	    callback(_this.sparqlFlatten(body));
-	 	});
+    });
 };
 
 TourpediaSparqler.prototype.getPlaceById = function(id, callback) {
@@ -73,8 +73,6 @@ TourpediaSparqler.prototype.getPlaceById = function(id, callback) {
                 '{ $resource vcard:latitude ?lat. } UNION ' +
                 '{ $resource vcard:longitude ?lng. }' +
               '}';
-
-  // var query = 'select * from $graph where { ?s ?p ?o }';
 
   var _this = this;
 

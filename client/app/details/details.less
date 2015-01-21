@@ -1,11 +1,36 @@
-#detail-map {
-  .angular-google-map-container {
-    height: 300px;
+#place-details-container {
+  position: absolute;
+  top: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.7);
+
+  .relativeWrapper {
+    position: relative;
+  }
+  #box-container {
+    position: absolute;
+    margin-top: 1%;
+    left: 5%;
+    right: 5%;
+    padding: 30px 0;
+
+    #back-button {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    #detail-map {
+      .angular-google-map-container {
+        height: 300px;
+      }
+    }
   }
 }
 
-#back-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-}

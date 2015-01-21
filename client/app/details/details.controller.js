@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('locationMashupApp')
-  .controller('DetailsCtrl', function ($scope, $stateParams, $http, $location, uiGmapIsReady, uiGmapGoogleMapApi) {
+  .controller('DetailsCtrl', function ($scope, $stateParams, $http, $state, $location) {
     var id = $stateParams.id;
-
 
     $scope.details = {};
     $scope.imgUrl = '';
@@ -20,7 +19,6 @@ angular.module('locationMashupApp')
         minZoom: 9
       }
     };
-
 
     var interestingPlaces = [];
 
@@ -63,6 +61,7 @@ angular.module('locationMashupApp')
 
 
     var userLocation;
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(geoposition) {
         userLocation = {
@@ -72,12 +71,12 @@ angular.module('locationMashupApp')
       });
     }
 
-    // $scope.navigateToPlace = function() {
-      // var place = userLocation;
-      // var url = 'https://www.google.com/maps/dir/' + place.lat + ',' + place.lng + '/' + placePosition.latitude + ',' + placePosition.longitude + '/';
-      // url = $state.href(url);
-      // window.open(url,'_blank');
-    // };
+    $scope.navigateToPlace = function() {
+      var place = userLocation;
+      var url = 'https://www.google.com/maps/dir/' + place.lat + ',' + place.lng + '/' + $scope.mainMarker.coords.latitude + ',' + $scope.mainMarker.coords.longitude + '/';
+      url = $state.href(url);
+      window.open(url, '_blank');
+    };
 
     $http.get('/api/placeDetails/' + id)
       .success(function(place) {

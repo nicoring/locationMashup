@@ -1,68 +1,79 @@
-<button class="btn btn-default" id="back-button" ng-click="goBack()">Go Back</button>
-<div class="container">
-  <div class="row">
-    <h3>{{details.label}}</h3>
+<div id="place-details-container">
+  <div class="relativeWrapper">
+    <div id="box-container" class="box">
+      <span class="glyphicon glyphicon-remove" id="back-button" ng-click="goBack()"></span>
 
-    <div class="col-md-6">
-      <h4>Details</h4>
-      <div ng-repeat="(key, value) in details">
-        <p><strong>{{key}}:</strong> {{value}}</p>
-      </div>
-      <button class="btn btn-default" id="route-there" ng-click="navigateToPlace()" ng-show="supportGeoLocation()">Go There</button>
-      <img ng-src="{{imgUrl}}" ng-show="isImageAvailable()">
-      </br>
-      <div id="interesting-places">
-        <h4>Interesting Places around</h4>
-        <ui-gmap-google-map
-          id="detail-map"
-          center='detailsMap.center'
-          zoom='detailsMap.zoom'
-          options='detailsMap.options'>
+      <div class="container">
 
-          <ui-gmap-marker
-            idKey="wikivoyage-marker"
-            coords="mainMarker.coords"
-            icon="'/assets/images/pins3.png'">
-          </ui-gmap-marker>
+        <div class="row">
+          <h3>{{details.label}}</h3>
 
-          <ui-gmap-markers
-            models="detailsMarkers"
-            coords="'self'"
-            click="markerClicked"
-            fit="true">
-          </ui-gmap-markers>
+          <div class="col-md-6">
+            <h4>Details</h4>
+            <div ng-repeat="(key, value) in details">
+              <p><strong>{{key}}:</strong> {{value}}</p>
+            </div>
+            <button class="btn btn-default" id="route-there" ng-click="navigateToPlace()">Go There</button>
+            <img ng-src="{{imgUrl}}" ng-show="isImageAvailable()">
+            </br>
+            <div id="interesting-places">
+              <h4>Interesting Places around</h4>
 
-        </ui-gmap-google-map>
-        <div id="interesting-place-details" ng-show="true">
-          <div ng-repeat="(key, value) in selectedInterestingPlace">
-            <p><strong>{{key}}:</strong> {{value}}</p>
+              <ui-gmap-google-map
+                id="detail-map"
+                center='detailsMap.center'
+                zoom='detailsMap.zoom'
+                options='detailsMap.options'>
+
+                <ui-gmap-marker
+                  idKey="wikivoyage-marker"
+                  coords="mainMarker.coords"
+                  icon="'/assets/images/pins3.png'">
+                </ui-gmap-marker>
+
+                <ui-gmap-markers
+                  models="detailsMarkers"
+                  coords="'self'"
+                  click="markerClicked"
+                  fit="true">
+                </ui-gmap-markers>
+
+              </ui-gmap-google-map>
+
+              <div id="interesting-place-details" ng-show="true">
+                <div ng-repeat="(key, value) in selectedInterestingPlace">
+                  <p><strong>{{key}}:</strong> {{value}}</p>
+                </div>
+              </div>
+            </div>
+            <div id="locationinfo" ng-show="isLocationInfoAvailable()">
+              <h4>Location</h4>
+              <p>This attraction is located in <strong>{{locationInfo.label}}</strong></p>
+              <p>{{locationInfo.description}}</p>
+            </div>
+          </div>
+          <!-- end colum -->
+
+          <div class="col-md-6">
+            <div ng-show="areReviewsAvailable()">
+              <h4>Reviews</h4>
+              <div ng-repeat="review in reviews">
+                <p>
+                  {{review.text}} </br>
+                  Rating: {{review.rating}} Polarity: {{review.polarity}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- end colum -->
+
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div>Icon made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
           </div>
         </div>
       </div>
-      <div id="locationinfo" ng-show="isLocationInfoAvailable()">
-        <h4>Location</h4>
-        <p>This attraction is located in <strong>{{locationInfo.label}}</strong></p>
-        <p>{{locationInfo.description}}</p>
-      </div>
-    </div>
-    <!-- end colum -->
-
-    <div class="col-md-6">
-      <div ng-show="areReviewsAvailable()">
-        <h4>Reviews</h4>
-        <div ng-repeat="review in reviews">
-          <p>
-            {{review.text}} </br>
-            Rating: {{review.rating}} Polarity: {{review.polarity}}
-          </p>
-        </div>
-      </div>
-    </div>
-    <!-- end colum -->
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <div>Icon made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
     </div>
   </div>
 </div>

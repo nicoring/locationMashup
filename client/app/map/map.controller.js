@@ -16,15 +16,15 @@ angular.module('locationMashupApp')
     /** map options **/
 
     $scope.map = {
-    	center: position,
-    	zoom: 12,
-    	options: {
-    		minZoom: 9,
+      center: position,
+      zoom: 12,
+      options: {
+        minZoom: 9,
         mapTypeControl: false,
         panControl: false,
         streetViewControlOptions: {},
         zoomControlOptions: {}
-    	}
+      }
     };
 
     /** place map controls **/

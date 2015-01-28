@@ -215,17 +215,17 @@ exports.getPlaces = function(req, res) {
   if (req.query.noToken === "1" && running) {
 
     // wait for mapnificent to finish
-    time = Date.now();
+    var debugTime = Date.now();
     $.when(deferredPosition).done(function() {
       if (!running) {
         return;
       }
 
       console.log('done mapnificent!');
-      console.log('took ', Date.now() - time +'ms');
+      console.log('took ', Date.now() - debugTime +'ms');
 
       // start request with approximate bbox from mapnificent
-      time = Date.now();
+      debugTime = Date.now();
       if (req.query.category) {
         sparqler.getResourcesOfCategoryInBBox(
           position.stationsAABB,
@@ -242,9 +242,9 @@ exports.getPlaces = function(req, res) {
 
         var places = sparqler.sparqlFlatten(data);
         console.log('done fetching places!', places.length + ' places.');
-        console.log('took ', Date.now() - time +'ms');
+        console.log('took ', Date.now() - debugTime +'ms');
 
-        time = Date.now();
+        debugTime = Date.now();
         deferredPlaces.resolve(places);
       }
 
@@ -255,13 +255,13 @@ exports.getPlaces = function(req, res) {
         }
 
         console.log('done filtering places!', places.length +' places remain.');
-        console.log('took ', Date.now() - time +'ms');
+        console.log('took ', Date.now() - debugTime +'ms');
 
         // intersect tourpedia places with mapnificent's station map
-        time = Date.now();
+        debugTime = Date.now();
         var intersectedPlaces = position.intersectPointsWithStations(places);
         console.log('done intersecting places!', intersectedPlaces.length +' places remain.');
-        console.log('took ', Date.now() - time +'ms');
+        console.log('took ', Date.now() - debugTime +'ms');
 
         if (!running) {
           return;

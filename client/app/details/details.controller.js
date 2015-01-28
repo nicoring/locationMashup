@@ -100,7 +100,8 @@ angular.module('locationMashupApp')
       center: $scope.map.center,
       zoom: 14,
       options: {
-        minZoom: 9
+        minZoom: 9,
+        styles: $scope.map.options.styles
       }
     };
 
@@ -117,10 +118,11 @@ angular.module('locationMashupApp')
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(geoposition) {
-        userLocation = {
+        $scope.userLocation = {
           lat: geoposition.coords.latitude,
           lng: geoposition.coords.longitude
         };
+        $scope.$digest();
       });
     }
 
@@ -145,17 +147,18 @@ angular.module('locationMashupApp')
       $scope.selectedInterestingPlace = interestingPlaces[model.id];
     };
 
-    $scope.supportsGeoLoctation = function() {
-      if (navigator.geolocation) {
-        return true;
-      } else {
-        return false;
-      }
-    };
+    // $scope.supportsGeoLoctation = function() {
+    //   if (navigator.geolocation) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // };
 
-    $scope.gotGeoLocation = function() {
-      return userLocation !== undefined;
-    };
+    // $scope.gotGeoLocation = function() {
+    //   console.log(userLocation);
+    //   return userLocation !== undefined;
+    // };
 
     $scope.hasLabel = false;
 
@@ -164,8 +167,8 @@ angular.module('locationMashupApp')
     };
 
     $scope.navigateToPlace = function() {
-      var place = userLocation;
-      var url = 'https://www.google.com/maps/dir/' + place.lat + ',' + place.lng + '/' + $scope.mainMarker.coords.latitude + ',' + $scope.mainMarker.coords.longitude + '/';
+      var place = $scope.userLocation;
+      var url = 'https://www.google.com/maps/dir/' + place.lat + ',' + place.lng + '/' + $scope.mainMarker.coords.latitude + ',' + $scope.mainMarker.coords.longitude + '/data=!3m1!4b1!4m2!4m1!3e3';
       window.open(url, '_blank');
     };
 

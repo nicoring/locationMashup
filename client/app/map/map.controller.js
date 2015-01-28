@@ -23,7 +23,22 @@ angular.module('locationMashupApp')
         mapTypeControl: false,
         panControl: false,
         streetViewControlOptions: {},
-        zoomControlOptions: {}
+        zoomControlOptions: {},
+        styles: [
+          {
+            'featureType': 'poi',
+            'elementType': 'labels',
+            'stylers': [
+              { 'visibility': 'off' }
+            ]
+          },
+          {
+            'featureType': 'administrative.province',
+            'stylers': [
+              { 'weight': 3.7 }
+            ]
+          }
+        ]
       }
     };
 

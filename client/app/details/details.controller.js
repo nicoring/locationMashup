@@ -147,18 +147,6 @@ angular.module('locationMashupApp')
       $scope.selectedInterestingPlace = interestingPlaces[model.id];
     };
 
-    // $scope.supportsGeoLoctation = function() {
-    //   if (navigator.geolocation) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // };
-
-    // $scope.gotGeoLocation = function() {
-    //   console.log(userLocation);
-    //   return userLocation !== undefined;
-    // };
 
     $scope.hasLabel = false;
 
@@ -205,6 +193,7 @@ angular.module('locationMashupApp')
           // marker position in wikivoyage map should not update
           // thus make a deep copy
           $scope.mainMarker.coords = _.cloneDeep(position);
+          console.log('main marker coords', $scope.mainMarker.coords);
 
           // set the center of the map
           $scope.detailsMap.center = position;
@@ -278,7 +267,7 @@ angular.module('locationMashupApp')
       if (places.length > 0) {
         locationURI = getDistrictOfPlaces(places);
       } else {
-        locationURI = 'http:localhost/wikivoyage/Berlin';
+        locationURI = 'http://localhost/wikivoyage/Berlin';
       }
 
       url = '/api/placeDetails/locationInfo?location=' + encodeURI(locationURI);

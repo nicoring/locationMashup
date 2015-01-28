@@ -115,7 +115,7 @@ TourpediaSparqler.prototype.getResourcesInBBox = function(bbox, callback) {
 * @param {Function} callback Callback which is executed after the query
 */
 TourpediaSparqler.prototype.getResourcesOfCategoryInBBox = function(bbox, category, callback) {
-  var query = "select * from $graph where { ?s a $type; vcard:latitude ?lat ; vcard:longitude ?lng ; rdfs:label ?label . filter ( ?lat < $north && ?lat > $south && ?lng < $east && ?lng > $west ) } ";
+  var query = "select * from $graph where { ?s a $type; a ?type; vcard:latitude ?lat ; vcard:longitude ?lng ; rdfs:label ?label . filter ( ?lat < $north && ?lat > $south && ?lng < $east && ?lng > $west ) } ";
   var sQuery = this.createQuery(query);
 
 

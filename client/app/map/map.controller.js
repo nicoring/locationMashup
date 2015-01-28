@@ -101,16 +101,26 @@ angular.module('locationMashupApp')
     /** time input slider **/
 
     // time inputslider
-    $scope.timeInput = 10;
-    var timeToTravel = $scope.timeInput * 60;
+    // $scope.timeInput = 10;
 
-    $scope.$watch('timeInput', function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        timeToTravel = newVal * 60;
-        console.log('timeInput', newVal);
-        showMarkersForPosition();
-      }
-    });
+    // $scope.$watch('timeInput', function (newVal, oldVal) {
+    //   if (newVal !== oldVal) {
+    //     timeToTravel = newVal * 60;
+    //     console.log('timeInput', newVal);
+    //     showMarkersForPosition();
+    //   }
+    // });
+
+    $scope.slider = {
+      options: {
+        stop: showMarkersForPosition
+      },
+      value: 10
+    };
+
+    var timeToTravel = function () {
+      return $scope.slider.value * 60;
+    };
 
     /** category select **/
 
@@ -133,10 +143,6 @@ angular.module('locationMashupApp')
       }
     });
 
-    // holds deferred object, which will be set on a reqest
-    // and will be resolved and reset after another request from the same client
-    var httpTimeout = null;
-
     var typeMapping = {
       'http://dbpedia.org/ontology/Restaurant': 'Restaurant',
       'http://protege.cim3.net/file/pub/ontologies/travel/travel.owl#Sightseeing': 'Sightseeing',
@@ -146,14 +152,19 @@ angular.module('locationMashupApp')
       'http://purl.org/goodrelations/v1#ProductOrService': 'ProductOrService'
     };
 
+    // holds deferred object, which will be set on a reqest
+    // and will be resolved and reset after another request from the same client
+    var httpTimeout = null;
+
     function showMarkersForPosition() {
 
       var url = 'api/places/' + '?lat=' + position.latitude +
                 '&lng=' + position.longitude +
-                '&time='+ timeToTravel +
+                '&time='+ timeToTravel() +
                 '&noToken=1';
 
-      console.log('category', category);
+      // console.log('category', category);
+      console.log(timeToTravel());
 
       if (category !== 'all') {
         url += '&category=' + category;

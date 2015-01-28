@@ -18,15 +18,18 @@
             <!-- <div ng-repeat="(key, value) in details">
               <p><strong>{{key}}:</strong> {{value}}</p>
             </div> -->
-            <button class="btn btn-default" id="route-there" ng-click="navigateToPlace()" ng-show="gotGeoLocation()">Go There</button>
+            <button class="btn btn-default" id="route-there" ng-click="navigateToPlace()" ng-show="userLocation">Go There</button>
             </br>
-            <div ng-show="hasReviews()">
+            <div ng-show="hasReviews()" id="reviews">
               <h4>Reviews</h4>
               <div ng-repeat="review in reviews">
                 <p>
                   {{review.text}} </br>
                   <!-- Rating: {{review.rating}} Polarity: {{review.polarity}} -->
-                  <span id="rating" ng-show="review.rating > 0" ng-repeat="n in range(0,review.rating)" class="glyphicon glyphicon-star"></span>
+                  <div id="rating" ng-show="review.rating > 0">
+                    <span ng-repeat="n in range(0,review.rating)" class="glyphicon glyphicon-star"></span><span id="rating" ng-show="review.rating > 0" ng-repeat="n in range(0,5 - review.rating)" class="glyphicon glyphicon-star-empty"></span>
+                  </div>
+
                 </p>
               </div>
             </div>

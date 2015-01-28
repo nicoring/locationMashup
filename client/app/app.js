@@ -7,7 +7,8 @@ angular.module('locationMashupApp', [
   //'ngRoute',
   'ui.bootstrap',
   'ui.router',
-  'uiGmapgoogle-maps'
+  'uiGmapgoogle-maps',
+  'ui.slider'
 ])
   .config(['$urlRouterProvider', '$locationProvider', 'uiGmapGoogleMapApiProvider', function ($urlRouterProvider, $locationProvider, GoogleMapApiProviders) {
     $urlRouterProvider.otherwise('/');

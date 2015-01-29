@@ -74,9 +74,8 @@ angular.module('locationMashupApp')
       $location.path('/');
     };
 
-    $scope.markerClicked = function (marker) {
-      var model = marker.model;
-      $scope.selectedInterestingPlace = interestingPlaces[model.id];
+    $scope.detailsMarkerClicked = function (marker) {
+      $scope.selectedInterestingPlace = $scope.details.interestingPlaces[marker.model.id];
     };
 
 
@@ -99,12 +98,13 @@ angular.module('locationMashupApp')
       // TODO: refactor html template to use $scope.details directly
       $scope.details = place;
       $scope.hasLabel = $scope.details.hasLabel;
-      $scope.detailsMap.cetner = $scope.details.position;
+      $scope.detailsMap.center = $scope.details.position;
       $scope.locationInfo = $scope.details.districtInfo; // when refactoring rename locationInfo to districtInfo!!
 
-      // marker position in wikivoyage map should not update
-      // thus make a deep copy
-      $scope.mainMarker.coords = _.cloneDeep($scope.details.position);
+      $scope.mainMarker.coords = {
+        latitude: parseFloat($scope.details.position.latitude),
+        longitude: parseFloat($scope.details.position.longitude)
+      }
 
       // prepare marker models
       $scope.detailsMarkers = _.map($scope.details.interestingPlaces, function (el, i) {

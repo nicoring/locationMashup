@@ -56,13 +56,13 @@
                 <ui-gmap-markers
                   models="detailsMarkers"
                   coords="'self'"
-                  click="markerClicked"
+                  click="detailsMarkerClicked"
                   fit="true">
                 </ui-gmap-markers>
 
               </ui-gmap-google-map>
 
-              <div id="interesting-place-details" ng-show="true">
+              <div id="interesting-place-details">
                   <p><strong>{{selectedInterestingPlace.label}}</strong></p>
                   <p>{{selectedInterestingPlace.description}}</p>
                 <!-- <div ng-repeat="(key, value) in selectedInterestingPlace">
@@ -71,8 +71,7 @@
               </div>
             </div>
             <div id="locationinfo" ng-show="hasLocationInfo()">
-              <h4>Location</h4>
-              <p>This attraction is located in <strong>{{locationInfo.label}}</strong></p>
+              <h4>This attraction is located in <strong>{{locationInfo.label}}</strong></h4>
               <p>{{locationInfo.description}}</p>
             </div>
           </div>

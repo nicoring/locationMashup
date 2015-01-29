@@ -48,7 +48,7 @@ function getDistrictOfPlaces(places) {
 
   _.forEach(places, function (place) {
     location = place.location;
-    if (placeCounts[location] !== null) {
+    if (location in placeCounts) {
       placeCounts[location] += 1;
     } else {
       placeCounts[location] = 1;

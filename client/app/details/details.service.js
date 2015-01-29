@@ -90,7 +90,7 @@ DetailsService.prototype.collectDetails = function(placeId) {
 
 DetailsService.prototype.getPlaceDetails = function(placeId) {
 
-  return this.$http.get('/api/placeDetails/' + placeId).then(
+  return this.$http.get('/api/placeDetails/' + placeId, {cache: 'true'}).then(
     // success callback
     function(response) {
 

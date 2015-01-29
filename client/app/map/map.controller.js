@@ -5,7 +5,7 @@ function getIdOfResource(resource) {
 }
 
 angular.module('locationMashupApp')
-  .controller('MapCtrl', function ($scope, $http, $location, uiGmapGoogleMapApi) {
+  .controller('MapCtrl', function ($scope, $http, $location, uiGmapGoogleMapApi, Details) {
 
     /** default start position **/
     var position = {
@@ -61,20 +61,26 @@ angular.module('locationMashupApp')
 
     // from user selected marker
     $scope.isMarkerSelected = false;
-    $scope.selectedMarker = {};
+    $scope.selectedPlace = {};
 
     $scope.markerClicked = function(marker) {
-      $scope.selectedMarker = marker.model;
-      $scope.isMarkerSelected = true;
+      var id = marker.model.id;
+      var place = Details.getPlaceDetails(id);
+
+      place.then( function(placeDetails) {
+        placeDetails.id = id;
+        $scope.selectedPlace = placeDetails;
+        $scope.isMarkerSelected = true;
+      });
     };
 
     $scope.closeInfo = function() {
-      $scope.selectedMarker = {};
+      $scope.selectedPlace = {};
       $scope.isMarkerSelected = false;
     };
 
     $scope.showMore = function() {
-      $location.path('/details/' + $scope.selectedMarker.id);
+      $location.path('/details/' + $scope.selectedPlace.id);
     };
 
     // draggable position marker

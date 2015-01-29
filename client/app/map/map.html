@@ -30,8 +30,8 @@
 -->
 
 <div id="placeInfo" ng-show="isMarkerSelected" class="mapOverlay box">
-  <h4>{{selectedMarker.title}}</h4>
-  <p>ID: {{selectedMarker.id}}</p>
+  <h4>{{selectedPlace.label}}</h4>
+  <p>{{selectedPlace.address}}</p>
   <span class="glyphicon glyphicon-remove" ng-click="closeInfo()"></span>
   <button class="btn btn-default pull-right" ng-click="showMore()">Show More</button>
 </div>

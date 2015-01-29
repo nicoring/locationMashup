@@ -78,6 +78,7 @@ DetailsService.prototype.collectDetails = function(placeId) {
     return self.getInterestingPlaces(place).then(function(interesting) {
       place.interestingPlaces = interesting.interestingPlaces;
       return self.getDistrictInfo(interesting.allWikivoyagePlaces).then(function(info) {
+        info.description = unescape(info.description);
         place.districtInfo = info;
         return place;
       });

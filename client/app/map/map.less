@@ -15,6 +15,24 @@ body {
   z-index: 10;
 }
 
+.loadingOverlay {
+  display: none;
+  width: 100%;
+  height: 100%;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2; // overlay the rating stars
+
+  background-color: white;
+  opacity: 0.9;
+
+  &.loading {
+    display: block;
+  }
+}
+
 #label {
   top: -5px;
   left: 20px;

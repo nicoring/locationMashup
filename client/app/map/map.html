@@ -25,6 +25,9 @@
 -->
 
 <div id="placeInfo" ng-show="isMarkerSelected" class="mapOverlay box">
+  <div class="loadingOverlay" ng-class="{ loading: isLoadingMapOverlay }">
+    <span us-spinner></span>
+  </div>
   <h4>{{selectedPlace.label}}</h4>
   <p>{{selectedPlace.address}}</p>
   <img ng-src="{{imgUrl}}" alt="Image of {{details.label}}" ng-show="hasImage" width="380" height="200"/>

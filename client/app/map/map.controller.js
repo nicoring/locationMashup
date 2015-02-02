@@ -67,6 +67,7 @@ angular.module('locationMashupApp')
     $scope.imgUrl = '';
     $scope.hasImage = false;
     $scope.averageRating = 0;
+    $scope.isLoadingMapOverlay = false;
 
     /** get average star rating for a selected place **/
 
@@ -91,6 +92,7 @@ angular.module('locationMashupApp')
       var placeDfd = Details.getPlaceDetails(id);
       $scope.hasImage = false;
       $scope.imgUrl = '';
+      $scope.isLoadingMapOverlay = true;
 
       averageStarRating(id).then(function(averageRating) {
         $scope.averageRating = averageRating;
@@ -106,6 +108,9 @@ angular.module('locationMashupApp')
             $scope.imgUrl = photoUrl;
             $scope.hasImage = true;
           })
+          .always(function() {
+            $scope.isLoadingMapOverlay = false;
+          });
       });
     };
 

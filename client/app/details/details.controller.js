@@ -3,8 +3,7 @@
 angular.module('locationMashupApp')
   .controller('DetailsCtrl', function ($scope, $stateParams, $http, $state, $location, Details, photo) {
 
-    var id = $stateParams.id,
-        interestingPlaces = [];
+    var id = $stateParams.id;
 
     // lodash range in scope
     $scope.range = _.range;

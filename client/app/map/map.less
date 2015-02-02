@@ -27,10 +27,23 @@ body {
 
   background-color: white;
   opacity: 0.9;
+}
 
-  &.loading {
-    display: block;
-  }
+.loadingContainer {
+  position: relative;
+  float: right;
+  display: none;
+
+  // these sizes are adapted to our spinners default layout
+  // when it changes, adapt here as well!
+  width: 48px;
+  height: 100%;
+  margin-top: -26px;
+  margin-right: -60px;
+}
+
+&.loading {
+  display: block;
 }
 
 #label {

@@ -204,6 +204,7 @@ angular.module('locationMashupApp')
     // holds deferred object, which will be set on a reqest
     // and will be resolved and reset after another request from the same client
     var httpTimeout = null;
+    $scope.isLoading = false;
 
     function showMarkersForPosition() {
 
@@ -225,6 +226,7 @@ angular.module('locationMashupApp')
       }
       httpTimeout = new $.Deferred();
 
+      $scope.isLoading = true;
       $http.get(url, { cache: 'true', timeout: httpTimeout.promise()})
         .success(function(places) {
 
@@ -241,9 +243,11 @@ angular.module('locationMashupApp')
             };
           });
 
+          $scope.isLoading = false;
         })
         .error(function(places, status) {
           console.error('places loading failed', status);
+          $scope.isLoading = false;
         });
     }
 

@@ -18,6 +18,10 @@
             <!-- <div ng-repeat="(key, value) in details">
               <p><strong>{{key}}:</strong> {{value}}</p>
             </div> -->
+            <div id="image" ng-show="hasImage">
+              <img ng-src="{{imgUrl}}" alt="Image of {{details.label}}" />
+            </div>
+
             <button class="btn btn-default" id="route-there" ng-click="navigateToPlace()" ng-show="userLocation">Go There</button>
             </br>
             <div ng-show="hasReviews()" id="reviews">

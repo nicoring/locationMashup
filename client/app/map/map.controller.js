@@ -5,7 +5,7 @@ function getIdOfResource(resource) {
 }
 
 angular.module('locationMashupApp')
-  .controller('MapCtrl', function ($scope, $http, $location, uiGmapGoogleMapApi, Details) {
+  .controller('MapCtrl', function ($scope, $http, $location, uiGmapGoogleMapApi, Details, photo) {
 
     /** default start position **/
     var position = {
@@ -63,20 +63,33 @@ angular.module('locationMashupApp')
     $scope.isMarkerSelected = false;
     $scope.selectedPlace = {};
 
+    // img from foursquare or google places
+    $scope.imgUrl = '';
+    $scope.hasImage = false;
+
     $scope.markerClicked = function(marker) {
       var id = marker.model.id;
-      var place = Details.getPlaceDetails(id);
+      var placeDfd = Details.getPlaceDetails(id);
+      $scope.hasImage = false;
+      $scope.imgUrl = '';
 
-      place.then( function(placeDetails) {
+      placeDfd.then( function(placeDetails) {
         placeDetails.id = id;
         $scope.selectedPlace = placeDetails;
         $scope.isMarkerSelected = true;
+
+        photo.getPhotoForUrl(placeDetails.wikiLink).done( function(photoUrl) {
+          $scope.imgUrl = photoUrl;
+          $scope.hasImage = true;
+        });
       });
     };
 
     $scope.closeInfo = function() {
       $scope.selectedPlace = {};
       $scope.isMarkerSelected = false;
+      $scope.hasImage = false;
+      $scope.imgUrl = '';
     };
 
     $scope.showMore = function() {
@@ -93,7 +106,8 @@ angular.module('locationMashupApp')
         draggable: true,
         clickable: false,
         crossOnDrag: true,
-        curser: 'pointer'
+        curser: 'pointer',
+        zIndex: 99999
       },
       events: {
         dragend: function (marker) {

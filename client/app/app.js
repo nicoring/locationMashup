@@ -4,7 +4,6 @@ angular.module('locationMashupApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  //'ngRoute',
   'ui.bootstrap',
   'ui.router',
   'uiGmapgoogle-maps',

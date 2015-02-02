@@ -32,6 +32,7 @@
 <div id="placeInfo" ng-show="isMarkerSelected" class="mapOverlay box">
   <h4>{{selectedPlace.label}}</h4>
   <p>{{selectedPlace.address}}</p>
+  <img ng-src="{{imgUrl}}" alt="Image of {{details.label}}" ng-show="hasImage"/>
   <span class="glyphicon glyphicon-remove" ng-click="closeInfo()"></span>
   <button class="btn btn-default pull-right" ng-click="showMore()">Show More</button>
 </div>

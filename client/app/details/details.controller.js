@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('locationMashupApp')
-  .controller('DetailsCtrl', function ($scope, $stateParams, $http, $state, $location, Details) {
+  .controller('DetailsCtrl', function ($scope, $stateParams, $http, $state, $location, Details, photo) {
 
     var id = $stateParams.id,
         interestingPlaces = [];
@@ -12,7 +12,6 @@ angular.module('locationMashupApp')
     /** expose to template **/
 
     $scope.details = {};
-    $scope.imgUrl = '';
     $scope.reviews = [];
     $scope.selectedInterestingPlace = {};
     $scope.locationInfo = {};
@@ -60,10 +59,6 @@ angular.module('locationMashupApp')
 
     $scope.areReviewsAvailable = function () {
       return $scope.reviews.length > 0;
-    };
-
-    $scope.isImageAvailable = function() {
-      return $scope.imgUrl !== '';
     };
 
     $scope.isLocationInfoAvailable = function() {
@@ -117,14 +112,20 @@ angular.module('locationMashupApp')
         };
       });
 
+      if ($scope.imgUrl.length === 0 && !$scope.hasImage) {
+        photo.getPhotoForUrl(place.wikiLink).done( function(photoUrl) {
+          $scope.imgUrl = photoUrl;
+          $scope.hasImage = true;
+        });
+      }
     });
 
     Details.getReviews(id).then(function(reviews) {
       $scope.reviews = reviews;
     });
 
-    Details.getImageUrl(id).then(function(url) {
-      $scope.imgUrl = url;
-    });
+    // Details.getImageUrl(id).then(function(url) {
+    //   $scope.imgUrl = url;
+    // });
 
   });

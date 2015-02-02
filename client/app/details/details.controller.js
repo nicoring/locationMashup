@@ -5,9 +5,6 @@ angular.module('locationMashupApp')
 
     var id = $stateParams.id;
 
-    // lodash range in scope
-    $scope.range = _.range;
-
     /** expose to template **/
 
     $scope.details = {};

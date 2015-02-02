@@ -95,7 +95,7 @@ angular.module('locationMashupApp')
       $scope.mainMarker.coords = {
         latitude: parseFloat($scope.details.position.latitude),
         longitude: parseFloat($scope.details.position.longitude)
-      }
+      };
 
       // prepare marker models
       $scope.detailsMarkers = _.map($scope.details.interestingPlaces, function (el, i) {

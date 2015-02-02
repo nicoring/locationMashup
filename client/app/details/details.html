@@ -31,9 +31,8 @@
                   {{review.text}} </br>
                   <!-- Rating: {{review.rating}} Polarity: {{review.polarity}} -->
                   <div id="rating" ng-show="review.rating > 0">
-                    <span ng-repeat="n in range(0,review.rating)" class="glyphicon glyphicon-star"></span><span id="rating" ng-show="review.rating > 0" ng-repeat="n in range(0,5 - review.rating)" class="glyphicon glyphicon-star-empty"></span>
+                    <rating-stars review-rating="{{review.rating}}"></rating-stars>
                   </div>
-
                 </p>
               </div>
             </div>

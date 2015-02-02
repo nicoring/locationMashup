@@ -66,22 +66,51 @@ angular.module('locationMashupApp')
     // img from foursquare or google places
     $scope.imgUrl = '';
     $scope.hasImage = false;
+    $scope.averageRating = 0;
+    $scope.isLoadingMapOverlay = false;
+
+    /** get average star rating for a selected place **/
+
+    function averageStarRating(placeId) {
+      return Details.getReviews(placeId).then(function(reviews) {
+        var ratings = _(reviews)
+          .pluck('rating')
+          .filter(function(rating) { return rating > 0; });
+
+        var sum = ratings.reduce(function(result, rating) { return result + rating; }, 0);
+        var count = ratings.value().length;
+        if (count > 0) {
+          return sum / count;
+        } else {
+          return 0;
+        }
+      });
+    }
 
     $scope.markerClicked = function(marker) {
       var id = marker.model.id;
       var placeDfd = Details.getPlaceDetails(id);
       $scope.hasImage = false;
       $scope.imgUrl = '';
+      $scope.isLoadingMapOverlay = true;
+
+      averageStarRating(id).then(function(averageRating) {
+        $scope.averageRating = averageRating;
+      });
 
       placeDfd.then( function(placeDetails) {
         placeDetails.id = id;
         $scope.selectedPlace = placeDetails;
         $scope.isMarkerSelected = true;
 
-        photo.getPhotoForUrl(placeDetails.wikiLink).done( function(photoUrl) {
-          $scope.imgUrl = photoUrl;
-          $scope.hasImage = true;
-        });
+        photo.getPhotoForUrl(placeDetails.wikiLink)
+          .done( function(photoUrl) {
+            $scope.imgUrl = photoUrl;
+            $scope.hasImage = true;
+          })
+          .always(function() {
+            $scope.isLoadingMapOverlay = false;
+          });
       });
     };
 
@@ -175,6 +204,7 @@ angular.module('locationMashupApp')
     // holds deferred object, which will be set on a reqest
     // and will be resolved and reset after another request from the same client
     var httpTimeout = null;
+    $scope.isLoading = false;
 
     function showMarkersForPosition() {
 
@@ -196,6 +226,7 @@ angular.module('locationMashupApp')
       }
       httpTimeout = new $.Deferred();
 
+      $scope.isLoading = true;
       $http.get(url, { cache: 'true', timeout: httpTimeout.promise()})
         .success(function(places) {
 
@@ -212,9 +243,11 @@ angular.module('locationMashupApp')
             };
           });
 
+          $scope.isLoading = false;
         })
         .error(function(places, status) {
           console.error('places loading failed', status);
+          $scope.isLoading = false;
         });
     }
 

@@ -60,7 +60,7 @@ angular.module('locationMashupApp')
         })
         .error(function() {
           dfd.reject();
-        })
+        });
 
       return dfd;
     }

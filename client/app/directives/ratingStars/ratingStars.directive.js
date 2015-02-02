@@ -8,9 +8,15 @@ angular.module('locationMashupApp')
       '<span id="rating" ng-repeat="n in emptyStars" class="glyphicon glyphicon-star-empty"></span>',
       restrict: 'EA',
       link: function (scope, element, attrs) {
-        var rating = parseInt(attrs.reviewRating);
-        scope.stars = _.range(0, rating);
-        scope.emptyStars = _.range(0, 5 - rating);
+        function _link() {
+          var rating = parseInt(attrs.reviewRating);
+          scope.stars = _.range(0, rating);
+          scope.emptyStars = _.range(0, 5 - rating);
+        }
+
+        attrs.$observe('reviewRating', _link);
+        _link();
+
       }
     };
   });

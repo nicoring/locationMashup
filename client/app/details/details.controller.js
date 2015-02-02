@@ -3,8 +3,7 @@
 angular.module('locationMashupApp')
   .controller('DetailsCtrl', function ($scope, $stateParams, $http, $state, $location, Details, photo) {
 
-    var id = $stateParams.id,
-        interestingPlaces = [];
+    var id = $stateParams.id;
 
     /** expose to template **/
 
@@ -96,7 +95,7 @@ angular.module('locationMashupApp')
       $scope.mainMarker.coords = {
         latitude: parseFloat($scope.details.position.latitude),
         longitude: parseFloat($scope.details.position.longitude)
-      }
+      };
 
       // prepare marker models
       $scope.detailsMarkers = _.map($scope.details.interestingPlaces, function (el, i) {

@@ -19,7 +19,7 @@
               <p><strong>{{key}}:</strong> {{value}}</p>
             </div> -->
             <div id="image" ng-show="hasImage">
-              <img ng-src="{{imgUrl}}" alt="Image of {{details.label}}" />
+              <img ng-src="{{imgUrl}}" alt="Image of {{details.label}}" width="380" height="200"/>
             </div>
 
             <button class="btn btn-default" id="route-there" ng-click="navigateToPlace()" ng-show="userLocation">Go There</button>

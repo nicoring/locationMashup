@@ -21,6 +21,23 @@ function getHashTag(string) {
   return string.split('#')[1];
 }
 
+function getLabelFor(place) {
+  if ('label' in place) {
+    place.hasLabel = true;
+  } else if ('dcTitle' in place) {
+    place.label = place.dcTitle;
+    place.hasLabel = true;
+  } else if ('vcardFn' in place) {
+    place.label = place.vcardFn;
+    place.hasLabel = true;
+  } else if ('grName' in place) {
+    place.label = place.grName;
+    place.hasLabel = true;
+  } else {
+    place.hasLabel = false;
+  }
+}
+
 function selectRandomPlacesByType(places, type) {
 
   // get type of selected place and get matching wikivoyage Activities based on the mapping above
@@ -78,7 +95,6 @@ DetailsService.prototype.collectDetails = function(placeId) {
     return self.getInterestingPlaces(place).then(function(interesting) {
       place.interestingPlaces = interesting.interestingPlaces;
       return self.getDistrictInfo(interesting.allWikivoyagePlaces).then(function(info) {
-        info.description = unescape(info.description);
         place.districtInfo = info;
         return place;
       });
@@ -97,17 +113,7 @@ DetailsService.prototype.getPlaceDetails = function(placeId) {
       var place = response.data;
 
       // just store one label
-      if ('label' in place) {
-        place.hasLabel = true;
-      } else if ('rdfsLabel' in place) {
-        place.label = place.rdfsLabel;
-        place.hasLabel = true;
-      } else if ('fn' in place) {
-        place.label = place.fn;
-        place.hasLabel = true;
-      } else {
-        place.hasLabel = false;
-      }
+      getLabelFor(place);
 
       // format place position to match GoogleMaps API
       place.position = {
@@ -168,11 +174,12 @@ DetailsService.prototype.getDistrictInfo = function(places) {
     function(response) {
 
       var districtInfo = response.data;
-      if (districtInfo.length > 0) {
-        return districtInfo[0];
-      } else {
-        return  '';
-      }
+      // if (districtInfo.length > 0) {
+      //   return districtInfo[0];
+      // } else {
+      //   return '';
+      // }
+      // return districtInfo;
 
     },
 

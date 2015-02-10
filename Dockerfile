@@ -1,3 +1,1 @@
-FROM node:slim
-
-EXPOSE 3000
+FROM digitallyseamless/nodejs-bower-grunt-runtime

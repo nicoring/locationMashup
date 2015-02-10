@@ -28,7 +28,6 @@ WikivoyageSparqler.prototype.getAllOfCategory = function(category, callback) {
   var activity = "voyont:" + category.capitalize() + 'Activity'
 
   var _this = this;
-
   this.createQuery(query)
     .setParameter('activity', activity)
     .setParameter('graph', this.defaultGraph)
@@ -37,10 +36,12 @@ WikivoyageSparqler.prototype.getAllOfCategory = function(category, callback) {
     });
 }
 
-
+/**
+ *
+ */
 WikivoyageSparqler.prototype.getLocationDetailsByUri = function(uri, callback) {
 
-  var query = 'SELECT ?label ?description FROM $graph WHERE { $uri dcterms:description ?description ; rdfs:label ?label . }';
+  var query = 'SELECT * FROM $graph WHERE { {$uri dcterms:description ?description ; rdfs:label ?label} UNION {$uri owl:sameAs ?dbpediaUri} }';
   uri = '<' + encodeURI(uri) + '>';
 
   var _this = this;
@@ -48,9 +49,13 @@ WikivoyageSparqler.prototype.getLocationDetailsByUri = function(uri, callback) {
     .setParameter('graph', this.defaultGraph)
     .setParameter('uri', uri)
     .execute(function(body) {
-      callback(_this.sparqlFlatten(body));
+      var result = _this.sparqlFlatten(body);
+      result = _.reduce(result, _.assign, {});
+      callback(result);
     });
 }
+
+
 /**
 * Get all resources inside a given rectangular bounding box
 *

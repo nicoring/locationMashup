@@ -10,6 +10,9 @@ var wikiSparqler = new WikivoyageSparqler();
 var TourpediaSparqler = require('../../libs/sparqler/tourpedia_sparqler');
 var tourSparqler = new TourpediaSparqler();
 
+var DBPediaSparqler = require('../../libs/sparqler/dbpedia_sparqler');
+var dbpSparqler = new DBPediaSparqler();
+
 
 // Get list of placeDetails
 exports.index = function(req, res) {
@@ -104,6 +107,15 @@ exports.locationInfo = function(req, res) {
   var location = req.query.location;
 
   wikiSparqler.getLocationDetailsByUri(location, function (result) {
-    res.json(result);
+    if (result.dbpediaUri) {
+      // dbpSparqler.getWikipediaLink(result.dbpediaUri, function(wikiLink) {
+      //   console.log("result", wikiLink);
+      //   result.wikiLink = wikiLink;
+      //   res.json(result);
+      // });
+      res.json(result);
+    } else {
+      res.json(result);
+    }
   });
 };

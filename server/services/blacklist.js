@@ -3,7 +3,18 @@ var _ = require('lodash');
 
 /** SETUP BLACKLIST **/
 
-var blacklist = require('../../data/blacklist');
+var blacklist = [
+    'arzt',
+    'dr. ',
+    'haltestelle',
+    { label: 'apotheke', types: ['PointOfInterest'] },
+    's ',
+    's-bahn',
+    'u ',
+    'u-bahn',
+    'bhf',
+    'ice'
+];
 
 /** HELPERS **/
 
@@ -54,4 +65,3 @@ exports.contains = function(label, type) {
   return false;
 
 }
-

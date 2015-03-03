@@ -18,16 +18,15 @@ var SparqlerQuery = require("./query");
 
 var defaults = {
   request: {
-    method: "POST",
+    method: "GET",
     encoding: "utf8",
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Accept": "application/sparql-results+json"
+      "Content-Type": "application/x-www-form-urlencoded"
     }
   },
-  requestBody: {
+  queryParams: {
     format: "application/sparql-results+json",
-    "content-type": "application/sparql-results+json"
+    timeout: 30000
   },
 
   // rdf prefixes, look them up at `prefix.cc`
@@ -63,7 +62,7 @@ function Sparqler(endpoint, options) {
   // load defaults
   this.prefixes = _.extend(defaults.prefixes, options.prefixes || {});
   this.requestOptions = _.extend(defaults.request, { url: endpoint }, options.request || {});
-  this.requestBody = _.extend(defaults.requestBody, options.requestBody || {});
+  this.queryParams = _.extend(defaults.queryParams, options.queryParams || {});
 
   // build a wrapper function which holds the default params for request
   this.Request = Request.defaults(this.requestOptions);
@@ -113,17 +112,17 @@ Sparqler.prototype.execute = function(query, callback) {
   // console.log("query", query);
 
   // perform update on INSERT or DELETE
-  var requestBody;
+  var queryParams;
   if (!query.contains("INSERT DATA") && !query.contains("DELETE")) {
-    requestBody = _.extend(this.requestBody, { query: query });
+    queryParams = _.extend(this.queryParams, { query: query });
   }
   else {
-    requestBody = _.extend(this.requestBody, { update: query });
+    queryParams = _.extend(this.queryParams, { update: query });
   }
 
   // the requestBody includes the defaultParameters and the query
   var opts = {
-    body: Querystring.stringify(requestBody)
+    qs: queryParams
   };
 
   callback = errorHandler(callback);

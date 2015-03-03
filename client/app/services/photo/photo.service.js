@@ -49,7 +49,6 @@ angular.module('locationMashupApp')
 
       $http.get(placeUrl, {cache: 'true'})
         .success(function(data) {
-          console.log(data);
           if (data.cover && data.cover.coverPhoto.url) {
             dfd.resolve(data.cover.coverPhoto.url);
           } else if (!data.image.isDefault) {

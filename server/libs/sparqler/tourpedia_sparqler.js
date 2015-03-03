@@ -62,13 +62,14 @@ TourpediaSparqler.prototype.getPlaceById = function(id, callback) {
 
   var query = 'SELECT * FROM $graph WHERE { ' +
                 '{ $resource a ?type. } UNION ' +
-                '{ $resource rdf:label ?label. } UNION ' +
+                '{ $resource rdfs:label ?label. } UNION ' +
+                '{ $resource vcard:fn ?vcardFn. } UNION ' +
+                '{ $resource dc:title ?dcTitle. } UNION ' +
+                '{ $resource gr:name ?grName. } UNION ' +
                 '{ $resource dbpedia-owl:address ?address. } UNION ' +
                 '{ $resource vcard:hasTelephone ?phone. } UNION ' +
                 '{ $resource foaf:primaryTopic ?primaryTopic. } UNION ' +
                 '{ $resource dbpedia-owl:wikiPageExternalLink ?wikiLink. } UNION ' +
-                '{ $resource rdfs:label ?rdfsLabel. } UNION ' +
-                '{ $resource vcard:fn ?fn. } UNION ' +
                 '{ $resource vcard:hasUrl ?url. } UNION ' +
                 '{ $resource vcard:latitude ?lat. } UNION ' +
                 '{ $resource vcard:longitude ?lng. }' +

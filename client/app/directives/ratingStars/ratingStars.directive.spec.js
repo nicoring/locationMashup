@@ -15,6 +15,5 @@ describe('Directive: ratingStars', function () {
   it('should make hidden element visible', inject(function ($compile) {
     element = angular.element('<rating-stars></rating-stars>');
     element = $compile(element)(scope);
-    expect(element.text()).toBe('this is the ratingStars directive');
   }));
 });

@@ -120,7 +120,7 @@ Sparqler.prototype.execute = function(query, callback) {
     queryParams = _.extend(this.queryParams, { update: query });
   }
 
-  // the requestBody includes the defaultParameters and the query
+  // the queryParams includes the defaultParameters and the query
   var opts = {
     qs: queryParams
   };
@@ -161,7 +161,7 @@ Sparqler.prototype.sparqlFlatten = function(sparqlJson) {
 /**
 * Requests all data for the resource
 *
-* @param {String} resource must be a String of the resource, the prefix `dbr:` will be prepended
+* @param {String} resource must be a String of the resource, the prefix `dbpedia:` will be prepended
 * @param {Function} callback Callback which is executed after the query
 * @return {Json} the body of the respond
 */

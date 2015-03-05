@@ -6,5 +6,5 @@ client/bower_components
 dist
 /server/config/local.env.js
 db
-data/tourpedia_dump
+data/tourpedia
 mongoData.json

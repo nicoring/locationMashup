@@ -175,8 +175,8 @@ DetailsService.prototype.getDistrictInfo = function(places) {
     function(response) {
 
       var districtInfo = response.data;
-      if (districtInfo.length > 0) {
-        return districtInfo[0];
+      if (districtInfo.label && districtInfo.description) {
+        return districtInfo;
       } else {
         return  {
           label: '',

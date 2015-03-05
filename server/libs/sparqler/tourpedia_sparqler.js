@@ -1,7 +1,7 @@
 var Sparqler = require('./sparqler');
 var _ = require('lodash');
-
-var tourpediaEnpoint = 'http://localhost:10002/sparql';
+var sparqlConfig = require('../../config');
+var tourpediaEnpoint = sparqlConfig.virtuoso_url;
 
 
 function TourpediaSparqler() {
@@ -17,7 +17,7 @@ function TourpediaSparqler() {
 	};
 
   this.base = 'http://tour-pedia.org/resource/';
-  this.defaultGraph = "<http://localhost/tourpedia>";
+  this.defaultGraph = "<"+sparqlConfig.tourpedia_graph+">";
 }
 
 TourpediaSparqler.prototype = _.create(Sparqler.prototype);

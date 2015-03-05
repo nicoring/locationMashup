@@ -1,13 +1,13 @@
 var Sparqler = require('./sparqler');
 var _ = require('lodash');
-
-var wikivoyageEnpoint = 'http://localhost:10002/sparql';
+var sparqlConfig = require('../../config');
+var wikivoyageEnpoint = sparqlConfig.virtuoso_url;
 
 function WikivoyageSparqler() {
   Sparqler.call(this, wikivoyageEnpoint);
 
-  this.defaultGraph = "<http://localhost/wikivoyage>";
-  this.base = "http://localhost/wikivoyage";
+  this.defaultGraph = "<"+sparqlConfig.wikivoyage_graph+">";
+  this.base = sparqlConfig.wikivoyage_graph;
 }
 
 WikivoyageSparqler.prototype = _.create(Sparqler.prototype);

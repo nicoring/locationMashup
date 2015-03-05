@@ -8,7 +8,7 @@ Run these commands if you use `brew`:
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 
 # install node (and npm), mongoDB and nvm
-brew install node mongodb
+brew install node mongodb nvm
 ````
 
 On linux use following commands to install:

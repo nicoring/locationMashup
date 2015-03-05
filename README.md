@@ -11,7 +11,7 @@ ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 brew install node mongodb nvm
 ````
 
-On linux use following commands to install:
+Otherwise use following commands to install:
 ```bash
 # install node, npm, mongoDB
 sudo apt-get install node npm mongodb
@@ -20,9 +20,9 @@ sudo apt-get install node npm mongodb
 curl https://raw.githubusercontent.com/creationix/nvm/v0.11.1/install.sh | bash
 ```
 
-If you have to install manually try this:
+If you have to install npm manually try this:
 ```bash
-# install node
+# install npm
 curl http://npmjs.org/install.sh | sh
 ```
 
@@ -39,6 +39,6 @@ npm install -g bower grunt
 npm install && bower install && grunt build --force && npm start
 ```
 
-You need to download [these](https://drive.google.com/open?id=0B-qPNJhiRTz2fmxZQkE4UGtiNGItbFZfTTFubTNiZmJHYTY4aGdfbnpiOEVfM3U1VTVRWDA&authuser=0) turtle files and put them in an database which provides a SPARQL endpoint. Then you have to edit the url and graphs in `server/config.js`.
+You need to download [these](https://drive.google.com/open?id=0B-qPNJhiRTz2fmxZQkE4UGtiNGItbFZfTTFubTNiZmJHYTY4aGdfbnpiOEVfM3U1VTVRWDA&authuser=0) turtle files and put them in a database which provides a SPARQL endpoint. Then you have to edit the url and graphs in `server/config.js`.
 
 Unfortunately the dockerfile is not working. Feel free to contact us for help!

@@ -24,4 +24,4 @@ npm install && bower install && grunt build --force && npm start
 ```
 You need do download [these](https://drive.google.com/open?id=0B-qPNJhiRTz2fmxZQkE4UGtiNGItbFZfTTFubTNiZmJHYTY4aGdfbnpiOEVfM3U1VTVRWDA&authuser=0) turtle files and put them in an database whoch provides a SPARQL endpoint. Then you must edit, the url and graphs in config.js.
 
-
+Unfortunately the dockerfile is not working. Feel free to contact us for help!

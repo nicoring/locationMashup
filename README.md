@@ -14,7 +14,7 @@ brew install node mongodb
 curl http://npmjs.org/install.sh | sh
 ```
 
-Run these commands in any way and start mongoDB:
+Then run these commands and start mongoDB:
 ``` bash
 # install bower and grunt
 npm install -g bower grunt
@@ -22,6 +22,6 @@ npm install -g bower grunt
 # run this to start the application
 npm install && bower install && grunt build --force && npm start
 ```
-You need do download [this](https://drive.google.com/open?id=0B-qPNJhiRTz2fmxZQkE4UGtiNGItbFZfTTFubTNiZmJHYTY4aGdfbnpiOEVfM3U1VTVRWDA&authuser=0) turtle files and put them in an database whoch provides a SPARQL endpoint. Then you must edit, the url and graphs in config.js.
+You need do download [these](https://drive.google.com/open?id=0B-qPNJhiRTz2fmxZQkE4UGtiNGItbFZfTTFubTNiZmJHYTY4aGdfbnpiOEVfM3U1VTVRWDA&authuser=0) turtle files and put them in an database whoch provides a SPARQL endpoint. Then you must edit, the url and graphs in config.js.
 
 
